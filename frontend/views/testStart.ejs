@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار معلومات</title>
+    <link rel="stylesheet" href="/stylesheets/styles.css">
+    
+</head>
+
+<body>
+    <div class="container">
+        <div class="timer-container">
+            <canvas id="timerCanvas" width="50" height="50"></canvas>
+            <div id="timer" class="timer">00:00</div>
+        </div>
+        <h1>اختبار معلومات</h1>
+        <div id="quiz"></div>
+
+
+        
+        <div class="navigation">
+            <button id="prev" class="navigation-button disabled">السؤال السابق</button>
+ <div class="question-navigation-container">
+            <div id="question-navigation" class="question-navigation"></div>
+        </div>            <button id="next" class="navigation-button">السؤال التالي</button>
+        </div>
+        <div class="end-test-container">
+            <button id="submit" class="navigation-button hidden">إنهاء الاختبار</button>
+        </div>
+
+
+
+        <div id="results" class="results-container" style="display: none;">
+            <h2 class="results-title">نتائج الاختبار</h2>
+            <p id="score" class="results-score"></p>
+            <button id="retry" class="navigation-button">إعادة الاختبار</button>
+        </div>
+    </div>
+    <script src="/javascripts/script.js"></script>
+</body>
+</html> 

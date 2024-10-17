@@ -1,0 +1,27 @@
+/*#logo{display:inline;}*/
+*{margin:0;}
+
+.nav{margin:0 1em;text-decoration:none;}
+header{border-radius:700px;
+    display:flex;
+    border:solid;
+    background-color:#f0f0f0;
+    align-items:center
+    ;justify-content:space-between;width:100%;}
+body{background-color:#111;}
+main{color:white ;font-size: x-large;}
+.nav4{background-color:#ddd;border-radius:5px}
+
+input{width: 80vw;font-size: large;padding: 0px;}
+
+button{width: 25px;}
+textarea{resize: none;width:80vw;font-size:2em ;}
+
+
+form{text-align: center;}
+/* form input{margin-bottom:50px;width:50%;height:50px;font-size:large;} */
+footer{color:white;font-size:2em;padding:10px;text-align:center;}
+div{display:flex;padding-left: 25px;}
+form{ display:flex ;width:80vw;flex-direction: column;margin:auto;align-items:center;}
+#submit{grid-column-start:2 ;margin: auto;}
+@media(max-width:500px) {header{flex-direction:column;}}

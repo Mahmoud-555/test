@@ -1,0 +1,12 @@
+
+*{margin:0;}
+.nav{margin:0 1em;text-decoration:none;}
+header{border-radius:700px;display:flex;border:solid;background-color:#f0f0f0;align-items:center;;justify-content:space-between;width:100%;}
+body{background-color:#111;}
+main{color:white}
+.nav3{background-color:#ddd;border-radius:5px}
+
+@media(max-width:500px) {header{flex-direction:column;}}
+form{display:flex;flex-direction:column;align-items:center;}
+form input{margin-bottom:50px;width:50%;height:50px;}
+footer{color:white;font-size:2em;padding:10px;text-align:center;}

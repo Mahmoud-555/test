@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>my app</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        .gradient-circle {
+
+            width: 37px;
+            /* عرض الدائرة */
+            height: 37px;
+            /* ارتفاع الدائرة */
+
+            background-color: #1e190d;
+            ;
+            /* لون الخلفية للـ div */
+            border-radius: 50%;
+            /* لجعل الشكل دائري */
+            position: relative;
+            /* لجعل العناصر المطلقة تعمل بشكل صحيح */
+            display: flex;
+            /* لمركز المحتوى */
+            justify-content: center;
+            /* لمركز المحتوى أفقياً */
+            align-items: center;
+            /* لمركز المحتوى عمودياً */
+            /* border:  solid transparent; */
+            /* الحدود الأساسية بسمك 1rem */
+            box-sizing: border-box;
+            /* لاحتساب الحدود في حجم العنصر */
+
+        }
+
+        .gradient-circle::before {
+            content: '';
+            position: absolute;
+            top: -4px;
+            /* ضعه على الحافة العليا */
+            left: -4px;
+            /* ضعه على الحافة اليسرى */
+            right: -4px;
+            /* ضعه على الحافة اليمنى */
+            bottom: -4px;
+            /* ضعه على الحافة السفلى */
+            background: linear-gradient(58deg, #5AA4E8 0%, #5AA4E8 48%, #137489 84%, #137489 100%);
+
+            /* background: linear-gradient(38deg, #5AA4E8, #137489);  */
+            /* تدرج الألوان */
+            border-radius: 50%;
+            /* لجعل الشكل دائري */
+            z-index: -1;
+            /* إرسال الخلفية إلى الخلف */
+        }
+
+
+
+        .modal-content {
+            border-radius: 1rem;
+        }
+
+        .modal-header {
+            border-bottom: none;
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 0.9rem;
+        }
+
+        .form-section {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .form-section.active {
+            display: block;
+            opacity: 1;
+        }
+
+        .btn-custom {
+            background-color: #007bff;
+            color: white;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .btn-custom:hover {
+            background-color: #0056b3;
+            color: white;
+        }
+
+
+
+
+
+
+
+
+
+        P {
+            margin: 0;
+        }
+
+
+        /* تحديد حجم الـ div الحاوي */
+        #carouselContainer {
+            width: 92%;
+            /* أو أي قيمة محددة حسب الحاجة */
+            height: 500px;
+            /* يمكنك تغيير هذا حسب الحجم الذي تريده */
+            position: relative;
+            /* لتكون الـ Carousel متوافقة مع حجم الـ div */
+            overflow: hidden;
+            /* لتجنب ظهور أي محتوى خارج الـ div */
+        }
+
+        /* جعل الصور تأخذ الحجم الكامل للـ div */
+        .carousel-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            /* لضمان أن الصور تغطي كامل المساحة دون تشويه */
+        }
+
+        /* التأكد من أن أزرار التنقل تتناسب مع حجم الـ div */
+        .carousel-control-prev,
+        .carousel-control-next {
+            width: 5%;
+            height: 100%;
+        }
+    </style>
+      <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                getUserData()
+            });
+
+            function getUserData() {
+
+                fetch("api/v1/users/getMe", {
+                    method: "get",
+                    headers: {
+                        'Content-type': 'application/json; charset=UTF-8',
+                    },
+                    // body: JSON.stringify({ email: email, password: password })
+                }).then((response) => {
+                    response.json().then((userData) => {
+                        document.getElementById("profile-img").src = userData.data.profileImage
+
+                        document.getElementById("balance").innerHTML = userData.data.balance
+
+                        document.getElementById("username").innerHTML = userData.data.username
+                    }
+                    )
+                }).catch((err) => { console.log(err) })
+
+            }
+        </script >
+</head>
+
+<body style=" background: #03101f;min-height: 100vh;">
+    <%if(isSignIn){%>
+        <header
+            style="overflow: hidden; height: 55px; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; background: rgba(125,150,239,0.1); border-width: 0px; border-color: #000; box-shadow: 5px 4px 21px 0 rgba(0,0,0,0.25);padding:6px 10px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div
+                    style="display: flex; justify-content: flex-start; align-items: center; flex-grow: 0; flex-shrink: 0; position: relative; gap: 20px;">
+
+                    <div class="gradient-circle">
+                        <div
+                            style="display: flex;border-radius: 50%; overflow: hidden; align-items: center;justify-content: center; height: 100%;">
+                            <img id="profile-img" style="height: 43px;width: 43px;" src="" />
+                        </div>
+                    </div>
+
+
+                    <p
+                        style="flex-grow: 0; flex-shrink: 0; width: 92px; font-size: 14px; font-weight: 900; font-style: italic; text-align: left; color: #fff;">
+                        stethoscope
+                    </p>
+                </div>
+                <div
+                    style="display: flex; justify-content: flex-start; align-items: center; flex-grow: 0; flex-shrink: 0; position: relative; gap: 20px;padding: 10px;">
+                    <svg id="notificationButton" width="14" height="15" viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg"
+                        style="flex-grow: 0; flex-shrink: 0;" preserveAspectRatio="none">
+                        <path
+                            d="M7 0.5C6.56902 0.5 6.1557 0.663888 5.85095 0.955612C5.54621 1.24733 5.375 1.643 5.375 2.05556V2.32078C3.48188 2.96167 2.125 4.69067 2.125 6.72222V10.6111H1.3125C1.09701 10.6111 0.890349 10.6931 0.737976 10.8389C0.585603 10.9848 0.5 11.1826 0.5 11.3889C0.5 11.5952 0.585603 11.793 0.737976 11.9389C0.890349 12.0847 1.09701 12.1667 1.3125 12.1667H12.6875C12.903 12.1667 13.1097 12.0847 13.262 11.9389C13.4144 11.793 13.5 11.5952 13.5 11.3889C13.5 11.1826 13.4144 10.9848 13.262 10.8389C13.1097 10.6931 12.903 10.6111 12.6875 10.6111H11.875V6.72222C11.8751 5.75695 11.5627 4.81538 10.9806 4.02714C10.3986 3.23889 9.57562 2.64275 8.625 2.32078V2.05556C8.625 1.643 8.45379 1.24733 8.14905 0.955612C7.8443 0.663888 7.43098 0.5 7 0.5ZM7 14.5C6.56902 14.5 6.1557 14.3361 5.85095 14.0444C5.54621 13.7527 5.375 13.357 5.375 12.9444H8.625C8.625 13.357 8.45379 13.7527 8.14905 14.0444C7.8443 14.3361 7.43098 14.5 7 14.5Z"
+                            fill="white"></path>
+                    </svg>
+                    
+                    
+                    <svg width="6" height="21" viewBox="0 0 6 21" fill="none" xmlns="http://www.w3.org/2000/svg"
+                        style="flex-grow: 0; flex-shrink: 0;" preserveAspectRatio="none">
+                        <path
+                            d="M3 16.0556C3.49445 16.0556 3.9778 16.1859 4.38892 16.4301C4.80005 16.6742 5.12048 17.0213 5.3097 17.4274C5.49892 17.8334 5.54843 18.2802 5.45196 18.7113C5.3555 19.1424 5.1174 19.5383 4.76777 19.8491C4.41813 20.1599 3.97268 20.3716 3.48773 20.4573C3.00277 20.543 2.50011 20.499 2.04329 20.3308C1.58648 20.1626 1.19603 19.8778 0.921327 19.5124C0.646624 19.1469 0.500001 18.7173 0.500001 18.2778C0.500001 17.6884 0.763394 17.1232 1.23223 16.7064C1.70108 16.2897 2.33696 16.0556 3 16.0556ZM3 4.94444C2.50555 4.94444 2.0222 4.81411 1.61108 4.56993C1.19995 4.32575 0.879521 3.97869 0.690302 3.57263C0.501083 3.16657 0.451575 2.71976 0.548038 2.28869C0.644501 1.85762 0.882603 1.46166 1.23223 1.15088C1.58187 0.840092 2.02732 0.628445 2.51227 0.5427C2.99723 0.456955 3.49989 0.500963 3.95671 0.669158C4.41352 0.837352 4.80397 1.12218 5.07867 1.48762C5.35338 1.85306 5.5 2.28271 5.5 2.72222C5.5 3.31159 5.23661 3.87682 4.76777 4.29357C4.29892 4.71032 3.66304 4.94444 3 4.94444ZM3 12.7222C2.50555 12.7222 2.0222 12.5919 1.61108 12.3477C1.19995 12.1035 0.879521 11.7565 0.690302 11.3504C0.501083 10.9443 0.451575 10.4975 0.548038 10.0665C0.644501 9.6354 0.882603 9.23943 1.23223 8.92865C1.58187 8.61787 2.02732 8.40622 2.51227 8.32048C2.99723 8.23473 3.49989 8.27874 3.95671 8.44693C4.41352 8.61513 4.80397 8.89996 5.07867 9.2654C5.35338 9.63084 5.5 10.0605 5.5 10.5C5.5 11.0894 5.23661 11.6546 4.76777 12.0713C4.29892 12.4881 3.66304 12.7222 3 12.7222Z"
+                            fill="white"></path>
+                    </svg>
+                </div>
+            </div>
+        </header>
+        <%}%>
+            <%if(!isSignIn){%>
+                <!-- Modal -->
+                <div class="modal fade" id="authModal" tabindex="-1" aria-labelledby="authModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="authModalLabel">Login</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div id="loginForm" class="form-section active">
+                                    <h4 class="text-center">Welcome Back!</h4>
+                                    <form id="formLogin">
+                                        <div class="mb-3">
+                                            <label for="loginEmail" class="form-label">Email Address</label>
+                                            <input type="email" class="form-control" id="loginEmail" required>
+                                            <div class="error-message" id="loginEmailError"></div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="loginPassword" class="form-label">Password</label>
+                                            <input type="password" class="form-control" id="loginPassword" required>
+                                            <div class="error-message" id="loginPasswordError"></div>
+                                        </div>
+                                        <p class="text-end"><a href="#" id="forgotPassword">Forgot Password?</a></p>
+                                        <button type="submit" class="btn btn-custom w-100 mt-3">Login</button>
+                                    </form>
+                                    <p class="mt-3 text-center">Don't have an account? <a href="#" id="showRegister"
+                                            class="text-primary fw-bold">Join us now!</a></p>
+                                </div>
+
+                                <div id="registerForm" class="form-section">
+                                    <h4 class="text-center">Create an Account</h4>
+                                    <form id="formRegister">
+                                        <div class="mb-3">
+                                            <label for="registerEmail" class="form-label">Email Address</label>
+                                            <input type="email" class="form-control" id="registerEmail" required>
+                                            <div class="error-message" id="registerEmailError"></div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="registerPassword" class="form-label">Password</label>
+                                            <input type="password" class="form-control" id="registerPassword" required>
+                                            <div class="error-message" id="registerPasswordError"></div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="registerConfirmPassword" class="form-label">Confirm
+                                                Password</label>
+                                            <input type="password" class="form-control" id="registerConfirmPassword"
+                                                required>
+                                            <div class="error-message" id="registerConfirmPasswordError"></div>
+                                        </div>
+                                        <button type="submit" class="btn btn-custom w-100">Sign Up</button>
+                                    </form>
+                                    <p class="mt-3 text-center">Already have an account? <a href="#" id="showLogin"
+                                            class="text-primary fw-bold">Login</a></p>
+                                </div>
+
+                                <div id="forgotPasswordForm" class="form-section">
+                                    <h4 class="text-center">Reset Password</h4>
+                                    <form id="formForgotPassword">
+                                        <div class="mb-3">
+                                            <label for="forgotEmail" class="form-label">Email Address</label>
+                                            <input type="email" class="form-control" id="forgotEmail" required>
+                                            <div class="error-message" id="forgotEmailError"></div>
+                                        </div>
+                                        <button type="submit" class="btn btn-custom w-100">Reset Password</button>
+                                    </form>
+                                    <p class="mt-3 text-center">Remembered your password? <a href="#"
+                                            id="showLoginFromForgot" class="text-primary fw-bold">Login</a></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <header
+                    style="overflow: hidden;  border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; background: rgba(125,150,239,0.1); border-width: 0px; border-color: #000; box-shadow: 5px 4px 21px 0 rgba(0,0,0,0.25);">
+
+                    <div style="display: flex; justify-content: space-between; align-items: center;padding:0 1rem;">
+                        <div
+                            style="display: flex; justify-content: flex-start; align-items: center; flex-grow: 0; flex-shrink: 0; position: relative; gap: 20px;padding: 6PX;">
+                            <!-- <img style="flex-grow: 0; flex-shrink: 0;" src="ellipse-1.png" /> -->
+                            <p
+                                style="flex-grow: 0; flex-shrink: 0;font-size: 1.4rem; font-weight: 900; font-style: italic; text-align: left; color: #fff;">
+                                stethoscope
+                            </p>
+                        </div>
+                        <div
+                            style="display: flex; justify-content: flex-start; align-items: center; flex-grow: 0; flex-shrink: 0; position: relative; gap: 20px;padding: 10px;">
+                            <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
+                                data-bs-target="#authModal" id="openModal">SIGN IN</button>
+
+                            <!-- <svg width="14" height="15" viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg"
+                    style="flex-grow: 0; flex-shrink: 0;" preserveAspectRatio="none">
+                    <path
+                        d="M7 0.5C6.56902 0.5 6.1557 0.663888 5.85095 0.955612C5.54621 1.24733 5.375 1.643 5.375 2.05556V2.32078C3.48188 2.96167 2.125 4.69067 2.125 6.72222V10.6111H1.3125C1.09701 10.6111 0.890349 10.6931 0.737976 10.8389C0.585603 10.9848 0.5 11.1826 0.5 11.3889C0.5 11.5952 0.585603 11.793 0.737976 11.9389C0.890349 12.0847 1.09701 12.1667 1.3125 12.1667H12.6875C12.903 12.1667 13.1097 12.0847 13.262 11.9389C13.4144 11.793 13.5 11.5952 13.5 11.3889C13.5 11.1826 13.4144 10.9848 13.262 10.8389C13.1097 10.6931 12.903 10.6111 12.6875 10.6111H11.875V6.72222C11.8751 5.75695 11.5627 4.81538 10.9806 4.02714C10.3986 3.23889 9.57562 2.64275 8.625 2.32078V2.05556C8.625 1.643 8.45379 1.24733 8.14905 0.955612C7.8443 0.663888 7.43098 0.5 7 0.5ZM7 14.5C6.56902 14.5 6.1557 14.3361 5.85095 14.0444C5.54621 13.7527 5.375 13.357 5.375 12.9444H8.625C8.625 13.357 8.45379 13.7527 8.14905 14.0444C7.8443 14.3361 7.43098 14.5 7 14.5Z"
+                        fill="white"></path>
+                </svg> -->
+
+                            <svg width="6" height="21" viewBox="0 0 6 21" fill="none" xmlns="http://www.w3.org/2000/svg"
+                                style="flex-grow: 0; flex-shrink: 0;" preserveAspectRatio="none">
+                                <path
+                                    d="M3 16.0556C3.49445 16.0556 3.9778 16.1859 4.38892 16.4301C4.80005 16.6742 5.12048 17.0213 5.3097 17.4274C5.49892 17.8334 5.54843 18.2802 5.45196 18.7113C5.3555 19.1424 5.1174 19.5383 4.76777 19.8491C4.41813 20.1599 3.97268 20.3716 3.48773 20.4573C3.00277 20.543 2.50011 20.499 2.04329 20.3308C1.58648 20.1626 1.19603 19.8778 0.921327 19.5124C0.646624 19.1469 0.500001 18.7173 0.500001 18.2778C0.500001 17.6884 0.763394 17.1232 1.23223 16.7064C1.70108 16.2897 2.33696 16.0556 3 16.0556ZM3 4.94444C2.50555 4.94444 2.0222 4.81411 1.61108 4.56993C1.19995 4.32575 0.879521 3.97869 0.690302 3.57263C0.501083 3.16657 0.451575 2.71976 0.548038 2.28869C0.644501 1.85762 0.882603 1.46166 1.23223 1.15088C1.58187 0.840092 2.02732 0.628445 2.51227 0.5427C2.99723 0.456955 3.49989 0.500963 3.95671 0.669158C4.41352 0.837352 4.80397 1.12218 5.07867 1.48762C5.35338 1.85306 5.5 2.28271 5.5 2.72222C5.5 3.31159 5.23661 3.87682 4.76777 4.29357C4.29892 4.71032 3.66304 4.94444 3 4.94444ZM3 12.7222C2.50555 12.7222 2.0222 12.5919 1.61108 12.3477C1.19995 12.1035 0.879521 11.7565 0.690302 11.3504C0.501083 10.9443 0.451575 10.4975 0.548038 10.0665C0.644501 9.6354 0.882603 9.23943 1.23223 8.92865C1.58187 8.61787 2.02732 8.40622 2.51227 8.32048C2.99723 8.23473 3.49989 8.27874 3.95671 8.44693C4.41352 8.61513 4.80397 8.89996 5.07867 9.2654C5.35338 9.63084 5.5 10.0605 5.5 10.5C5.5 11.0894 5.23661 11.6546 4.76777 12.0713C4.29892 12.4881 3.66304 12.7222 3 12.7222Z"
+                                    fill="white"></path>
+                            </svg>
+
+                        </div>
+                    </div>
+
+
+                </header>
+                <%}%>
+                    <!-- points -->
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center;height: 59px; padding-left: 21px; padding-right: 21px; padding-top: 0px; padding-bottom: 0px; border-radius: 8px; background: linear-gradient(to right, #182e51 0%, #3668b7 100%);width: 92%;margin:1.2rem auto;">
+                        <p style="flex-grow: 0; flex-shrink: 0; width: 163px; text-align: left;">
+                            <span
+                                style="flex-grow: 0; flex-shrink: 0; width: 163px; font-size: 14px; font-weight: 500; text-align: left; color: rgba(255,255,255,0.87);">welcome
+                                back!</span><br />
+                                <span id="username" style="flex-grow: 0; flex-shrink: 0; width: 163px; font-size: 12px; font-weight: 300; text-align: left; color: #e7e0e0;">
+                                Mahmoud ahmed mohamed
+                            </span>
+                        </p>
+                        <div
+                            style="display: flex; justify-content: center; align-items: center; flex-grow: 0; flex-shrink: 0; position: relative; gap: 10px;">
+                            <svg width="18" height="19" viewBox="0 0 18 19" fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                                style="flex-grow: 0; flex-shrink: 0; width: 16px; height: 16px;"
+                                preserveAspectRatio="none">
+                                <path
+                                    d="M15.5448 1.5V5.86571H3.17908C2.62244 5.83281 2.09941 5.58851 1.71693 5.18276C1.33445 4.777 1.12143 4.24046 1.12143 3.68286C1.12143 3.12525 1.33445 2.58871 1.71693 2.18296C2.09941 1.77721 2.62244 1.5329 3.17908 1.5H15.5448Z"
+                                    stroke="white" stroke-width="2" stroke-miterlimit="10" stroke-linecap="square">
+                                </path>
+                                <path
+                                    d="M14.0895 10.2617H17V13.1722H14.0895C13.7036 13.1722 13.3334 13.0189 13.0605 12.746C12.7876 12.4731 12.6343 12.1029 12.6343 11.717C12.6343 11.331 12.7876 10.9609 13.0605 10.6879C13.3334 10.415 13.7036 10.2617 14.0895 10.2617Z"
+                                    stroke="white" stroke-width="2" stroke-miterlimit="10" stroke-linecap="square">
+                                </path>
+                                <path
+                                    d="M17 5.86587V17.5002H2.45525C2.06992 17.4981 1.70093 17.3442 1.42845 17.0717C1.15598 16.7992 1.00202 16.4302 1.00001 16.0449V3.6792C0.999011 3.966 1.05463 4.25017 1.16369 4.51542C1.27275 4.78068 1.4331 5.0218 1.63554 5.22495C1.83798 5.4281 2.07854 5.58929 2.34341 5.69927C2.60828 5.80925 2.89226 5.86587 3.17906 5.86587H17Z"
+                                    stroke="white" stroke-width="2" stroke-miterlimit="10" stroke-linecap="square">
+                                </path>
+                            </svg>
+                            <p id="balance"
+                                style="flex-grow: 0; flex-shrink: 0; width: 47px; font-size: 14px; font-weight: 900; font-style: italic; text-align: left; color: #fff;">
+                                0
+                            </p>
+                        </div>
+                    </div>
+                    <div id="carouselContainer"
+                        style="width: 92%; height: 124px;border-radius: 8px; background: #d9d9d9;margin: auto;">
+
+
+
+                        <div id="carouselExampleAutoplaying" class="carousel slide h-100" data-bs-ride="carousel">
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <img src="images/31122108-digital-illustration-of-kidney-in-colour-background-1.jpeg"
+                                        class="d-block w-100  object-fit-cover" alt="...">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="images/download-3.jpeg" class="d-block w-100 object-fit-cover" alt="...">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="images/istockphoto-1266230179-612x612-1.jpeg"
+                                        class="d-block w-100 object-fit-cover" alt="...">
+                                </div>
+                            </div>
+
+
+
+
+                            <button class="carousel-control-prev" type="button"
+                                data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button"
+                                data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+                        </div>
+
+
+
+
+                    </div>
+                    <div style="width: 92%;margin:1.2rem auto;display: flex;flex-wrap: wrap;gap: 1rem">
+                        <div
+                            style="min-width: 144px; height: 86px; border-radius: 8px; background: linear-gradient(to right, #0f1d34 0%, #1d3863 100%); display: flex;display: flex; align-items: center;justify-content: space-around;flex-grow: 1">
+
+                            <p
+                                style="width: 65.24px; height: 23px; font-size: 9px; font-weight: 500; text-align: left; color: #fff;">
+                                start medical quiz
+                            </p>
+
+
+
+
+                            <div style="width: 49.28px; height: 86px;">
+                                <img src="images/m5_8.png.png"
+                                    style="width: 49.28px; height: 86px; object-fit: contain;" />
+                            </div>
+                        </div>
+                        <div
+                            style="min-width: 144px; height: 86px; border-radius: 8px; background: linear-gradient(to right, #0f1d34 0%, #1d3863 100%);display: flex;display: flex; align-items: center; justify-content: space-around;flex-grow: 1">
+
+                            <p
+                                style="width: 65.24px; height: 23px; font-size: 9px; font-weight: 500; text-align: left; color: #fff;">
+                                challange your freinds </p>
+
+
+
+
+                            <div style="width: 49.28px; height: 86px;position: relative;">
+                                <img src="images/m5_8.png.png"
+                                    style="width: 49.28px; height: 82.84px; position: absolute; left: 1.89px; top: 1.5px; object-fit: contain;" />
+                                <img src="images/m5_8.png.png"
+                                    style="width: 36.61px; height: 61.65px; position: absolute;left: -16.13px; top: 16.69px; object-fit: contain;" />
+                                <img src="images/m5_8.png.png"
+                                    style="width: 33.79px; height: 56.83px; position: absolute; left: 29.83px;top: 20.62px; object-fit: contain;" />
+
+
+
+
+                            </div>
+                        </div>
+                        <a style="flex-grow: 1;" href="test">
+                            <div
+                                style="min-width: 144px; height: 86px; border-radius: 8px; background: linear-gradient(to right, #0f1d34 0%, #1d3863 100%); position: relative;display: flex;display: flex; align-items: center;justify-content: space-around;flex-grow: 1">
+                                <p
+                                    style="width: 65.24px; height: 23px; font-size: 9px; font-weight: 500; text-align: left; color: #fff;">
+                                    <span
+                                        style="width: 65.24px; height: 23px; font-size: 9px; font-weight: 500; text-align: left; color: #fff;">test
+                                        your self</span><br />
+                                </p>
+                                <div style="width: 49.28px; height: 49.28px;position: relative;">
+                                    <img src="images/image-4.png"
+                                        style="width: 100%; height: 100%; position: absolute; object-fit: cover;" />
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <p
+                        style="font-size: 14px; font-weight: 500; text-align: left; color: #fff;margin: auto;width: 92%;">
+                        history
+                    </p>
+                    <div>
+                    </div>
+             
+
+
+                    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+                        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+                        crossorigin="anonymous"></script>
+                    <%if(isSignIn){%>
+
+
+
+
+                        <%}%>
+                            <%if(!isSignIn){%>
+                                <script>
+                                    document.addEventListener('DOMContentLoaded', function () {
+
+
+                                        const authModalLabel = document.getElementById('authModalLabel');
+                                        const loginForm = document.getElementById('loginForm');
+                                        const registerForm = document.getElementById('registerForm');
+                                        const forgotPasswordForm = document.getElementById('forgotPasswordForm');
+
+                                        // Open modal
+                                        document.getElementById('openModal').addEventListener('click', function () {
+                                            showForm(loginForm);
+                                            authModalLabel.textContent = 'Login';
+                                            clearErrors();
+                                        });
+
+                                        // Show register form
+                                        document.getElementById('showRegister').addEventListener('click', function (e) {
+                                            e.preventDefault();
+                                            transitionForms(loginForm, registerForm, 'Sign Up');
+                                        });
+
+                                        // Show login form
+                                        document.getElementById('showLogin').addEventListener('click', function (e) {
+                                            e.preventDefault();
+                                            transitionForms(registerForm, loginForm, 'Login');
+                                        });
+
+                                        // Show forgot password form
+                                        document.getElementById('forgotPassword').addEventListener('click', function (e) {
+                                            e.preventDefault();
+                                            transitionForms(loginForm, forgotPasswordForm, 'Forgot Password');
+                                        });
+
+                                        // Show login form from forgot password
+                                        document.getElementById('showLoginFromForgot').addEventListener('click', function (e) {
+                                            e.preventDefault();
+                                            transitionForms(forgotPasswordForm, loginForm, 'Login');
+                                        });
+
+                                        function clearErrors() {
+                                            document.querySelectorAll('.error-message').forEach(error => error.textContent = '');
+                                        }
+
+                                        function showForm(form) {
+                                            form.classList.add('active');
+                                            form.style.display = 'block';
+                                            setTimeout(() => {
+                                                form.style.opacity = '1';
+                                            }, 10);
+                                        }
+
+                                        function hideForm(form) {
+                                            form.style.opacity = '0';
+                                            setTimeout(() => {
+                                                form.style.display = 'none';
+                                                form.classList.remove('active');
+                                            }, 200);
+                                        }
+
+                                        function transitionForms(currentForm, nextForm, label) {
+                                            hideForm(currentForm);
+                                            setTimeout(() => {
+                                                showForm(nextForm);
+                                                authModalLabel.textContent = label;
+                                            }, 200);
+                                        }
+
+                                        // Reset all forms when modal is closed
+                                        const modalElement = document.getElementById('authModal');
+                                        modalElement.addEventListener('hidden.bs.modal', function () {
+                                            hideForm(loginForm);
+                                            hideForm(registerForm);
+                                            hideForm(forgotPasswordForm);
+                                            showForm(loginForm);
+                                            authModalLabel.textContent = 'Login';
+                                            clearErrors();
+                                        });
+
+                                        // Validate login form
+                                        document.getElementById('formLogin').addEventListener('submit', function (e) {
+                                            e.preventDefault();
+                                            const email = document.getElementById('loginEmail').value;
+                                            const password = document.getElementById('loginPassword').value;
+                                            let valid = true;
+
+                                            clearErrors();
+                                            if (!email) {
+                                                document.getElementById('loginEmailError').textContent = 'Please enter your email.';
+                                                valid = false;
+                                            }
+                                            if (!password) {
+                                                document.getElementById('loginPasswordError').textContent = 'Please enter your password.';
+                                                valid = false;
+                                            }
+                                            if (valid) {
+
+                                                fetch("api/v1/auth/login", {
+                                                    method: "post",
+                                                    headers: {
+                                                        'Content-type': 'application/json; charset=UTF-8',
+                                                    },
+                                                    body: JSON.stringify({ email: email, password: password })
+                                                }).then((response) => {
+                                                    response.json().then((userData) => {
+                                                        document.location.pathname = "/"
+
+                                                        // localStorage.setItem('userData', JSON.stringify(userData));
+
+
+                                                        if (userData) {
+                                                            if (userData.profileImage) {
+                                                                // document.getElementById("account").innerHTML = '  <button class="profile-data"><div class="profile-img"></div>         <i class="fa-solid fa-caret-down"></i>                    </button>'
+                                                                // document.getElementsByClassName("profile-img")[0].innerHTML = "  <img  src='' alt='profile'  >   ";
+                                                                // document.querySelector(".profile-img img").src = userData.profileImage;
+
+
+                                                            }
+
+                                                        }
+
+
+
+
+                                                        console.log(userData);
+
+                                                    }
+                                                    )
+                                                }).catch((err) => { console.log(err) })
+
+
+                                            }
+                                        });
+
+                                        // Validate register form
+                                        document.getElementById('formRegister').addEventListener('submit', function (e) {
+                                            e.preventDefault();
+                                            const email = document.getElementById('registerEmail').value;
+                                            const password = document.getElementById('registerPassword').value;
+                                            const confirmPassword = document.getElementById('registerConfirmPassword').value;
+                                            let valid = true;
+
+                                            clearErrors();
+                                            if (!email) {
+                                                document.getElementById('registerEmailError').textContent = 'Please enter your email.';
+                                                valid = false;
+                                            }
+                                            if (!password) {
+                                                document.getElementById('registerPasswordError').textContent = 'Please enter your password.';
+                                                valid = false;
+                                            }
+                                            if (password !== confirmPassword) {
+                                                document.getElementById('registerConfirmPasswordError').textContent = 'Passwords do not match.';
+                                                valid = false;
+                                            }
+                                            if (valid) {
+
+
+                                                fetch("api/v1/auth/signup", {
+                                                    method: "post",
+                                                    headers: {
+                                                        'Content-type': 'application/json; charset=UTF-8',
+                                                    },
+                                                    body: JSON.stringify({
+                                                        // username: username,
+                                                        // name: name,
+                                                        email: email,
+                                                        password: password,
+                                                        passwordConfirm: confirmPassword
+                                                    })
+                                                }).then((response) => {
+                                                    response.json().then((userData) => {
+
+                                                        localStorage.setItem('userData', JSON.stringify(userData));
+
+
+
+                                                        if (userData) {
+                                                            if (userData.profileImage) {
+
+                                                                document.getElementsByClassName("profile-img")[0].innerHTML = "  <img  src='' alt='profile'  >   ";
+                                                                document.querySelector(".profile-img img").src = userData.profileImage;
+
+
+                                                            }
+
+                                                        }
+
+
+
+
+                                                        console.log(userData);
+
+                                                    }
+                                                    )
+                                                })
+
+                                            }
+                                        });
+
+                                        // Validate forgot password form
+                                        document.getElementById('formForgotPassword').addEventListener('submit', function (e) {
+                                            e.preventDefault();
+                                            const email = document.getElementById('forgotEmail').value;
+                                            let valid = true;
+
+                                            clearErrors();
+                                            if (!email) {
+                                                document.getElementById('forgotEmailError').textContent = 'Please enter your email.';
+                                                valid = false;
+                                            }
+                                            if (valid) {
+                                                alert('Password reset instructions sent!');
+                                            }
+                                        });
+                                    });
+                                </script>
+                                <%}%>
+</body>
+
+</html>
