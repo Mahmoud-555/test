@@ -48,7 +48,7 @@ requistManager()
 
 
 async function getSubjects() {
-    let response = await fetch("/subjects")
+    let response = await fetch("/api/v1/subjects")
 
     let data = await response.json()
     localStorage.setItem("subjects", JSON.stringify(data))
@@ -56,7 +56,7 @@ async function getSubjects() {
     console.log(data)
 }
 async function getLectures() {
-    let response = await fetch("/lectures")
+    let response = await fetch("/api/v1/lectures")
 
     let data = await response.json()
     localStorage.setItem("lectures", JSON.stringify(data))
@@ -64,7 +64,7 @@ async function getLectures() {
     console.log(data)
 }
 async function getGrades() {
-    let response = await fetch("/grades")
+    let response = await fetch("/api/v1/grades")
 
     let data = await response.json()
     localStorage.setItem("grades", JSON.stringify(data))
@@ -72,7 +72,7 @@ async function getGrades() {
     console.log(data)
 }
 async function getBlocks() {
-    let response = await fetch("/blocks")
+    let response = await fetch("/api/v1/blocks")
 
     let data = await response.json()
     localStorage.setItem("blocks", JSON.stringify(data))
@@ -88,7 +88,7 @@ async function getBlocks() {
 
 
 async function getU() {
-    let response = await fetch("/users")
+    let response = await fetch("/api/v1/users")
 
     let data = await response.json()
 
@@ -96,12 +96,12 @@ async function getU() {
 
     console.log(data)
     if (usersNum) {
-        usersNum.innerHTML = data.length
+        usersNum.innerHTML = data.data.length
     }
 
 }
 async function getQ() {
-    let response = await fetch("/questions")
+    let response = await fetch("/api/v1/questions")
     let data = await response.json()
 
     let questionsTable = document.getElementById('questionsTable')
@@ -111,13 +111,13 @@ async function getQ() {
     console.log(questionsTable)
 
     if (questionsNum) {
-        questionsNum.innerHTML = data.length
+        questionsNum.innerHTML = data.data.length
     }
 
     questionsTable.innerHTML = ""
 
-    for (let i = 0; i < data.length; i++) {
-        const element = data[i];
+    for (let i = 0; i < data.data.length; i++) {
+        const element = data.data[i];
 
         questionsTable.innerHTML += `<tr><td class="question">${element.question}</td><td><span class="price lecture">${element.lecture}</span></td><td><span class="count ">${element.answer}</span></td></tr>`
     }
@@ -169,8 +169,8 @@ function fillOptions() {
     lectureinput.addEventListener("focus", () => {
         let lectures = JSON.parse(localStorage.getItem("lectures"))
         lecture.innerHTML = ""
-        for (let i = 0; i < lectures.length; i++) {
-            lecture.innerHTML += `<option value="${lectures[i].lecture}">`
+        for (let i = 0; i < lectures.data.length; i++) {
+            lecture.innerHTML += `<option value="${lectures.data[i].lecture}">`
 
         }
         lecture.innerHTML += `<option value="Add new lecture"></option>`

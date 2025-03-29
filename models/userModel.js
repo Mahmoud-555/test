@@ -8,10 +8,11 @@ var myschema = new schema({
     // name: {type: String,trim: true,required: [true, 'name required']},
     profileImage: { type: String, default: "/images/uploads/emoji-avatar-thumb-768x810.png" },
     role: { type: String, enum: ["user","helper", "admin"], default: "user" },
-
+    friends:[{
+        type: mongoose.Schema.ObjectId,
+        ref: 'user',
+      }],
     balance: Number,
-
-
     uniqueString: String,
     verified: { type: Boolean, default: false },
 }, { timestamps: true });
@@ -20,5 +21,24 @@ var myschema = new schema({
 
 
 
+
+
+
+
 var Mymodel = mongoose.model('user', myschema);
 module.exports = Mymodel
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

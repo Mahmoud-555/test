@@ -5,32 +5,49 @@ var createError = require('http-errors');
 const { v4: uuidv4 } = require('uuid');
 const User = require('../models/userModel');
 
+const nodemailer = require('nodemailer');
+
+const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+        user: process.env.MY_EMAIL,
+        pass: process.env.MY_EMAIL_PASS
+    }
+});
+
+
+
+
 // @desc    Signup
 // @route   GET /api/v1/auth/signup
 // @access  Public
 exports.signup = asyncHandler(async (req, res, next) => {
     //   1-check user email in db or not
-
     User.findOne({ email: req.body.email })
         .then((userData) => {
             if (userData) {
+
                 return next(createError(400, "email is alredy exist"))
             } else {
 
                 User.findOne({ username: req.body.username })
                     .then((userData2) => {
                         if (userData2) {
+
                             return next(createError(400, "username is alredy exist"))
                         } else {
+
                             bcrypt.hash(req.body.password, 12)
                                 .then((hash) => {
+
                                     req.body.password = hash
                                     req.body.uniqueString = uuidv4()
                                     const newUser = new User(req.body)
                                     newUser.save()
                                         .then((userData3) => {
+
                                             const token = jwt.sign({ userId: userData3._id }, process.env.JWT_SECRET_KEY, { expiresIn: "10m" });
-                                            link = `${process.env.DOMAIN_NAME}/users/verify-email/?id=${userData3._id}&token=${token}`
+                                            link = `${process.env.DOMAIN_NAME}/verify-email/?id=${userData3._id}&token=${token}`
 
                                             var mailOptions = {
                                                 from: process.env.MY_EMAIL,
@@ -93,7 +110,7 @@ exports.signup = asyncHandler(async (req, res, next) => {
 exports.login = asyncHandler(async (req, res, next) => {
     // 1) check if password and email in the body (validation)
     // 2) check if user exist & check if password is correct
-   
+
 
     const user = await User.findOne({ email: req.body.email });
 
@@ -106,8 +123,8 @@ exports.login = asyncHandler(async (req, res, next) => {
     if (!user.verified) {
         return next(createError(403, "this email is not verified check your email to verify it"))
 
-    }     
-       console.log(req.body)
+    }
+    console.log(req.body)
 
     // 3) generate token
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET_KEY, { expiresIn: "30d" });
@@ -117,7 +134,7 @@ exports.login = asyncHandler(async (req, res, next) => {
 
         // until deploying
         secure: false
-    })  
+    })
 
     res.status(200).json(
         {
@@ -272,9 +289,8 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
 // @route   POST /api/v1/auth/verifyEmail
 // @access  Public
 exports.verifyEmail = asyncHandler(async (req, res, next) => {
-    const id = req.query.id;
-    const token = req.query.token;
-
+    const id = req.body.id;
+    const token = req.body.token;
 
     User.findOne({ _id: id })
         .then((userData) => {
@@ -291,7 +307,7 @@ exports.verifyEmail = asyncHandler(async (req, res, next) => {
                         } else {
                             const userId = decoded.userId
 
-                            user.findOneAndUpdate({ _id: userId }, { verified: true })
+                            User.findOneAndUpdate({ _id: userId }, { verified: true })
                                 .then((userData) => {
                                     res.status(200).json({
                                         status: 'Success',

@@ -1,0 +1,319 @@
+::-webkit-scrollbar {
+    width: 0px;
+    height: 0px;
+}
+body{
+    background: #03101f;
+    min-height: 100vh;
+
+}
+a {
+    text-decoration: none;
+}
+
+P {
+    margin: 0;
+}
+
+.gradient-circle {
+
+    width: 37px;
+    /* عرض الدائرة */
+    height: 37px;
+    /* ارتفاع الدائرة */
+
+    background-color: #1e190d;
+    ;
+    /* لون الخلفية للـ div */
+    border-radius: 50%;
+    /* لجعل الشكل دائري */
+    position: relative;
+    /* لجعل العناصر المطلقة تعمل بشكل صحيح */
+    display: flex;
+    /* لمركز المحتوى */
+    justify-content: center;
+    /* لمركز المحتوى أفقياً */
+    align-items: center;
+    /* لمركز المحتوى عمودياً */
+    /* border:  solid transparent; */
+    /* الحدود الأساسية بسمك 1rem */
+    box-sizing: border-box;
+    /* لاحتساب الحدود في حجم العنصر */
+
+}
+
+.gradient-circle::before {
+    content: '';
+    position: absolute;
+    top: -4px;
+    /* ضعه على الحافة العليا */
+    left: -4px;
+    /* ضعه على الحافة اليسرى */
+    right: -4px;
+    /* ضعه على الحافة اليمنى */
+    bottom: -4px;
+    /* ضعه على الحافة السفلى */
+    background: linear-gradient(58deg, #5AA4E8 0%, #5AA4E8 48%, #137489 84%, #137489 100%);
+
+    /* background: linear-gradient(38deg, #5AA4E8, #137489);  */
+    /* تدرج الألوان */
+    border-radius: 50%;
+    /* لجعل الشكل دائري */
+    z-index: -1;
+    /* إرسال الخلفية إلى الخلف */
+}
+.modal-content {
+    border-radius: 1rem;
+}
+
+.modal-header {
+    border-bottom: none;
+}
+
+.modal-body {
+    padding: 2rem;
+}
+
+.error-message {
+    color: red;
+    font-size: 0.9rem;
+}
+.form-section {
+
+    display: none;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    grid-template-columns: repeat(calc((92vw-32)/76),60px);
+
+}
+
+
+.form-section.active {
+    display: block;
+    opacity: 1;
+}
+
+.btn-custom {
+    background-color: #007bff;
+    color: white;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.btn-custom:hover {
+    background-color: #0056b3;
+    color: white;
+}
+
+
+
+
+@media only screen and (max-width: 600px) {
+    #posts {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr
+    }
+
+    .post {
+        width: 100% !important;
+
+
+    }
+}
+
+@media only screen and (max-width: 400px) {
+    #posts {
+        display: grid !important;
+        grid-template-columns: 1fr
+    }
+
+    .post {
+        width: 100% !important;
+
+
+    }
+}
+
+
+
+
+/* تحديد حجم الـ div الحاوي */
+#carouselContainer {
+    width: 92%;
+    /* أو أي قيمة محددة حسب الحاجة */
+    height: 500px;
+    /* يمكنك تغيير هذا حسب الحجم الذي تريده */
+    position: relative;
+    /* لتكون الـ Carousel متوافقة مع حجم الـ div */
+    overflow: hidden;
+    /* لتجنب ظهور أي محتوى خارج الـ div */
+}
+
+/* جعل الصور تأخذ الحجم الكامل للـ div */
+.carousel-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* لضمان أن الصور تغطي كامل المساحة دون تشويه */
+}
+
+/* التأكد من أن أزرار التنقل تتناسب مع حجم الـ div */
+.carousel-control-prev,
+.carousel-control-next {
+    width: 5%;
+    height: 100%;
+}
+
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.dropdown {
+    display: none;
+    /* Hidden by default */
+    position: absolute;
+    background-color: white;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    width: 350px;
+    z-index: 100;
+    margin-top: 10px;
+    overflow: hidden;
+    animation: fadeIn 0.3s ease;
+    top: 39px;
+    right: 33px;
+}
+
+
+.dropdown-header {
+    padding: 10px 15px;
+    background-color: #f7f9fc;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eaeaea;
+}
+
+.dropdown-header h5 {
+    margin: 0;
+    font-size: 16px;
+    color: #333;
+}
+
+.clear-button {
+    background: #FF5733;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 12px;
+}
+.action-div{
+    /* background: #FF5733; */
+    /* color: white; */
+    /* padding: 4px 10px; */
+    font-size: 12px;
+    /* width: 80px; */
+    gap: 8px;
+    background: #f6f9fc;
+    border: none;
+    border-radius: 4px;
+    display: flex;
+    margin-top: 8px;
+    flex-direction: column;
+}
+.btn{
+min-width: 70px;
+
+
+}
+.clear-button:hover {
+    background-color: #FF5733;
+}
+
+#notificationContainer {
+    max-height: 350px;
+    overflow: scroll;
+}
+
+.notification-item {
+    padding: 10px 15px;
+    display: flex;
+    /* align-items: center;  */
+    border-bottom: 1px solid #f1f1f1;
+    transition: background-color 0.3s;
+}
+
+/* .notification-item> div{
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #f1f1f1;
+    transition: background-color 0.3s;
+}  */
+/* 
+.notification-item:hover {
+    background-color: #f9f9f9;
+} */
+
+.notification-item:last-child {
+    border-bottom: none;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.notification-message {
+    width: 100%;
+}
+
+.notification-time {
+    font-size: 10px;
+    font-weight: 600;
+    color: #848484;
+    display: flex;
+    justify-content: space-between;
+}
+
+.view-all {
+    display: block;
+    padding: 10px 15px;
+    text-align: center;
+    color: #FF5733;
+    text-decoration: none;
+}
+
+.view-all:hover {
+    background-color: #f9f9f9;
+}
+
+/* Show class */
+.dropdown.show {
+    display: block;
+}
+
+.badge {
+    background-color: #FF5733;
+    /* styling based on examples */
+    border-radius: 50%;
+    padding: 4px;
+    position: absolute;
+    top: 4px;
+    left: 18px;
+    font-size: 8px;
+    color: white;
+    width: 1rem;
+}

@@ -4,11 +4,12 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="/stylesheets/styles.css">
     <title>اجابة استفهام</title>
 
     <script src="/socket.io/socket.io.js"></script>
-    <script src="javascripts/socket.js">
+    <script src="/javascripts/socket.js">
+
 
 
 
@@ -210,7 +211,7 @@
     <header
       style="width: 92%; height: 55px; display: flex;justify-content: space-between;align-items: center;margin: auto;">
 
-      <a id="back" href="/">
+      <a id="back" href="/challenge">
         <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"
           style="width: 40px; height: 40px;" preserveAspectRatio="none">
           <path d="M25 30L15 20L25 10" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
@@ -260,275 +261,6 @@
 
     <!-- online -->
     <div id="onlineUsers" style="display: flex;gap: 1rem;overflow: scroll;padding: 1rem 4% ;margin:auto;">
-
-      <!-- <div style="display: flex;justify-content: flex-start;align-items: center;flex-grow: 0;flex-shrink: 0;position: relative;/* gap: 4px; */flex-direction: column;">
-
-        <div class="gradient-circle">
-          +
-        </div>
-        <p style="/* width: 60px; */height: 17px;padding: 4px 0;font-size: 12px;font-weight: 900;/* font-style: italic; */text-align: left;color: #fff;">
-          Add friends
-        </p>
-
-
-
-      </div> -->
-
-
-      <!-- 
- <div
-        style="display: flex;justify-content: flex-start;align-items: center;flex-grow: 0;flex-shrink: 0;position: relative;/* gap: 4px; */flex-direction: column;">
-
-        <div class="gradient-circle">
-          <div
-            style="display: flex;border-radius: 50%; overflow: hidden; align-items: center;justify-content: center; height: 100%;">
-            <div
-              style="height: 10px; width: 10px;background-color: greenyellow;position: absolute;top: 0;left: 32px;border-radius: 50%;">
-            </div>
-            <img id="profile-img" style="height: 43px;width: 43px;"
-              src="/images/uploads/emoji-avatar-thumb-768x810.png">
-          </div>
-        </div>
-        <p
-          style="width: 60px; height: 17px;padding: 4px 0;font-size: 12px; font-weight: 900; font-style: italic; text-align: left; color: #fff;">
-          Add friends
-        </p>
-
-
-
-      </div>
-      <div
-        style="display: flex;justify-content: flex-start;align-items: center;flex-grow: 0;flex-shrink: 0;position: relative;/* gap: 4px; */flex-direction: column;">
-
-        <div class="gradient-circle">
-          <div
-            style="display: flex;border-radius: 50%; overflow: hidden; align-items: center;justify-content: center; height: 100%;">
-            <div
-              style="height: 10px; width: 10px;background-color: greenyellow;position: absolute;top: 0;left: 32px;border-radius: 50%;">
-            </div>
-            <img id="profile-img" style="height: 43px;width: 43px;"
-              src="/images/uploads/emoji-avatar-thumb-768x810.png">
-          </div>
-        </div>
-        <p
-          style="width: 60px; height: 17px;padding: 4px 0;font-size: 12px; font-weight: 900; font-style: italic; text-align: left; color: #fff;">
-          momo123
-        </p>
-
-
-
-      </div>
-      <div
-        style="display: flex;justify-content: flex-start;align-items: center;flex-grow: 0;flex-shrink: 0;position: relative;/* gap: 4px; */flex-direction: column;">
-
-        <div class="gradient-circle">
-          <div
-            style="display: flex;border-radius: 50%; overflow: hidden; align-items: center;justify-content: center; height: 100%;">
-            <div
-              style="height: 10px; width: 10px;background-color: greenyellow;position: absolute;top: 0;left: 32px;border-radius: 50%;">
-            </div>
-            <img id="profile-img" style="height: 43px;width: 43px;"
-              src="/images/uploads/emoji-avatar-thumb-768x810.png">
-          </div>
-        </div>
-        <p
-          style="width: 60px; height: 17px;padding: 4px 0;font-size: 12px; font-weight: 900; font-style: italic; text-align: left; color: #fff;">
-          momo123
-        </p>
-
-
-
-      </div>
-      <div
-        style="display: flex;justify-content: flex-start;align-items: center;flex-grow: 0;flex-shrink: 0;position: relative;/* gap: 4px; */flex-direction: column;">
-
-        <div class="gradient-circle">
-          <div
-            style="display: flex;border-radius: 50%; overflow: hidden; align-items: center;justify-content: center; height: 100%;">
-            <div
-              style="height: 10px; width: 10px;background-color: greenyellow;position: absolute;top: 0;left: 32px;border-radius: 50%;">
-            </div>
-            <img id="profile-img" style="height: 43px;width: 43px;"
-              src="/images/uploads/emoji-avatar-thumb-768x810.png">
-          </div>
-        </div>
-        <p
-          style="width: 60px; height: 17px;padding: 4px 0;font-size: 12px; font-weight: 900; font-style: italic; text-align: left; color: #fff;">
-          momo123
-        </p>
-
-
-
-      </div>
-      <div
-        style="display: flex;justify-content: flex-start;align-items: center;flex-grow: 0;flex-shrink: 0;position: relative;/* gap: 4px; */flex-direction: column;">
-
-        <div class="gradient-circle">
-          <div
-            style="display: flex;border-radius: 50%; overflow: hidden; align-items: center;justify-content: center; height: 100%;">
-            <div
-              style="height: 10px; width: 10px;background-color: greenyellow;position: absolute;top: 0;left: 32px;border-radius: 50%;">
-            </div>
-            <img id="profile-img" style="height: 43px;width: 43px;"
-              src="/images/uploads/emoji-avatar-thumb-768x810.png">
-          </div>
-        </div>
-        <p
-          style="width: 60px; height: 17px;padding: 4px 0;font-size: 12px; font-weight: 900; font-style: italic; text-align: left; color: #fff;">
-          momo123
-        </p>
-
-
-
-      </div>
-      <div
-        style="display: flex;justify-content: flex-start;align-items: center;flex-grow: 0;flex-shrink: 0;position: relative;/* gap: 4px; */flex-direction: column;">
-
-        <div class="gradient-circle">
-          <div
-            style="display: flex;border-radius: 50%; overflow: hidden; align-items: center;justify-content: center; height: 100%;">
-            <div
-              style="height: 10px; width: 10px;background-color: greenyellow;position: absolute;top: 0;left: 32px;border-radius: 50%;">
-            </div>
-            <img id="profile-img" style="height: 43px;width: 43px;"
-              src="/images/uploads/emoji-avatar-thumb-768x810.png">
-          </div>
-        </div>
-        <p
-          style="width: 60px; height: 17px;padding: 4px 0;font-size: 12px; font-weight: 900; font-style: italic; text-align: left; color: #fff;">
-          momo123
-        </p>
-
-
-
-      </div>
-      <div
-        style="display: flex;justify-content: flex-start;align-items: center;flex-grow: 0;flex-shrink: 0;position: relative;/* gap: 4px; */flex-direction: column;">
-
-        <div class="gradient-circle">
-          <div
-            style="display: flex;border-radius: 50%; overflow: hidden; align-items: center;justify-content: center; height: 100%;">
-            <div
-              style="height: 10px; width: 10px;background-color: greenyellow;position: absolute;top: 0;left: 32px;border-radius: 50%;">
-            </div>
-            <img id="profile-img" style="height: 43px;width: 43px;"
-              src="/images/uploads/emoji-avatar-thumb-768x810.png">
-          </div>
-        </div>
-        <p
-          style="width: 60px; height: 17px;padding: 4px 0;font-size: 12px; font-weight: 900; font-style: italic; text-align: left; color: #fff;">
-          momo123
-        </p>
-
-
-
-      </div>
-      <div
-        style="display: flex;justify-content: flex-start;align-items: center;flex-grow: 0;flex-shrink: 0;position: relative;/* gap: 4px; */flex-direction: column;">
-
-        <div class="gradient-circle">
-          <div
-            style="display: flex;border-radius: 50%; overflow: hidden; align-items: center;justify-content: center; height: 100%;">
-            <div
-              style="height: 10px; width: 10px;background-color: greenyellow;position: absolute;top: 0;left: 32px;border-radius: 50%;">
-            </div>
-            <img id="profile-img" style="height: 43px;width: 43px;"
-              src="/images/uploads/emoji-avatar-thumb-768x810.png">
-          </div>
-        </div>
-        <p
-          style="width: 60px; height: 17px;padding: 4px 0;font-size: 12px; font-weight: 900; font-style: italic; text-align: left; color: #fff;">
-          momo123
-        </p>
-
-
-
-      </div>
-      <div
-        style="display: flex;justify-content: flex-start;align-items: center;flex-grow: 0;flex-shrink: 0;position: relative;/* gap: 4px; */flex-direction: column;">
-
-        <div class="gradient-circle">
-          <div
-            style="display: flex;border-radius: 50%; overflow: hidden; align-items: center;justify-content: center; height: 100%;">
-            <div
-              style="height: 10px; width: 10px;background-color: greenyellow;position: absolute;top: 0;left: 32px;border-radius: 50%;">
-            </div>
-            <img id="profile-img" style="height: 43px;width: 43px;"
-              src="/images/uploads/emoji-avatar-thumb-768x810.png">
-          </div>
-        </div>
-        <p
-          style="width: 60px; height: 17px;padding: 4px 0;font-size: 12px; font-weight: 900; font-style: italic; text-align: left; color: #fff;">
-          momo123
-        </p>
-
-
-
-      </div>
-      <div
-        style="display: flex;justify-content: flex-start;align-items: center;flex-grow: 0;flex-shrink: 0;position: relative;/* gap: 4px; */flex-direction: column;">
-
-        <div class="gradient-circle">
-          <div
-            style="display: flex;border-radius: 50%; overflow: hidden; align-items: center;justify-content: center; height: 100%;">
-            <div
-              style="height: 10px; width: 10px;background-color: greenyellow;position: absolute;top: 0;left: 32px;border-radius: 50%;">
-            </div>
-            <img id="profile-img" style="height: 43px;width: 43px;"
-              src="/images/uploads/emoji-avatar-thumb-768x810.png">
-          </div>
-        </div>
-        <p
-          style="width: 60px; height: 17px;padding: 4px 0;font-size: 12px; font-weight: 900; font-style: italic; text-align: left; color: #fff;">
-          momo123
-        </p>
-
-
-
-      </div>
-      <div
-        style="display: flex;justify-content: flex-start;align-items: center;flex-grow: 0;flex-shrink: 0;position: relative;/* gap: 4px; */flex-direction: column;">
-
-        <div class="gradient-circle">
-          <div
-            style="display: flex;border-radius: 50%; overflow: hidden; align-items: center;justify-content: center; height: 100%;">
-            <div
-              style="height: 10px; width: 10px;background-color: greenyellow;position: absolute;top: 0;left: 32px;border-radius: 50%;">
-            </div>
-            <img id="profile-img" style="height: 43px;width: 43px;"
-              src="/images/uploads/emoji-avatar-thumb-768x810.png">
-          </div>
-        </div>
-        <p
-          style="width: 60px; height: 17px;padding: 4px 0;font-size: 12px; font-weight: 900; font-style: italic; text-align: left; color: #fff;">
-          momo123
-        </p>
-
-
-
-      </div>
-      <div
-        style="display: flex;justify-content: flex-start;align-items: center;flex-grow: 0;flex-shrink: 0;position: relative;/* gap: 4px; */flex-direction: column;">
-
-        <div class="gradient-circle">
-          <div
-            style="display: flex;border-radius: 50%; overflow: hidden; align-items: center;justify-content: center; height: 100%;">
-            <div
-              style="height: 10px; width: 10px;background-color: greenyellow;position: absolute;top: 0;left: 32px;border-radius: 50%;">
-            </div>
-            <img id="profile-img" style="height: 43px;width: 43px;"
-              src="/images/uploads/emoji-avatar-thumb-768x810.png">
-          </div>
-        </div>
-        <p
-          style="width: 60px; height: 17px;padding: 4px 0;font-size: 12px; font-weight: 900; font-style: italic; text-align: left; color: #fff;">
-          momo123
-        </p>
-
-
-
-      </div>
- -->
 
     </div>
 
@@ -764,120 +496,16 @@
 
 
 
-    <!-- 
-
-    <div style="width: 60px; height: 70px;">
-      <div style="width: 60px; height: 61px;">
-        <img style="position: absolute; left: 169.5px; top: 275.5px;" src="/images/uploads/ellipse-3.png" />
-        <p
-          style="width: 60px; height: 17px; position: absolute; left: 159px; top: 321px; font-size: 12px; font-weight: 900; font-style: italic; text-align: left; color: #fff;">
-          momo123
-        </p>
-      </div>
-      <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg"
-        style="width: 17px; height: 17px; position: absolute; left: 200px; top: 268px;"
-        preserveAspectRatio="xMidYMid meet">
-        <path
-          d="M4.95825 14.875C4.56867 14.875 4.23516 14.7363 3.95773 14.4589C3.6803 14.1814 3.54159 13.8479 3.54159 13.4583V4.25H2.83325V2.83333H6.37492V2.125H10.6249V2.83333H14.1666V4.25H13.4583V13.4583C13.4583 13.8479 13.3195 14.1814 13.0421 14.4589C12.7647 14.7363 12.4312 14.875 12.0416 14.875H4.95825ZM12.0416 4.25H4.95825V13.4583H12.0416V4.25ZM6.37492 12.0417H7.79159V5.66667H6.37492V12.0417ZM9.20825 12.0417H10.6249V5.66667H9.20825V12.0417Z"
-          fill="#FF002E"></path>
-      </svg>
-    </div>
-    <div style="width: 60px; height: 70px;">
-      <div style="width: 60px; height: 61px;">
-        <img style="position: absolute; left: 271.5px; top: 278.5px;" src="/images/uploads/ellipse-3.png" />
-        <p
-          style="width: 60px; height: 17px; position: absolute; left: 261px; top: 324px; font-size: 12px; font-weight: 900; font-style: italic; text-align: left; color: #fff;">
-          momo123
-        </p>
-      </div>
-      <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg"
-        style="width: 17px; height: 17px; position: absolute; left: 302px; top: 271px;"
-        preserveAspectRatio="xMidYMid meet">
-        <path
-          d="M4.95825 14.875C4.56867 14.875 4.23516 14.7363 3.95773 14.4589C3.6803 14.1814 3.54159 13.8479 3.54159 13.4583V4.25H2.83325V2.83333H6.37492V2.125H10.6249V2.83333H14.1666V4.25H13.4583V13.4583C13.4583 13.8479 13.3195 14.1814 13.0421 14.4589C12.7647 14.7363 12.4312 14.875 12.0416 14.875H4.95825ZM12.0416 4.25H4.95825V13.4583H12.0416V4.25ZM6.37492 12.0417H7.79159V5.66667H6.37492V12.0417ZM9.20825 12.0417H10.6249V5.66667H9.20825V12.0417Z"
-          fill="#FF002E"></path>
-      </svg>
-    </div>
-    <div style="width: 60px; height: 70px;">
-      <div style="width: 60px; height: 61px;">
-        <img style="position: absolute; left: 72.5px; top: 368.5px;" src="/images/uploads/ellipse-3.png" />
-        <p
-          style="width: 60px; height: 17px; position: absolute; left: 62px; top: 414px; font-size: 12px; font-weight: 900; font-style: italic; text-align: left; color: #fff;">
-          momo123
-        </p>
-      </div>
-      <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg"
-        style="width: 17px; height: 17px; position: absolute; left: 103px; top: 361px;"
-        preserveAspectRatio="xMidYMid meet">
-        <path
-          d="M4.95825 14.875C4.56867 14.875 4.23516 14.7363 3.95773 14.4589C3.6803 14.1814 3.54159 13.8479 3.54159 13.4583V4.25H2.83325V2.83333H6.37492V2.125H10.6249V2.83333H14.1666V4.25H13.4583V13.4583C13.4583 13.8479 13.3195 14.1814 13.0421 14.4589C12.7647 14.7363 12.4312 14.875 12.0416 14.875H4.95825ZM12.0416 4.25H4.95825V13.4583H12.0416V4.25ZM6.37492 12.0417H7.79159V5.66667H6.37492V12.0417ZM9.20825 12.0417H10.6249V5.66667H9.20825V12.0417Z"
-          fill="#FF002E"></path>
-      </svg>
-    </div>
-    <div style="width: 60px; height: 70px;">
-      <div style="width: 60px; height: 61px;">
-        <img style="position: absolute; left: 169.5px; top: 373.5px;" src="/images/uploads/ellipse-3.png" />
-        <p
-          style="width: 60px; height: 17px; position: absolute; left: 159px; top: 419px; font-size: 12px; font-weight: 900; font-style: italic; text-align: left; color: #fff;">
-          momo123
-        </p>
-      </div>
-      <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg"
-        style="width: 17px; height: 17px; position: absolute; left: 200px; top: 366px;"
-        preserveAspectRatio="xMidYMid meet">
-        <path
-          d="M4.95825 14.875C4.56867 14.875 4.23516 14.7363 3.95773 14.4589C3.6803 14.1814 3.54159 13.8479 3.54159 13.4583V4.25H2.83325V2.83333H6.37492V2.125H10.6249V2.83333H14.1666V4.25H13.4583V13.4583C13.4583 13.8479 13.3195 14.1814 13.0421 14.4589C12.7647 14.7363 12.4312 14.875 12.0416 14.875H4.95825ZM12.0416 4.25H4.95825V13.4583H12.0416V4.25ZM6.37492 12.0417H7.79159V5.66667H6.37492V12.0417ZM9.20825 12.0417H10.6249V5.66667H9.20825V12.0417Z"
-          fill="#FF002E"></path>
-      </svg>
-    </div>
-    <div style="width: 60px; height: 70px;">
-      <div style="width: 60px; height: 61px;">
-        <img style="position: absolute; left: 266.5px; top: 373.5px;" src="/images/uploads/ellipse-3.png" />
-        <p
-          style="width: 60px; height: 17px; position: absolute; left: 256px; top: 419px; font-size: 12px; font-weight: 900; font-style: italic; text-align: left; color: #fff;">
-          momo123
-        </p>
-      </div>
-      <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg"
-        style="width: 17px; height: 17px; position: absolute; left: 297px; top: 366px;"
-        preserveAspectRatio="xMidYMid meet">
-        <path
-          d="M4.95825 14.875C4.56867 14.875 4.23516 14.7363 3.95773 14.4589C3.6803 14.1814 3.54159 13.8479 3.54159 13.4583V4.25H2.83325V2.83333H6.37492V2.125H10.6249V2.83333H14.1666V4.25H13.4583V13.4583C13.4583 13.8479 13.3195 14.1814 13.0421 14.4589C12.7647 14.7363 12.4312 14.875 12.0416 14.875H4.95825ZM12.0416 4.25H4.95825V13.4583H12.0416V4.25ZM6.37492 12.0417H7.79159V5.66667H6.37492V12.0417ZM9.20825 12.0417H10.6249V5.66667H9.20825V12.0417Z"
-          fill="#FF002E"></path>
-      </svg>
-    </div>
-    <div style="width: 338px; height: 43px;">
-      <div style="width: 338px; height: 43px;">
-        <div
-          style="width: 338px; height: 43px; position: absolute; left: 18.5px; top: 202.5px; border-radius: 4px; background: rgba(217,217,217,0.02); box-shadow: 0px 4px 4px 0 rgba(0,0,0,0.25);">
-        </div>
-        <p
-          style="width: 144.69px; height: 23px; position: absolute; left: 35.6px; top: 213px; opacity: 0.45; font-size: 20px; text-align: left; color: #fff;">
-          username
-        </p>
-        <svg width="27" height="27" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg"
-          style="width: 27px; height: 27px; position: absolute; left: 319px; top: 213px;"
-          preserveAspectRatio="xMidYMid meet">
-          <path
-            d="M12.375 19.125H14.625V14.625H19.125V12.375H14.625V7.875H12.375V12.375H7.875V14.625H12.375V19.125ZM13.5 24.75C11.9438 24.75 10.4813 24.4594 9.1125 23.8781C7.74375 23.2781 6.55312 22.4719 5.54063 21.4594C4.52813 20.4469 3.72188 19.2563 3.12188 17.8875C2.54062 16.5187 2.25 15.0562 2.25 13.5C2.25 11.9437 2.54062 10.4812 3.12188 9.1125C3.72188 7.74375 4.52813 6.55312 5.54063 5.54062C6.55312 4.52812 7.74375 3.73125 9.1125 3.15C10.4813 2.55 11.9438 2.25 13.5 2.25C15.0563 2.25 16.5188 2.55 17.8875 3.15C19.2563 3.73125 20.4469 4.52812 21.4594 5.54062C22.4719 6.55312 23.2688 7.74375 23.85 9.1125C24.45 10.4812 24.75 11.9437 24.75 13.5C24.75 15.0562 24.45 16.5187 23.85 17.8875C23.2688 19.2563 22.4719 20.4469 21.4594 21.4594C20.4469 22.4719 19.2563 23.2781 17.8875 23.8781C16.5188 24.4594 15.0563 24.75 13.5 24.75ZM13.5 22.5C16.0125 22.5 18.1406 21.6281 19.8844 19.8844C21.6281 18.1406 22.5 16.0125 22.5 13.5C22.5 10.9875 21.6281 8.85938 19.8844 7.11562C18.1406 5.37187 16.0125 4.5 13.5 4.5C10.9875 4.5 8.85938 5.37187 7.11562 7.11562C5.37187 8.85938 4.5 10.9875 4.5 13.5C4.5 16.0125 5.37187 18.1406 7.11562 19.8844C8.85938 21.6281 10.9875 22.5 13.5 22.5Z"
-            fill="#00FF29"></path>
-        </svg>
-      </div>
-    </div>
- -->
-
-    <!-- <div
-      style="width: 338px; height: 208px; position: absolute; left: 18px; top: 245px; background: rgba(217,217,217,0.1);">
-    </div> -->
 
 
-
-    <div
-      style="display: flex; justify-content: center; align-items: center; width: 84px; height: 30px;padding:4px 20px;border-radius: 4px; background: #15962a;margin: 1rem auto;">
+    <div onclick="inviteUsers()"
+      style="display: flex; justify-content: center; align-items: center; width: 84px; height: 30px;padding:4px 20px;border-radius: 4px; background: #15962a;margin: 1rem auto;cursor: pointer;">
       <p style="flex-grow: 0; flex-shrink: 0; font-size: 16px; font-weight: 700; text-align: left; color: #fff;
 ">
         Invite
       </p>
+
+      
     </div>
 
 
@@ -893,10 +521,14 @@
     if (testId) {
       invLink = document.getElementById("invLink")
       invLink.innerText = `${location.origin}/challenge/${testId}`
-    }else{
-      document.location.pathname = "/reward"
+    } else {
+      document.location.pathname = "/challenge"
 
     }
+
+
+
+
 
 
     function copy(e) {
@@ -938,6 +570,8 @@
 
 
     }
+
+
 
   </script>
 

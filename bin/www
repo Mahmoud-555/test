@@ -1,38 +1,507 @@
-#!/usr/bin/env node
-
 /**
  * Module dependencies.
  */
-
 var app = require('../app');
 var debug = require('debug')('myproject:server');
 var http = require('http');
-
+const socketIo = require('socket.io');
+const mongoose = require('mongoose');
+const jwt = require('jsonwebtoken');
+const User = require('../models/userModel');
+const Notifications = require('../models/notificationModel');
+const Quiz = require('../models/quizModel');
 /**
  * Get port from environment and store in Express.
  */
-
 var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
-
 /**
  * Create HTTP server.
  */
-
 var server = http.createServer(app);
+const io = socketIo(server);
+
+// sssssssssssss
+
+// online user
+const onlineUsers = {};
+
+// active quizes
+const activeCompetitions = {};
+
+
+
+
+
+
+
+
+// دالة للعثور على الأصدقاء المتصلين
+const getOnlineFriends = (friends) => {
+  return friends.filter(friend => onlineUsers[friend._id]);
+};
+
+const sendQuestion = (Id) => {
+
+  let competition = activeCompetitions[Id]
+  console.log("mmm", competition.currentIndex)
+
+  // get current question
+  let question = competition.questions[competition.currentIndex]
+  console.log(question)
+  activeCompetitions[Id].questionStartedAt = Date.now()
+
+  io.to(`${Id}/participants`).emit("newQuestion", question, question.duration, competition.currentIndex + 1, competition.questions.length)
+
+  let duration = question.duration || 5
+
+  if (competition.currentIndex >= competition.questions.length - 1) {
+    console.log("final question")
+
+    setTimeout(() => {
+      activeCompetitions[Id].currentIndex++
+      // save 
+      delete activeCompetitions[Id]
+    }, duration * 1000);
+
+
+  } else {
+    setTimeout(() => {
+      activeCompetitions[Id].currentIndex++
+
+      sendQuestion(Id)
+    }, duration * 1000);
+  }
+
+
+
+};
+
+io.on('connection', async (socket) => {
+  console.log("connected")
+
+  const cookieHeader = socket.request.headers.cookie;
+  // Initialize an empty object for parsed cookies
+  let parsedCookies = {};
+  // If cookie header exists, parse it
+  if (cookieHeader) {
+    // Split the cookies string and iterate through it to create an object
+    cookieHeader.split(';').forEach(cookie => {
+      const parts = cookie.split('=');
+      parsedCookies[parts[0].trim()] = decodeURIComponent(parts[1] || '');
+    });
+  }
+
+  // Retrieve the token
+  const token = await parsedCookies['token']; // The name of your cookie is "token"
+
+  // Optionally: Verify the token
+  if (token) {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+
+    socket.userData = await User.findById(decoded.userId).populate("friends", ["username", "profileImage"])
+
+    socket.join(socket.userData._id.toString());
+    if (!onlineUsers[socket.userData._id.toString()]) {
+      onlineUsers[socket.userData._id.toString()] = true
+      // online friends
+      const onlineFriends = await getOnlineFriends(socket.userData.friends);
+
+      onlineFriends.forEach(friend => {
+
+
+
+        // إذا كان الصديق متصل، أرسل له إشعار قطع الاتصال
+        io.to(friend._id.toString()).emit('friendStatusUpdate', { _id: socket.userData._id, username: socket.userData.username, profileImage: socket.userData.profileImage }, 'connected');
+      })
+
+    }
+
+
+
+
+
+
+  } else {
+    console.log("no token")
+    return socket.disconnect(); // Disconnect if no token found
+
+  }
+
+  socket.on('getOnlineFriends', async () => {
+    console.log("get")
+    try {
+      let onlineFriends = await getOnlineFriends(socket.userData.friends);
+      socket.emit('updateFriendList', onlineFriends);
+    } catch (error) {
+      console.error("Error getting online friends: ", error);
+    }
+  });
+
+  socket.on('addFriend', async (friendUsername) => {
+    const user = await User.findOne({ username: socket.handshake.query.username });
+
+    if (user && !user.friends.includes(friendUsername)) {
+      user.friends.push(friendUsername);
+      await user.save();
+      // أرسل إشعارًا فقط للمستخدم الذي أضاف صديقًا
+      socket.emit('friendAdded', friendUsername);
+    }
+  });
+
+  socket.on('removeFriend', async (friendUsername) => {
+    const user = await User.findOne({ username: socket.handshake.query.username });
+
+    if (user) {
+      user.friends = user.friends.filter(friend => friend !== friendUsername);
+      await user.save();
+      socket.emit('friendRemoved', friendUsername);
+    }
+  });
+  socket.on("inviteUsers", async (invitedUsers) => {
+    const challenge = await Quiz.findOne({ creator: socket.userData._id, status: "active", type: "challenge" }).sort({ createdAt: -1 }).populate("questions");
+
+    if (challenge) {
+      // add to active competitions
+      activeCompetitions[challenge._id] = challenge
+
+
+      const message = `<strong>${socket.userData.username}</strong> invited you to a challenge`
+      const link = `/challenge/${challenge._id}`
+      // check existance of notification
+      const n = await Notifications.findOne({ href: link });
+      if (!n) {
+        // invite users
+        invitedUsers.forEach(async (username) => {
+
+          const user = await User.findOne({ username: username });
+          if (user) {
+            const newNotification = new Notifications({ user: user._id, message: message, avatar: socket.userData.profileImage, href: link, type: "invitation" })
+            const notification = await newNotification.save()
+
+            if (onlineUsers[user._id]) {
+
+              io.to(user._id.toString()).emit("newNotification", { message: notification.message, avatar: notification.avatar, _id: notification._id, type: notification.type, href: notification.href })
+            }
+
+
+
+
+          }
+
+        })
+      }
+
+    }
+
+
+
+
+
+  })
+  socket.on("start competition", async (data, callback) => {
+    console.log(data)
+
+    const competition = activeCompetitions[data.Id] || await Quiz.findOne({ _id: data.Id, creator: socket.userData._id, status: "active", type: "challenge" }).populate("questions");
+
+    if (competition) {
+
+      const remain = 10
+      const startAt = Date.now() + (remain * 1000)
+
+
+
+      if (competition.creator.toString() == socket.userData._id) {
+        if (!competition.startAt) {
+
+          activeCompetitions[data.Id] = competition
+          activeCompetitions[data.Id].startAt = startAt
+
+          io.to(data.Id).emit("competitionStartAt", startAt)
+          callback({
+            status: "ok"
+          })
+          setTimeout(() => {
+            sendQuestion(data.Id)
+          }, remain * 1000);
+
+
+
+        }
+      } else {
+        console.log("you are not the owner")
+
+      }
+
+
+
+
+
+
+
+
+    }
+
+  })
+
+
+  // join competition room
+  socket.on("ready", async (Id, callback) => {
+    let competition = activeCompetitions[Id]
+    if (competition) {
+
+      if (!competition.startAt) {
+        // didn't start yet
+        socket.join(Id)
+        io.to(competition.creator.toString()).emit("Ready user", { _id: socket.userData._id, username: socket.userData.username, profileImage: socket.userData.profileImage }, 'connected')
+        callback({
+          status: "ok"
+        })
+      } else {
+        if (competition.startAt > Date.now()) {
+          // will start soon
+          socket.join(Id)
+          io.to(competition.creator.toString()).emit("Ready user", { _id: socket.userData._id, username: socket.userData.username, profileImage: socket.userData.profileImage }, 'connected')
+          socket.emit("competitionStartAt", competition.startAt)
+          callback({
+            status: "ok"
+          })
+        } else {
+          // started
+          if (competition.participants.includes(socket.userData._id)) {
+            let question = competition.questions[competition.currentIndex]
+            let timeRemaining = Math.round(question.duration - (Date.now() - competition.questionStartedAt) / 1000)
+
+            socket.emit("newQuestion", question, timeRemaining, competition.currentIndex + 1, competition.questions.length)
+            socket.join(`${Id}/participants`)
+
+            callback({
+              status: "joined"
+            })
+          } else {
+            callback({
+              status: "join"
+            })
+          }
+
+
+
+
+
+        }
+      }
+
+
+
+    } else {
+      try {
+        competition = await Quiz.findOne({ _id: Id, status: "active", type: "challenge" }).populate("questions");
+
+        if (competition) {
+          activeCompetitions[Id] = competition
+
+
+          if (!competition.startAt) {
+            // didn't start yet
+            socket.join(Id)
+            io.to(competition.creator.toString()).emit("Ready user", { _id: socket.userData._id, username: socket.userData.username, profileImage: socket.userData.profileImage }, 'connected')
+            callback({
+              status: "ok"
+            })
+          } else {
+            if (competition.startAt > Date.now()) {
+              // will start soon
+              socket.join(Id)
+              io.to(competition.creator.toString()).emit("Ready user", { _id: socket.userData._id, username: socket.userData.username, profileImage: socket.userData.profileImage }, 'connected')
+              socket.emit("competitionStartAt", competition.startAt)
+              callback({
+                status: "ok"
+              })
+            } else {
+              // started         
+              callback({
+                status: "join"
+              })
+
+
+            }
+          }
+
+
+        } else {
+          console.log("competition not found")
+        }
+      } catch (error) {
+        console.log(error)
+      }
+
+
+    }
+
+
+
+
+
+
+  })
+
+  socket.on("join competition", async (Id) => {
+    if (Id) {
+      const competition = activeCompetitions[Id] || await Quiz.findOne({ _id: Id, status: "active", type: "challenge" });
+      // console.log("competition")
+      if (competition) {
+
+
+        if (!activeCompetitions[Id].rank.some(user => user.id === socket.userData._id)) {
+          activeCompetitions[Id].participants.push(socket.userData._id)
+          // const exists = users.some(user => user.id === userToFind.id);
+          activeCompetitions[Id].rank.push({ id: socket.userData._id, username: socket.userData.username, avatar: socket.userData.profileImage, score: 0 })
+
+        }
+
+
+        if (!activeCompetitions[Id].usersAnswers[socket.userData._id]) {
+          activeCompetitions[Id].usersAnswers[socket.userData._id] = []
+
+        }
+
+        socket.join(`${Id}/participants`)
+
+        // send current question 
+        if (competition.startAt < Date.now()) {
+          let question = competition.questions[competition.currentIndex]
+          competition.questionStartedAt
+          let timeRemaining = Math.round(question.duration - (Date.now() - competition.questionStartedAt) / 1000)
+          console.log("llll", timeRemaining)
+          socket.emit("newQuestion", question, timeRemaining, competition.currentIndex + 1, competition.questions.length)
+
+        }
+
+
+      }
+    } else {
+      console.log("no id")
+    }
+
+
+
+
+
+
+  })
+
+  socket.on("answer", async (Id, userAnswers, callback) => {
+    console.log(userAnswers)
+
+    try {
+
+      if (activeCompetitions[Id]) {
+        const user = activeCompetitions[Id].rank.find(user => user.id === socket.userData._id);
+        let score = user.score || 0;
+        let currentQuestion = activeCompetitions[Id].questions[activeCompetitions[Id].currentIndex]
+        // check if user answer current question
+        if (userAnswers[currentQuestion._id]) {
+          console.log("score before", score)
+
+          // check existance of answer container
+          if (!activeCompetitions[Id].usersAnswers[socket.userData._id]) {
+            activeCompetitions[Id].usersAnswers[socket.userData._id] = []
+
+          }
+
+          // check if user didn't answer this question before
+          if (!activeCompetitions[Id].usersAnswers[socket.userData._id][activeCompetitions[Id].currentIndex]) {
+            // check if the answer is correct
+            activeCompetitions[Id].usersAnswers[socket.userData._id][activeCompetitions[Id].currentIndex] = userAnswers[currentQuestion._id]
+            if (currentQuestion.correct.includes(userAnswers[currentQuestion._id])) {
+              score++
+              user.score = score
+
+            }
+
+            console.log("score after", score)
+          } else {
+            console.log("there is an answer before")
+          }
+
+        } else {
+          console.log("this is not current question")
+
+        }
+
+      } else {
+        callback({
+          status: "faild"
+        })
+      }
+
+    } catch (error) {
+      console.log(error)
+    }
+
+
+
+    callback({
+      status: "ok"
+    })
+  })
+
+
+
+  socket.on("disconnecting", () => {
+    // console.log(io.sockets.adapter.rooms); // the Set contains at least the socket ID
+    // console.log(io.sockets.adapter.rooms.get(socket.userData._id.toString())); // the Set contains at least the socket ID
+
+
+  });
+
+  // عند قطع الاتصال
+  socket.on('disconnect', () => {
+    console.log(io.sockets.adapter.rooms.get(socket.userData._id.toString())); // the Set contains at least the socket ID
+    if (!io.sockets.adapter.rooms.get(socket.userData._id.toString())) {
+      onlineUsers[socket.userData._id] = false;
+
+      // مسح المستخدم المنقطع من الكائن
+      socket.userData.friends.forEach(friend => {
+        if (onlineUsers[friend._id]) {
+          // إذا كان الصديق متصل، أرسل له إشعار قطع الاتصال
+          io.to(friend._id.toString()).emit('friendStatusUpdate', socket.userData._id, 'disconnected');
+        }
+
+      });
+
+    }
+
+
+
+
+
+    // console.log('A user disconnected:', socket.userData._id);
+
+
+  });
+
+
+});
+
+
+// ssssssssssssss
+
+
+
 
 /**
  * Listen on provided port, on all network interfaces.
  */
 
-server.listen(port,"192.168.1.2");
-server.listen(port,"192.168.1.3");
-server.listen(port,"192.168.1.4");
-server.listen(port,"192.168.1.5");
-server.listen(port,"192.168.1.6");
-server.listen(port,"192.168.1.7");
-server.listen(port,"192.168.1.8");
-server.listen(port,"192.168.26.69");
+server.listen(port, "192.168.1.2");
+server.listen(port, "192.168.1.3");
+server.listen(port, "192.168.1.4");
+server.listen(port, "192.168.1.5");
+server.listen(port, "192.168.1.6");
+server.listen(port, "192.168.1.7");
+server.listen(port, "192.168.1.8");
+server.listen(port, "197.59.25.224");
 server.listen(port);
 
 server.on('error', onError);

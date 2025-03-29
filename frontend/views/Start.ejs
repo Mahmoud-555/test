@@ -1,0 +1,860 @@
+<!doctybe html>
+  <html>
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+      * {
+        margin: 0;
+
+        padding: 0;
+        box-sizing: border-box
+      }
+
+      ::-webkit-scrollbar {
+        width: 0px;
+        height: 0px;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        width: 100vw;
+        /* display: flex; */
+
+      }
+
+
+      .container {
+        min-height: 100vh;
+        position: relative;
+
+        margin: auto;
+        background-color: #fff;
+        padding: 20px;
+        padding-top: 8px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 800px;
+      }
+
+      h1 {
+        text-align: center;
+      }
+
+      .question {
+        display: flex;
+        align-items: center;
+
+        min-height: 4rem;
+        padding: 0 0 20px;
+        /* margin-bottom: 1rem; */
+        font-size: 1.2rem;
+        animation: fadeIn1 2s;
+
+      }
+
+      .answers {
+
+        margin-bottom: 20px;
+      }
+
+      .answer-button {
+        display: block;
+        width: 100%;
+        padding: 15px;
+        margin-bottom: 10px;
+        border: none;
+        border-radius: 8px;
+        background-color: #fff;
+        color: #007bff;
+        font-size: 1.03rem;
+        cursor: pointer;
+        text-align: left;
+        transition: background-color 0.3s, color 0.3s, transform 0.2s;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        animation: fadeIn1 2s;
+
+
+      }
+
+      .answer-button:hover {
+        background-color: #e0f7fa;
+        /* color: #fff; */
+        transform: translateY(-2px);
+
+      }
+
+      .answer-button.selected {
+        background-color: #007bff;
+        color: #fff;
+      }
+
+      .correct {
+        background-color: #c8e6c9;
+        /* لون الخلفية للإجابة الصحيحة */
+      }
+
+      .selected-answer {
+        border: 2px solid #388e3c;
+        /* لون حدود الإجابة الصحيحة */
+      }
+
+      .incorrect {
+        background-color: #ffebee;
+        /* لون الخلفية للإجابة الخاطئة */
+        border: 2px solid #d32f2f;
+        /* لون حدود الإجابة الخاطئة */
+      }
+
+      .navigation {
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 20px;
+      }
+
+
+      .navigation-button:hover:not(.disabled) {
+        background-color: #218838;
+      }
+
+
+      .question-navigation {
+        display: flex;
+        gap: 5px;
+        flex: 1;
+        justify-content: flex-start;
+
+      }
+
+
+      .timer-container {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        z-index: 10;
+        /* لضمان بقاء المؤقت فوق العناصر الأخرى */
+      }
+
+      canvas {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: #fff;
+        border: 2px solid #007bff;
+      }
+
+      .timer {
+        margin: 0;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -ms-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+        font-size: .8rem;
+        color: #333;
+        z-index: 1;
+      }
+
+
+
+      #quiz {
+        min-height: 20rem;
+        margin-top: 2rem;
+        /* Make space for the timer */
+      }
+
+      .navigation-button {
+        display: inline-block;
+        width: 120px;
+        padding: 10px;
+        border: none;
+        background-color: #28a745;
+        color: #fff;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 5px;
+        margin: 0 5px;
+        transition: background-color 0.3s;
+      }
+
+      .navigation-button.disabled {
+        background-color: #6c757d;
+        cursor: not-allowed;
+        opacity: 0.6;
+      }
+
+      .navigation-button:hover:not(.disabled) {
+        background-color: #218838;
+      }
+
+
+      .question-navigation-container {
+        /* width:80%; */
+        overflow-x: auto;
+        white-space: nowrap;
+        padding: 10px 0;
+        /* margin-top: 20px; */
+      }
+
+
+
+      .question-navigation button {
+        background-color: #007bff;
+        color: #fff;
+        border: 2px solid #007bff;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        font-size: 12px;
+        cursor: pointer;
+        transition: background-color 0.3s, color 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+
+      .question-navigation button.answered {
+        background-color: #28a745;
+      }
+
+      .question-navigation button.selected {
+        background-color: #0056b3;
+
+
+
+
+
+
+      }
+
+      .question-navigation button:hover {
+        background-color: #0056b3;
+      }
+
+
+
+      .end-test-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+      }
+
+      #results {
+        margin-top: 20px;
+        font-size: 18px;
+        text-align: center;
+      }
+
+      .results-container {
+        margin: 20px 0;
+        background-color: #f9f9f9;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        text-align: center;
+      }
+
+      .results-title {
+        font-size: 24px;
+        margin-bottom: 20px;
+        color: #333;
+      }
+
+      .results-score {
+        font-size: 20px;
+        margin-bottom: 30px;
+        color: #28a745;
+      }
+
+      .results-score strong {
+        font-weight: bold;
+      }
+
+
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+
+        }
+
+        to {
+          opacity: 1;
+          scale: 1.3;
+
+
+        }
+      }
+
+      @keyframes fadeIn1 {
+        from {
+          opacity: 0;
+        }
+
+        to {
+
+          opacity: 1;
+        }
+      }
+    </style>
+
+
+    <title>اجابة استفهام</title>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <!-- <script src="/javascripts/sockets/challengeStartSocket.js"></script> -->
+    <script>
+      // document.getElementById('createButton').onclick = function() {
+      //     playerName = document.getElementById('playerName').value;
+      //     if (playerName) {
+      //         gameId = uuidv4(); // إنشاء معرف لعبة فريد
+      //         socket.emit('joinGame', { gameId, playerName });
+      //         startGame(gameId);
+      //     } else {
+      //         alert("يرجى إدخال اسم المستخدم!");
+      //     }
+      // };
+
+      // document.getElementById('joinButton').onclick = function() {
+      //     const inviteUrl = document.getElementById('invitation').value;
+      //     if (inviteUrl) {
+      //         const parts = inviteUrl.split('/');
+      //         gameId = parts[parts.length - 1];
+      //         playerName = document.getElementById('playerName').value;
+      //         socket.emit('joinGame', { gameId, playerName });
+      //         startGame(gameId);
+      //     } else {
+      //         alert("يرجى إدخال رابط صالح للعبة!");
+      //     }
+      // };
+
+      // function startGame(id) {
+      //     document.getElementById('gameContainer').style.display = 'none';
+      //     document.getElementById('quiz').style.display = 'block';
+      //     socket.emit('getQuestion', id);
+      // }
+
+      // socket.on('gameJoined', (gameId) => {
+      //     console.log("Joined game: " + gameId);
+      // });
+
+      // socket.on('question', (question) => {
+      //     const quizContainer = document.getElementById('quiz');
+      //     quizContainer.innerHTML = '';
+
+      //     const questionElement = document.createElement('div');
+      //     questionElement.classList.add('question');
+      //     questionElement.innerText = question.question;
+
+      //     question.options.forEach((option, opIndex) => {
+      //         const optionElement = document.createElement('div');
+      //         optionElement.classList.add('options');
+      //         optionElement.innerHTML = `<input type="radio" name="option" value="${opIndex}" /> ${option}`;
+      //         questionElement.appendChild(optionElement);
+      //     });
+
+      //     const submitButton = document.createElement('button');
+      //     submitButton.innerText = 'إرسال إجابة';
+      //     submitButton.onclick = () => {
+      //         const selectedOption = document.querySelector(`input[name="option"]:checked`);
+      //         if (selectedOption) {
+      //             const answer = parseInt(selectedOption.value);
+      //             socket.emit('answer', { gameId, playerName, answer });
+      //             selectedOption.checked = false; // إعادة تعيين الاختيار
+      //         } else {
+      //             alert("يرجى اختيار إجابة!");
+      //         }
+      //     };
+
+      //     questionElement.appendChild(submitButton);
+      //     quizContainer.appendChild(questionElement);
+      //     startTimer(15); // 15 ثانية لكل سؤال
+      // });
+
+      // function startTimer(seconds) {
+      //     let remainingTime = seconds;
+      //     document.getElementById('timer').innerText = `الوقت المتبقي: ${remainingTime} ث`;
+      //     document.getElementById('timer').classList.remove('hidden');
+
+      //     timer = setInterval(() => {
+      //         remainingTime--;
+      //         document.getElementById('timer').innerText = `الوقت المتبقي: ${remainingTime} ث`;
+      //         if (remainingTime <= 0) {
+      //             clearInterval(timer);
+      //             document.getElementById('timer').classList.add('hidden');
+      //             alert("انتهى الوقت للإجابة!");
+      //             socket.emit('answer', { gameId, playerName, answer: -1 }); // -1 تُشير إلى عدم الإجابة
+      //         }
+      //     }, 1000);
+      // }
+
+      // socket.on('scoreUpdate', (scores) => {
+      //     const scoresElement = document.getElementById('scores');
+      //     scoresElement.innerHTML = '';
+      //     for (const player in scores) {
+      //         scoresElement.innerHTML += `${player}: ${scores[player]}<br>`;
+      //     }
+      // });
+
+      // socket.on('nextQuestion', (index) => {
+      //     socket.emit('getQuestion', gameId);
+      // });
+
+      // socket.on('endGame', (scores) => {
+      //     clearInterval(timer);
+      //     const quizContainer = document.getElementById('quiz');
+      //     quizContainer.innerHTML = "<h2>انتهت اللعبة!</h2>";
+      //     const scoresElement = document.getElementById('scores');
+      //     scoresElement.innerHTML = '<h3>النقاط النهائية:</h3>';
+      //     for (const player in scores) {
+      //         scoresElement.innerHTML += `${player}: ${scores[player]}<br>`;
+      //     }
+      //     document.getElementById('timer').classList.add('hidden');
+      // });
+
+      // // دالة UUID لإنشاء معرّف فريد لكل لعبة
+      // function uuidv4() {
+      //     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+      //         const r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+      //         return v.toString(16);
+      //     });
+      // }
+
+    </script>
+
+
+
+  </head>
+
+  <body>
+    <!-- competition -->
+    <div class="container">
+
+      <div style="display: flex;justify-content: space-between;align-items: center; ">
+        <div class="timer-container">
+          <canvas id="timerCanvas" width="50" height="50"></canvas>
+          <div id="timer" class="timer">00:00</div>
+        </div>
+
+
+        <div
+          style="background: linear-gradient(90deg, #0891ff, #ff2a2a);-webkit-background-clip: text;/* width: 100%; */-webkit-text-fill-color: transparent;/* padding: 0 8px; */">
+          <div style="
+              font-weight: 800;
+              padding: 4px;
+          ">
+            Score : 55
+
+          </div>
+
+          <div style="
+              font-weight: 800;
+              padding: 4px;
+          ">
+
+            Rank : 1st
+          </div>
+
+        </div>
+
+        <p style="display: none;" id="questionNum">
+          1/10
+        </p>
+
+      </div>
+
+
+
+
+
+
+
+      <div id="quiz"></div>
+
+
+
+
+
+      <div id="results" style="display: none;">
+        <div id="scoreDiv" class="results-container">
+          <h2 class="results-title">نتائج الاختبار</h2>
+          <p id="score" class="results-score"></p>
+          <button id="retry" class="navigation-button">إعادة الاختبار</button>
+        </div>
+
+      </div>
+
+
+
+    </div>
+
+
+    <script>
+      const socket = io();
+
+      socket.on("connect", () => {
+
+        setTimeout(() => {
+          socket.emit("join competition", Id)
+        }, 100);
+      }
+      )
+
+      socket.on("newQuestion", (question, questionNum, competitionLength) => {
+        console.log(question)
+        buildQuiz(question, questionNum, competitionLength)
+      })
+
+      function buildQuiz(data, questionNum, competitionLength) {
+        const quizContainer = document.getElementById('quiz');
+        const questionNumDiv = document.getElementById('questionNum');
+
+        const currentQuestion = data
+        currentQuestion.duration = currentQuestion.duration || 5; // الوقت بالثواني (10 دقائق)
+
+        const answers = currentQuestion.answers.map(answer =>
+          `<button class="answer-button" value="${answer}">${answer}</button>`
+        ).join('');
+
+        quizContainer.innerHTML = `
+      <div id=${currentQuestion._id} class="question">${currentQuestion.question}</div>
+      <div  class="answers">${answers}</div>
+      `;
+
+
+
+        questionNumDiv.innerHTML = `${questionNum}/${competitionLength} Q`
+        startTimer(currentQuestion.duration)
+
+
+
+      }
+
+      function selectAnswer(event) {
+        if (event.target.classList.contains('answer-button')) {
+          // إزالة التحديد من جميع الأزرار
+          document.querySelectorAll('.answer-button').forEach(button => button.classList.remove('selected'));
+
+          // إضافة التحديد إلى الزر الذي تم اختياره
+          event.target.classList.add('selected');
+
+          let userAnswer = {}
+          userAnswer[document.getElementsByClassName("question")[0].id] = event.target.value;
+
+
+          socket.emit("answer", Id, userAnswer, (res) => {
+            console.log(res)
+
+          })
+
+
+
+        }
+      }
+
+      let timerInterval;
+      let timeRemaining = 30; // الوقت بالثواني (10 دقائق)
+      const canvas = document.getElementById('timerCanvas');
+      const ctx = canvas.getContext('2d');
+      const radius = canvas.width / 2;
+
+
+
+
+
+
+
+
+      async function startTest() {
+
+        try {
+          const response = await fetch(`/api/v1/tests/${testId}`);
+          const res = await response.json();
+          questions = res.questions
+
+          // بدء المؤقت عند تحميل الصفحة
+          startTimer();
+          // عرض السؤال الأول عند تحميل الصفحة
+          buildQuiz();
+
+
+        } catch (error) {
+          console.error('Error fetching test:', error);
+        }
+
+      }
+
+
+
+
+
+
+
+
+
+      async function sendAnswers() {
+        const testId = localStorage.getItem('testId');
+
+        fetch(`/api/v1/tests/${testId}`, {
+          method: "post",
+          headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+          },
+          body: JSON.stringify({ userAnswers: userAnswers })
+        }).then((response) => {
+          response.json().then((res) => {
+            //   localStorage.setItem('testId',res.testId );
+            //   document.location.pathname = "/test/start"
+            showResults(res)
+
+
+          }
+          )
+        }).catch((err) => { console.log(err) })
+
+
+
+      }
+
+      // for question
+      function startTimer(duration) {
+        clearInterval(timerInterval);
+
+        timerElement = document.getElementById("timer")
+        let timeRemaining = duration
+        const minutes = Math.floor(timeRemaining / 60);
+        const seconds = timeRemaining % 60;
+        // timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        timerElement.textContent = `${timeRemaining}`;
+        console.log(timerElement.textContent)
+
+        drawTimerCircle(timeRemaining, duration);
+
+        timeRemaining--;
+
+        timerInterval = setInterval(() => {
+          const minutes = Math.floor(timeRemaining / 60);
+          const seconds = timeRemaining % 60;
+          // timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+          timerElement.textContent = `${timeRemaining}`;
+
+          console.log(timerElement.textContent)
+
+          drawTimerCircle(timeRemaining, duration);
+
+          timeRemaining--;
+
+          if (timeRemaining < 0) {
+            clearInterval(timerInterval);
+            // showResults();
+          }
+        }, 1000);
+      }
+
+      function drawTimerCircle(timeRemaining, duration) {
+        const percentage = timeRemaining / duration;
+        const endAngle = 2 * Math.PI * (1 - percentage);
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.beginPath();
+        ctx.arc(radius, radius, radius - 1, -Math.PI / 2, endAngle - Math.PI / 2);
+        ctx.lineWidth = 10;
+        ctx.strokeStyle = '#FF7b0f'; // لون الشريط الدائري
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(radius, radius, radius - 10, 0, 2 * Math.PI);
+        ctx.lineWidth = 10;
+        ctx.strokeStyle = '#f4f4f4'; // خلفية الشريط الدائري
+        ctx.stroke();
+      }
+
+
+
+
+
+      function updateButtons() {
+        const prevButton = document.getElementById('prev');
+        const nextButton = document.getElementById('next');
+        const submitButton = document.getElementById('submit');
+
+        // تغيير حالة زر السؤال السابق
+        prevButton.classList.toggle('disabled', currentQuestionIndex === 0);
+
+        // تغيير حالة زر السؤال التالي
+        nextButton.classList.toggle('disabled', currentQuestionIndex === questions.length - 1);
+
+        // تغيير حالة زر إنهاء الاختبار
+        const allAnswered = Object.keys(userAnswers).length === questions.length && Object.keys(userAnswers).every(key => userAnswers[key] !== undefined && userAnswers[key] !== null && userAnswers[key] !== '');
+        submitButton.classList.toggle('disabled', !allAnswered);
+
+        if (allAnswered) {
+          document.getElementById('submit').addEventListener('click', sendAnswers);
+
+        }
+      }
+
+      function updateQuestionNavigation() {
+        const navigationContainer = document.getElementById('question-navigation');
+        navigationContainer.innerHTML = '';
+
+        questions.forEach((_, index) => {
+          const button = document.createElement('button');
+          button.textContent = index + 1;
+          button.className = 'question-nav-button';
+          button.dataset.index = index;
+          if (userAnswers[questions[index]._id]) {
+            button.classList.add('answered');
+          }
+          if (index === currentQuestionIndex) {
+            button.classList.add('selected');
+          }
+          button.addEventListener('click', () => {
+            currentQuestionIndex = index;
+            buildQuiz();
+          });
+          navigationContainer.appendChild(button);
+        });
+        const selectedButton = navigationContainer.querySelector('.selected');
+        if (selectedButton) {
+          selectedButton.scrollIntoView({ behavior: 'smooth', inline: 'center', block: "end" });
+        }
+      }
+
+
+
+      function showResults(res) {
+
+        clearInterval(timerInterval); // إيقاف المؤقت عند انتهاء الاختبار
+        const resultsContainer = document.getElementById('results');
+        // resultsContainer.innerHTML = '';
+
+
+        res.testAnswers.forEach((currentQuestion) => {
+          const userAnswer = currentQuestion.userAnswer;
+          const resultItem = document.createElement('div');
+          const answerButtons = currentQuestion.answers.map(answer => {
+            let buttonClass = 'answer-button';
+            console.log(currentQuestion.correct)
+            if (answer === currentQuestion.correct[0]) {
+              buttonClass += ' correct';
+            }
+            if (userAnswer === answer) {
+              buttonClass += ' selected-answer'; // للأزرار المحددة
+            }
+
+
+            if (userAnswer !==
+              currentQuestion.correct[0] && userAnswer === answer) {
+              buttonClass += ' incorrect'; // للأزرار غير الصحيحة
+            }
+            return `<button class="${buttonClass}" disabled>${answer}</button>`;
+          }).join('');
+          resultItem.classList = "results-container"
+          resultItem.innerHTML = `
+    <div class="question">${currentQuestion.question}</div>
+    <div class="answers">${answerButtons}</div>`;
+          resultsContainer.appendChild(resultItem);
+
+
+        });
+
+        const scoreElement = document.getElementById('score');
+
+
+
+        scoreElement.innerHTML = `لقد حصلت على <strong>${res.score}</strong> من <strong>${questions.length}</strong> أسئلة صحيحة!`;
+        // عرض النتيجة بشكل مناسب
+        // scoreElement.innerHTML = `لقد حصلت على <strong>${score}</strong> من <strong>${res.testAnswers.length}</strong> أسئلة صحيحة!`;
+        resultsContainer.style.display = 'block';
+
+        // إخفاء الأسئلة والأزرار
+        document.getElementById('quiz').style.display = 'none';
+        document.querySelector('.navigation').style.display = 'none';
+        document.querySelector('.end-test-container').style.display = 'none';
+
+
+      }
+
+
+
+      // document.getElementById('next').addEventListener('click', () => {
+      //   if (currentQuestionIndex < questions.length - 1) {
+      //     currentQuestionIndex++;
+      //     buildQuiz();
+      //   }
+      // });
+
+      // document.getElementById('prev').addEventListener('click', () => {
+      //   if (currentQuestionIndex > 0) {
+      //     currentQuestionIndex--;
+      //     buildQuiz();
+      //   }
+      // });
+
+      // document.getElementById('submit').addEventListener('click', showResults);
+
+      document.getElementById('quiz').addEventListener('click', selectAnswer);
+
+    </script>
+
+
+
+  </body>
+
+  <script>
+    const Id = "<%= challengeId %>"
+
+
+
+    function copy(e) {
+
+      // Get the text field
+      var copyText = document.getElementById("invLink");
+      const originalIcon = 'M3.33325 10H2.66659C2.31296 10 1.97382 9.85956 1.72378 9.60952C1.47373 9.35947 1.33325 9.02033 1.33325 8.66671V2.66671C1.33325 2.31309 1.47373 1.97395 1.72378 1.7239C1.97382 1.47385 2.31296 1.33337 2.66659 1.33337H8.66659C9.02021 1.33337 9.35935 1.47385 9.60939 1.7239C9.85944 1.97395 9.99992 2.31309 9.99992 2.66671V3.33337M7.33325 6.00004H13.3333C14.0696 6.00004 14.6666 6.59699 14.6666 7.33337V13.3334C14.6666 14.0698 14.0696 14.6667 13.3333 14.6667H7.33325C6.59687 14.6667 5.99992 14.0698 5.99992 13.3334V7.33337C5.99992 6.59699 6.59687 6.00004 7.33325 6.00004Z';
+      // Modern check mark icon path for success
+      const successIcon = 'M1 12.5L5 16L15 6'; // Check mark path
+
+
+      // Copy the text inside the text field
+      navigator.clipboard.writeText(copyText.innerHTML).then(() => {
+
+
+
+
+
+
+        // Change icon to success icon
+        e.getElementsByTagName("path")[0].setAttribute('d', successIcon);
+        e.getElementsByTagName("path")[0].setAttribute("stroke", "rgb(0, 255, 41)")
+
+        setTimeout(() => {
+          e.getElementsByTagName("path")[0].setAttribute('d', originalIcon);  // Revert to original icon
+          e.getElementsByTagName("path")[0].setAttribute("stroke", "white")
+
+        }, 1500);  // Keep success icon for 1.5 seconds
+
+
+
+
+
+
+
+      }).catch(err => {
+
+        console.error('Failed to copy text: ', err);
+      });;
+
+
+    }
+
+  </script>
+
+
+  </html>

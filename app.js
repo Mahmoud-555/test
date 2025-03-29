@@ -20,7 +20,6 @@ const indexRouter = require('./routes/index');
 const dashboardRouter =require('./routes/dashboardRouter');
 
 
-
 // connect to mongodb
 mongoose.connect(process.env.MONGO_URI).then( ()=>{
   console.log('connected')
@@ -36,6 +35,9 @@ const app = express();
 // view engine setup
 app.set('views', path.join(__dirname, 'frontend/views'));
 app.set('view engine', 'ejs');
+
+
+
 
 
 

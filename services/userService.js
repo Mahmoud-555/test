@@ -3,10 +3,12 @@ const { v4: uuidv4 } = require('uuid');
 const bcrypt = require('bcrypt');
 const sharp = require('sharp');
 var createError = require('http-errors');
+const { formatDistanceToNow } = require('date-fns');
 
 const factory = require('./handlersFactory');
 const { uploadSingleImage } = require('../common/uploadImageMiddleware');
 const User = require('../models/userModel');
+const Notification = require('../models/notificationModel');
 
 
 
@@ -40,6 +42,22 @@ exports.getUsers = factory.getAll(User);
 // @route   GET /api/v1/users/:id
 // @access  Private/Admin
 exports.getUser = factory.getOne(User);
+
+// @desc    Get  user notifications
+// @route   GET /api/v1/users/notifications
+// @access  Private/Admin
+exports.getNotifications = async (req, res, next) => {
+  try {
+    const notifications = await Notification.find({ user: req.user._id }, ["message", "avatar", "type", "href","time"]).sort({ createdAt: -1 })
+    res.status(200).json(
+      {
+        notifications: notifications
+      }
+    )
+  } catch (error) {
+    console.error(error);
+  }
+}
 
 // @desc    Create user
 // @route   POST  /api/v1/users
@@ -101,17 +119,18 @@ exports.deleteUser = factory.deleteOne(User);
 exports.getLoggedUserData = asyncHandler(async (req, res, next) => {
   // req.params.id = req.user._id;
   // next();
-  res.status(200).json({ 
+  res.status(200).json({
     data: {
-        username: req.user.username,
-        email: req.user.email,
-        name: req.user.name,
-        profileImage: req.user.profileImage,
-        role: req.user.role,
-        balance: req.user.balance,
-        verified: req.user.verified,
-    } });
- 
+      username: req.user.username,
+      email: req.user.email,
+      name: req.user.name,
+      profileImage: req.user.profileImage,
+      role: req.user.role,
+      balance: req.user.balance,
+      verified: req.user.verified,
+    }
+  });
+
 
 });
 
@@ -132,25 +151,26 @@ exports.updateLoggedUserPassword = asyncHandler(async (req, res, next) => {
   );
 
   // 2) Generate token
- const token = jwt.sign({ userId: userData._id }, process.env.JWT_SECRET_KEY, { expiresIn: "30d" });
-    res.cookie("token", token, {
-        maxAge: 86400000, httpOnly: true,
+  const token = jwt.sign({ userId: userData._id }, process.env.JWT_SECRET_KEY, { expiresIn: "30d" });
+  res.cookie("token", token, {
+    maxAge: 86400000, httpOnly: true,
 
-        // until deploying
-        secure: false
-    })
-    res.status(200).json(
-        {
-            username: userData.username,
-            email: userData.email,
-            name: userData.name,
-            profileImage: userData.profileImage,
-            role: userData.role,
-            balance: userData.balance,
-            verified: userData.verified,
-        }
+    // until deploying
+    secure: false
+  })
+  res.status(200).json(
+    {
+      username: userData.username,
+      email: userData.email,
+      name: userData.name,
+      profileImage: userData.profileImage,
+      role: userData.role,
+      balance: userData.balance,
+      verified: userData.verified,
+    }
 
-    )});
+  )
+});
 
 // @desc    Update logged user data (without password, role)
 // @route   PUT /api/v1/users/updateMe

@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="ar">
+
+<head>
+       
+    
+    <style>
+       
+
+        .container {
+            margin: auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 800px;
+            position: relative;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .question {
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        .answers {
+            margin-bottom: 20px;
+        }
+
+        .answer-button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 10px;
+            border: none;
+            border-radius: 8px;
+            background-color: #ffffff;
+            color: #007bff;
+            font-size: 1.2rem;
+            cursor: pointer;
+            text-align: left;
+            transition: background-color 0.3s, color 0.3s, transform 0.2s;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .answer-button:hover {
+            background-color: #e0f7fa;
+            transform: translateY(-2px);
+        }
+
+        .answer-button.selected {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .correct {
+            background-color: #c8e6c9; /* لون الخلفية للإجابة الصحيحة */
+            border: 2px solid #388e3c; /* لون حدود الإجابة الصحيحة */
+        }
+
+        .incorrect {
+            background-color: #ffebee; /* لون الخلفية للإجابة الخاطئة */
+            border: 2px solid #d32f2f; /* لون حدود الإجابة الخاطئة */
+        }
+
+        .navigation {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .navigation-button {
+            display: inline-block;
+            width: 120px;
+            padding: 10px;
+            border: none;
+            background-color: #28a745;
+            color: #fff;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 8px;
+            margin: 0 5px;
+            transition: background-color 0.3s;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .navigation-button:hover:not(.disabled) {
+            background-color: #218838;
+        }
+
+        .navigation-button.disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .timer-container {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .timer {
+            font-size: 1rem;
+            color: #333;
+            margin-top: -35px;
+        }
+
+        canvas {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #fff;
+            border: 2px solid #007bff;
+        }
+
+        #quiz {
+            margin-top: 80px;
+        }
+
+        .end-test-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        #results {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .results-container {
+            margin-top: 20px;
+            padding: 15px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .result-item {
+            margin-bottom: 10px;
+            border-radius: 8px;
+        }
+
+        .selected-answer {
+            border: 2px solid #007bff; /* لون تحديد الإجابة المختارة */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="timer-container">
+            <canvas id="timerCanvas" width="50" height="50"></canvas>
+            <div id="timer" class="timer">00:00</div>
+        </div>
+        <h1>اختبار معلومات</h1>
+        <div id="quiz"></div>
+      
+      
+        <div class="navigation">
+            <button id="prev" class="navigation-button disabled">السؤال السابق</button>
+            <div id="question-navigation" class="question-navigation"></div>
+            <button id="next" class="navigation-button">السؤال التالي</button>
+        </div>
+        <div class="end-test-container">
+            <button id="submit" class="navigation-button hidden">إنهاء الاختبار</button>
+        </div>
+        <div id="results" style="display: none;"></div>
+    </div>
+
+
+
+
+
+
+    <script>
+        const questions = [
+            { question: "ما هي عاصمة فرنسا؟", answers: ["باريس", "برلين", "مدريد", "روما"], correct: "باريس" },
+            { question: "من هو مؤلف كتاب '1984'؟", answers: ["جورج أورويل", "ألدوس هكسلي", "سلمان رشدي", "جون شتاينبك"], correct: "جورج أورويل" },
+            { question: "ما هو أكبر كوكب في المجموعة الشمسية؟", answers: ["المشتري", "زحل", "أرض", "نبتون"], correct: "المشتري" },
+            { question: "ما هو العنصر الكيميائي الذي يرمز له بالرمز O؟", answers: ["الأكسجين", "الكربون", "الهيدروجين", "النيتروجين"], correct: "الأكسجين" },
+            { question: "من هو أول إنسان مشى على سطح القمر؟", answers: ["نيل أرمسترونغ", "بز ألدرين", "مايكل كولينز", "يوري جاجارين"], correct: "نيل أرمسترونغ" },
+            { question: "ما هي أكبر قارة من حيث المساحة؟", answers: ["آسيا", "أفريقيا", "أوروبا", "أمريكا الشمالية"], correct: "آسيا" },
+            { question: "ما هي اللغة الرسمية في البرازيل؟", answers: ["البرتغالية", "الإسبانية", "الإنجليزية", "الفرنسية"], correct: "البرتغالية" },
+            { question: "من هو مؤسس شركة مايكروسوفت؟", answers: ["بيل غيتس", "ستيف جوبز", "مارك زوكربيرغ", "جاك ما"], correct: "بيل غيتس" },
+            { question: "ما هو الحيوان الذي يعتبر أسرع حيوان بري؟", answers: ["النمر", "الفهد", "الأرنب", "الزرافة"], correct: "الفهد" },
+            { question: "ما هو اسم أطول نهر في العالم؟", answers: ["نهر النيل", "نهر الأمازون", "نهر الغانج", "نهر اليانغتسي"], correct: "نهر النيل" }
+        ];
+
+        let currentQuestionIndex = 0;
+        const userAnswers = []; // لتخزين الإجابات المختارة
+        let timerInterval;
+        let timeRemaining = 600; // الوقت بالثواني (10 دقائق)
+        const canvas = document.getElementById('timerCanvas');
+        const ctx = canvas.getContext('2d');
+        const radius = canvas.width / 2;
+
+        function startTimer() {
+            const timerElement = document.getElementById('timer');
+            timerInterval = setInterval(() => {
+                const minutes = Math.floor(timeRemaining / 60);
+                const seconds = timeRemaining % 60;
+                timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                drawTimerCircle(timeRemaining);
+
+                timeRemaining--;
+
+                if (timeRemaining < 0) {
+                    clearInterval(timerInterval);
+                    showResults();
+                }
+            }, 1000);
+        }
+
+        function drawTimerCircle(time) {
+            const percentage = time / 600;
+            const endAngle = 2 * Math.PI * (1 - percentage);
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.beginPath();
+            ctx.arc(radius, radius, radius - 1, -Math.PI / 2, endAngle - Math.PI / 2);
+            ctx.lineWidth = 10;
+            ctx.strokeStyle = '#FF7b0f'; // لون الشريط الدائري
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.arc(radius, radius, radius - 10, 0, 2 * Math.PI);
+            ctx.lineWidth = 10;
+            ctx.strokeStyle = '#f4f4f4'; // خلفية الشريط الدائري
+            ctx.stroke();
+        }
+
+        function buildQuiz() {
+            const quizContainer = document.getElementById('quiz');
+            const currentQuestion = questions[currentQuestionIndex];
+
+            const answers = currentQuestion.answers.map(answer =>
+                `<button class="answer-button" value="${answer}">${answer}</button>`
+            ).join('');
+
+            quizContainer.innerHTML = `
+                <div class="question">${currentQuestion.question}</div>
+                <div class="answers">${answers}</div>
+            `;
+
+            // إعادة تمييز الإجابة المختارة إذا كانت موجودة
+            if (userAnswers[currentQuestionIndex]) {
+                const selectedValue = userAnswers[currentQuestionIndex];
+                const selectedButton = document.querySelector(`.answer-button[value="${selectedValue}"]`);
+                if (selectedButton) {
+                    selectedButton.classList.add('selected');
+                }
+            }
+
+            updateButtons();
+            updateQuestionNavigation();
+        }
+
+        function updateButtons() {
+            const prevButton = document.getElementById('prev');
+            const nextButton = document.getElementById('next');
+            const submitButton = document.getElementById('submit');
+
+            // تغيير حالة زر السؤال السابق
+            prevButton.classList.toggle('disabled', currentQuestionIndex === 0);
+
+            // تغيير حالة زر السؤال التالي
+            nextButton.classList.toggle('disabled', currentQuestionIndex === questions.length - 1);
+
+            // تغيير حالة زر إنهاء الاختبار
+            const allAnswered = userAnswers.length === questions.length && userAnswers.every(answer => answer);
+            submitButton.classList.toggle('disabled', !allAnswered);
+        }
+
+        function updateQuestionNavigation() {
+            const navigationContainer = document.getElementById('question-navigation');
+            navigationContainer.innerHTML = '';
+
+            questions.forEach((_, index) => {
+                const button = document.createElement('button');
+                button.textContent = index + 1;
+                button.className = 'question-nav-button';
+                button.dataset.index = index;
+                if (userAnswers[index]) {
+                    button.classList.add('answered');
+                }
+                if (index === currentQuestionIndex) {
+                    button.classList.add('selected');
+                }
+                button.addEventListener('click', () => {
+                    currentQuestionIndex = index;
+                    buildQuiz();
+                });
+                navigationContainer.appendChild(button);
+            });
+            const selectedButton = navigationContainer.querySelector('.selected');
+            if (selectedButton) {
+                selectedButton.scrollIntoView({ behavior: 'smooth', inline: 'center' });
+            }
+        }
+
+        function showResults() {
+            clearInterval(timerInterval); // إيقاف المؤقت عند انتهاء الاختبار
+            const resultsContainer = document.getElementById('results');
+            resultsContainer.innerHTML = '';
+
+            questions.forEach((currentQuestion, questionNumber) => {
+                const userAnswer = userAnswers[questionNumber] || "لم يجيب";
+                const resultItem = document.createElement('div');
+                const answerButtons = currentQuestion.answers.map(answer => {
+                    let buttonClass = 'answer-button';
+                    if (answer === currentQuestion.correct) {
+                        buttonClass += ' correct';
+                    }
+                    if (userAnswer === answer) {
+                        buttonClass += ' selected-answer'; // للأزرار المحددة
+                    }
+                  
+                  
+                    if (userAnswer !== 
+                        currentQuestion.correct && userAnswer === answer) {
+                        buttonClass += ' incorrect'; // للأزرار غير الصحيحة
+                    }
+                    return `<button class="${buttonClass}" disabled>${answer}</button>`;
+                }).join('');
+
+                resultItem.innerHTML = `
+                    <div class="question">${currentQuestion.question}</div>
+                    <div class="answers">${answerButtons}</div>
+                `;
+                
+                resultsContainer.appendChild(resultItem);
+            });
+
+            // إضافة درجة الاختبار
+            const score = userAnswers.filter((answer, index) => answer === questions[index].correct).length;
+            resultsContainer.innerHTML += `<h2>لقد حصلت على ${score} من ${questions.length} أسئلة صحيحة!</h2>`;
+            resultsContainer.style.display = 'block';
+
+            // إخفاء الأسئلة والأزرار
+            document.getElementById('quiz').style.display = 'none';
+            document.querySelector('.navigation').style.display = 'none';
+            document.querySelector('.end-test-container').style.display = 'none';
+        }
+
+        function selectAnswer(event) {
+            if (event.target.classList.contains('answer-button')) {
+                // إزالة التحديد من جميع الأزرار
+                document.querySelectorAll('.answer-button').forEach(button => button.classList.remove('selected'));
+
+                // إضافة التحديد إلى الزر الذي تم اختياره
+                event.target.classList.add('selected');
+
+                // تخزين الإجابة المختارة
+                userAnswers[currentQuestionIndex] = event.target.value;
+                updateButtons(); // تحديث حالة الأزرار بناءً على الإجابات
+            }
+        }
+
+        document.getElementById('next').addEventListener('click', () => {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                buildQuiz();
+            }
+        });
+
+        document.getElementById('prev').addEventListener('click', () => {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                buildQuiz();
+            }
+        });
+
+        document.getElementById('submit').addEventListener('click', showResults);
+
+        document.getElementById('quiz').addEventListener('click', selectAnswer);
+
+        // بدء المؤقت عند تحميل الصفحة
+        startTimer();
+        // عرض السؤال الأول عند تحميل الصفحة
+        buildQuiz();
+    </script>
+</body>
+  
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function showResults(res) {
+
+    clearInterval(timerInterval); // إيقاف المؤقت عند انتهاء الاختبار
+    const resultsContainer = document.getElementById('results');
+    resultsContainer.innerHTML = '';
+
+    score = res.score
+
+    res.questions.forEach((currentQuestion) => {
+        const userAnswer = res.userAnswer;
+        const resultItem = document.createElement('div');
+        const answerButtons = currentQuestion.answers.map(answer => {
+            let buttonClass = 'answer-button';
+            if (answer === currentQuestion.correct) {
+                buttonClass += ' correct';
+            }
+            if (userAnswer === answer) {
+                buttonClass += ' selected-answer'; // للأزرار المحددة
+            }
+          
+          
+            if (userAnswer !== 
+                currentQuestion.correct && userAnswer === answer) {
+                buttonClass += ' incorrect'; // للأزرار غير الصحيحة
+            }
+            return `<button class="${buttonClass}" disabled>${answer}</button>`;
+        }).join('');
+
+
+      
+    });
+
+
+
+
+
+    const scoreElement = document.getElementById('score');
+
+
+
+
+    // عرض النتيجة بشكل مناسب
+    scoreElement.innerHTML = `لقد حصلت على <strong>${score}</strong> من <strong>${questions.length}</strong> أسئلة صحيحة!`;
+    resultsContainer.style.display = 'block';
+
+    // إخفاء الأسئلة والأزرار
+    document.getElementById('quiz').style.display = 'none';
+    document.querySelector('.navigation').style.display = 'none';
+    document.querySelector('.end-test-container').style.display = 'none';
+}

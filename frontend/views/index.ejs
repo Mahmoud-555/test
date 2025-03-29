@@ -3,13 +3,23 @@
 
 <head>
 
-    
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>my app</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="/stylesheets/index-style.css">
+
+
+
+    <!--     
     <style>
+        ::-webkit-scrollbar {
+            width: 0px;
+            height: 0px;
+        }
+
         .gradient-circle {
 
             width: 37px;
@@ -58,7 +68,9 @@
             /* إرسال الخلفية إلى الخلف */
         }
 
-
+        a {
+            text-decoration: none;
+        }
 
         .modal-content {
             border-radius: 1rem;
@@ -102,9 +114,31 @@
 
 
 
+        @media only screen and (max-width: 600px) {
+            #posts {
+                display: grid !important;
+                grid-template-columns: 1fr 1fr
+            }
+
+            .post {
+                width: 100% !important;
 
 
+            }
+        }
 
+        @media only screen and (max-width: 400px) {
+            #posts {
+                display: grid !important;
+                grid-template-columns: 1fr
+            }
+
+            .post {
+                width: 100% !important;
+
+
+            }
+        }
 
 
         P {
@@ -138,39 +172,177 @@
             width: 5%;
             height: 100%;
         }
-    </style>
-      <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                getUserData()
-            });
 
-            function getUserData() {
 
-                fetch("api/v1/users/getMe", {
-                    method: "get",
-                    headers: {
-                        'Content-type': 'application/json; charset=UTF-8',
-                    },
-                    // body: JSON.stringify({ email: email, password: password })
-                }).then((response) => {
-                    response.json().then((userData) => {
-                        document.getElementById("profile-img").src = userData.data.profileImage
-
-                        document.getElementById("balance").innerHTML = userData.data.balance
-
-                        document.getElementById("username").innerHTML = userData.data.username
-                    }
-                    )
-                }).catch((err) => { console.log(err) })
-
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
             }
-        </script >
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .dropdown {
+            display: none;
+            /* Hidden by default */
+            position: absolute;
+            background-color: white;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            width: 300px;
+            z-index: 100;
+            margin-top: 10px;
+            overflow: hidden;
+            animation: fadeIn 0.3s ease;
+            top: 39px;
+            right: 33px;
+        }
+
+
+        .dropdown-header {
+            padding: 10px 15px;
+            background-color: #f7f9fc;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eaeaea;
+        }
+
+        .dropdown-header h5 {
+            margin: 0;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .clear-button {
+            background: #FF5733;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .clear-button:hover {
+            background-color: #FF5733;
+        }
+
+        #notificationContainer {
+            max-height: 350px;
+            overflow: scroll;
+        }
+
+        .notification-item {
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #f1f1f1;
+            transition: background-color 0.3s;
+        }
+
+        .notification-item:hover {
+            background-color: #f9f9f9;
+        }
+
+        .notification-item:last-child {
+            border-bottom: none;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .notification-message {
+            flex-grow: 1;
+            margin-right: 5px;
+        }
+
+        .notification-time {
+            font-size: 12px;
+            color: #aaa;
+        }
+
+        .view-all {
+            display: block;
+            padding: 10px 15px;
+            text-align: center;
+            color: #FF5733;
+            text-decoration: none;
+        }
+
+        .view-all:hover {
+            background-color: #f9f9f9;
+        }
+
+        /* Show class */
+        .dropdown.show {
+            display: block;
+        }
+
+        .badge {
+            background-color: #FF5733;
+            /* styling based on examples */
+            border-radius: 50%;
+            padding: 4px;
+            position: absolute;
+            top: 4px;
+            left: 18px;
+            font-size: 8px;
+            color: white;
+            width: 1rem;
+        }
+    </style> -->
+
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function () {
+            getUserData()
+        });
+
+        function getUserData() {
+
+            fetch("api/v1/users/getMe", {
+                method: "get",
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                },
+                // body: JSON.stringify({ email: email, password: password })
+            }).then((response) => {
+                response.json().then((userData) => {
+                    document.getElementById("profile-img").src = userData.data.profileImage
+
+                    document.getElementById("balance").innerHTML = userData.data.balance
+
+                    document.getElementById("username").innerHTML = userData.data.username
+                }
+                )
+            }).catch((err) => { console.log(err) })
+
+        }
+    </script>
+    <%if(isSignIn){%>
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="/javascripts/initSocket.js"></script>
+        <%}%>
+
+
+
+
+
 </head>
 
-<body style=" background: #03101f;min-height: 100vh;">
+<body>
     <%if(isSignIn){%>
         <header
-            style="overflow: hidden; height: 55px; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; background: rgba(125,150,239,0.1); border-width: 0px; border-color: #000; box-shadow: 5px 4px 21px 0 rgba(0,0,0,0.25);padding:6px 10px;">
+            style=" height: 55px; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; background: rgba(125,150,239,0.1); border-width: 0px; border-color: #000; box-shadow: 5px 4px 21px 0 rgba(0,0,0,0.25);padding:6px 10px;">
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <div
                     style="display: flex; justify-content: flex-start; align-items: center; flex-grow: 0; flex-shrink: 0; position: relative; gap: 20px;">
@@ -178,6 +350,9 @@
                     <div class="gradient-circle">
                         <div
                             style="display: flex;border-radius: 50%; overflow: hidden; align-items: center;justify-content: center; height: 100%;">
+                            <div
+                                style="height: 10px; width: 10px;background-color: greenyellow;position: absolute;top: 0;left: 32px;border-radius: 50%;">
+                            </div>
                             <img id="profile-img" style="height: 43px;width: 43px;" src="" />
                         </div>
                     </div>
@@ -190,14 +365,57 @@
                 </div>
                 <div
                     style="display: flex; justify-content: flex-start; align-items: center; flex-grow: 0; flex-shrink: 0; position: relative; gap: 20px;padding: 10px;">
-                    <svg id="notificationButton" width="14" height="15" viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg"
-                        style="flex-grow: 0; flex-shrink: 0;" preserveAspectRatio="none">
+
+
+                    <svg id="notificationButton" width="14" height="15" viewBox="0 0 14 15" fill="none"
+                        xmlns="http://www.w3.org/2000/svg" style="flex-grow: 0; flex-shrink: 0;cursor: pointer;"
+                        preserveAspectRatio="none">
                         <path
                             d="M7 0.5C6.56902 0.5 6.1557 0.663888 5.85095 0.955612C5.54621 1.24733 5.375 1.643 5.375 2.05556V2.32078C3.48188 2.96167 2.125 4.69067 2.125 6.72222V10.6111H1.3125C1.09701 10.6111 0.890349 10.6931 0.737976 10.8389C0.585603 10.9848 0.5 11.1826 0.5 11.3889C0.5 11.5952 0.585603 11.793 0.737976 11.9389C0.890349 12.0847 1.09701 12.1667 1.3125 12.1667H12.6875C12.903 12.1667 13.1097 12.0847 13.262 11.9389C13.4144 11.793 13.5 11.5952 13.5 11.3889C13.5 11.1826 13.4144 10.9848 13.262 10.8389C13.1097 10.6931 12.903 10.6111 12.6875 10.6111H11.875V6.72222C11.8751 5.75695 11.5627 4.81538 10.9806 4.02714C10.3986 3.23889 9.57562 2.64275 8.625 2.32078V2.05556C8.625 1.643 8.45379 1.24733 8.14905 0.955612C7.8443 0.663888 7.43098 0.5 7 0.5ZM7 14.5C6.56902 14.5 6.1557 14.3361 5.85095 14.0444C5.54621 13.7527 5.375 13.357 5.375 12.9444H8.625C8.625 13.357 8.45379 13.7527 8.14905 14.0444C7.8443 14.3361 7.43098 14.5 7 14.5Z"
                             fill="white"></path>
                     </svg>
+
+                    <span class="badge" id="notificationBadge">33</span>
+
+                    <!-- notification -->
+
+
+                    <!-- <div id="notification-dropdown"
+                        style="display: none;background-color: white;padding: 8px;width: 250px;height: 400px;position: absolute;top: 39px;right: 33px;border-radius: 8px;z-index: 1000;animation: fadeIn 0.3s ease;">
+                        
+                        
+                        
+                        <h6 style="">
+                            Notifications
+                        </h6>
+
+                        <hr>
+
+
                     
-                    
+                    </div>
+                     -->
+
+
+                    <div class="dropdown" id="notificationDropdown" aria-hidden="true">
+                        <div class="dropdown-header">
+
+                            <h5>Notifications</h5>
+                            <button class="clear-button">Clear All</button>
+                        </div>
+                        <div id="notificationContainer"></div>
+                        <a href="#" class="view-all">View All</a>
+                    </div>
+
+
+
+
+
+
+
+
+
+
                     <svg width="6" height="21" viewBox="0 0 6 21" fill="none" xmlns="http://www.w3.org/2000/svg"
                         style="flex-grow: 0; flex-shrink: 0;" preserveAspectRatio="none">
                         <path
@@ -208,6 +426,12 @@
             </div>
         </header>
         <%}%>
+
+
+
+
+
+
             <%if(!isSignIn){%>
                 <!-- Modal -->
                 <div class="modal fade" id="authModal" tabindex="-1" aria-labelledby="authModalLabel"
@@ -248,6 +472,15 @@
                                             <input type="email" class="form-control" id="registerEmail" required>
                                             <div class="error-message" id="registerEmailError"></div>
                                         </div>
+
+                                        <div class="mb-3">
+                                            <label for="registerUserName" class="form-label">username</label>
+                                            <input type="email" class="form-control" id="registerUserName" required>
+                                            <div class="error-message" id="registerUserNameError"></div>
+                                        </div>
+
+
+
                                         <div class="mb-3">
                                             <label for="registerPassword" class="form-label">Password</label>
                                             <input type="password" class="form-control" id="registerPassword" required>
@@ -320,6 +553,13 @@
 
                 </header>
                 <%}%>
+
+                    <!-- <div style="height: 40px;margin: 5px;background-color: #0057b350;">
+
+</div> -->
+
+
+
                     <!-- points -->
                     <div
                         style="display: flex; justify-content: space-between; align-items: center;height: 59px; padding-left: 21px; padding-right: 21px; padding-top: 0px; padding-bottom: 0px; border-radius: 8px; background: linear-gradient(to right, #182e51 0%, #3668b7 100%);width: 92%;margin:1.2rem auto;">
@@ -327,7 +567,8 @@
                             <span
                                 style="flex-grow: 0; flex-shrink: 0; width: 163px; font-size: 14px; font-weight: 500; text-align: left; color: rgba(255,255,255,0.87);">welcome
                                 back!</span><br />
-                                <span id="username" style="flex-grow: 0; flex-shrink: 0; width: 163px; font-size: 12px; font-weight: 300; text-align: left; color: #e7e0e0;">
+                            <span id="username"
+                                style="flex-grow: 0; flex-shrink: 0; width: 163px; font-size: 12px; font-weight: 300; text-align: left; color: #e7e0e0;">
                                 Mahmoud ahmed mohamed
                             </span>
                         </p>
@@ -356,7 +597,7 @@
                             </p>
                         </div>
                     </div>
-                    <div id="carouselContainer"
+                    <!-- <div id="carouselContainer"
                         style="width: 92%; height: 124px;border-radius: 8px; background: #d9d9d9;margin: auto;">
 
 
@@ -394,7 +635,7 @@
 
 
 
-                    </div>
+                    </div> -->
                     <div style="width: 92%;margin:1.2rem auto;display: flex;flex-wrap: wrap;gap: 1rem">
                         <div
                             style="min-width: 144px; height: 86px; border-radius: 8px; background: linear-gradient(to right, #0f1d34 0%, #1d3863 100%); display: flex;display: flex; align-items: center;justify-content: space-around;flex-grow: 1">
@@ -412,29 +653,35 @@
                                     style="width: 49.28px; height: 86px; object-fit: contain;" />
                             </div>
                         </div>
-                        <div
-                            style="min-width: 144px; height: 86px; border-radius: 8px; background: linear-gradient(to right, #0f1d34 0%, #1d3863 100%);display: flex;display: flex; align-items: center; justify-content: space-around;flex-grow: 1">
 
-                            <p
-                                style="width: 65.24px; height: 23px; font-size: 9px; font-weight: 500; text-align: left; color: #fff;">
-                                challange your freinds </p>
+                        <a style="flex-grow: 1;" href="challenge">
 
+                            <div
+                                style="min-width: 144px; height: 86px; border-radius: 8px; background: linear-gradient(to right, #0f1d34 0%, #1d3863 100%);display: flex;display: flex; align-items: center; justify-content: space-around;flex-grow: 1">
 
-
-
-                            <div style="width: 49.28px; height: 86px;position: relative;">
-                                <img src="images/m5_8.png.png"
-                                    style="width: 49.28px; height: 82.84px; position: absolute; left: 1.89px; top: 1.5px; object-fit: contain;" />
-                                <img src="images/m5_8.png.png"
-                                    style="width: 36.61px; height: 61.65px; position: absolute;left: -16.13px; top: 16.69px; object-fit: contain;" />
-                                <img src="images/m5_8.png.png"
-                                    style="width: 33.79px; height: 56.83px; position: absolute; left: 29.83px;top: 20.62px; object-fit: contain;" />
+                                <p
+                                    style="width: 65.24px; height: 23px; font-size: 9px; font-weight: 500; text-align: left; color: #fff;">
+                                    challenge your freinds </p>
 
 
 
 
+                                <div style="width: 49.28px; height: 86px;position: relative;">
+                                    <img src="images/m5_8.png.png"
+                                        style="width: 49.28px; height: 82.84px; position: absolute; left: 1.89px; top: 1.5px; object-fit: contain;" />
+                                    <img src="images/m5_8.png.png"
+                                        style="width: 36.61px; height: 61.65px; position: absolute;left: -16.13px; top: 16.69px; object-fit: contain;" />
+                                    <img src="images/m5_8.png.png"
+                                        style="width: 33.79px; height: 56.83px; position: absolute; left: 29.83px;top: 20.62px; object-fit: contain;" />
+
+
+
+
+                                </div>
                             </div>
-                        </div>
+                        </a>
+
+
                         <a style="flex-grow: 1;" href="test">
                             <div
                                 style="min-width: 144px; height: 86px; border-radius: 8px; background: linear-gradient(to right, #0f1d34 0%, #1d3863 100%); position: relative;display: flex;display: flex; align-items: center;justify-content: space-around;flex-grow: 1">
@@ -450,14 +697,452 @@
                                 </div>
                             </div>
                         </a>
+
                     </div>
+
                     <p
-                        style="font-size: 14px; font-weight: 500; text-align: left; color: #fff;margin: auto;width: 92%;">
-                        history
+                        style="font-size: 22px; font-weight: 500; text-align: left; color: #fff;margin:auto ;width: 92%;">
+                        Quiz
                     </p>
-                    <div>
+
+                    <div id="posts" style="border-radius: 8px;margin: 82px auto;width: 92%;;border: solid 2px;display: flex;flex-wrap: wrap;margin: auto;padding: 18px;gap: 18px;border-left: none;
+    border-right: none;">
+
+
+
+
+
+
+                        <div class="post"
+                            style="height:fit-content ;width: 10rem;background-color: #f9f9fa;border-radius: 8px;margin: 0px;">
+
+
+
+                            <div style="display: flex;align-items: center;padding: 8px;gap: 8px;">
+
+                                <div id="img"
+                                    style="width: 40px;height: 40px;border-radius: 50%;background-color: #000;">
+
+                                </div>
+                                <div>
+                                    <span style="font-weight: 700;color: #0b7f2e;">mahmoud</span>
+                                    <br>
+                                    <span style="font-size: 14px;">1 day</span>
+
+                                </div>
+
+
+
+                            </div>
+
+                            <h2 class="post-title"
+                                style=" font-size: 1.1em; margin: 10px 0;text-align: center;font-weight: 600;">anatomy
+                                quiz</h2>
+
+                            <button style=" background-color: #007BFF;
+                            color: white;
+                            border: none;
+                            border-radius: 5px;
+                            padding: 4px 10px;
+                            cursor: pointer;
+                            transition: background-color 0.3s;
+                            display: block;
+                            margin: 8px auto;
+                            
+                            " class="read-more" onclick="goToPost()">start</button>
+
+                            <!-- <div id="title" style="padding: 8px;">
+                                anatomy quiz
+
+                            </div> -->
+
+
+                        </div>
+                        <div class="post"
+                            style="height:fit-content ;width: 10rem;background-color: #f9f9fa;border-radius: 8px;margin: 0px;">
+
+
+
+                            <div style="display: flex;align-items: center;padding: 8px;gap: 8px;">
+
+                                <div id="img"
+                                    style="width: 40px;height: 40px;border-radius: 50%;background-color: #000;">
+
+                                </div>
+                                <div>
+                                    <span style="font-weight: 700;color: #0b7f2e;">mahmoud</span>
+                                    <br>
+                                    <span style="font-size: 14px;">1 day</span>
+
+                                </div>
+
+
+
+                            </div>
+
+                            <h2 class="post-title"
+                                style=" font-size: 1.1em; margin: 10px 0;text-align: center;font-weight: 600;">anatomy
+                                quiz</h2>
+
+                            <button style=" background-color: #007BFF;
+                        color: white;
+                        border: none;
+                        border-radius: 5px;
+                        padding: 4px 10px;
+                        cursor: pointer;
+                        transition: background-color 0.3s;
+                        display: block;
+                        margin: 8px auto;
+                        
+                        " class="read-more" onclick="goToPost()">start</button>
+
+                            <!-- <div id="title" style="padding: 8px;">
+                            anatomy quiz
+
+                        </div> -->
+
+
+                        </div>
+                        <div class="post"
+                            style="height:fit-content ;width: 10rem;background-color: #f9f9fa;border-radius: 8px;margin: 0px;">
+
+
+
+                            <div style="display: flex;align-items: center;padding: 8px;gap: 8px;">
+
+                                <div id="img"
+                                    style="width: 40px;height: 40px;border-radius: 50%;background-color: #000;">
+
+                                </div>
+                                <div>
+                                    <span style="font-weight: 700;color: #0b7f2e;">mahmoud</span>
+                                    <br>
+                                    <span style="font-size: 14px;">1 day</span>
+
+                                </div>
+
+
+
+                            </div>
+
+                            <h2 class="post-title"
+                                style=" font-size: 1.1em; margin: 10px 0;text-align: center;font-weight: 600;">anatomy
+                                quiz</h2>
+
+                            <button style=" background-color: #007BFF;
+                    color: white;
+                    border: none;
+                    border-radius: 5px;
+                    padding: 4px 10px;
+                    cursor: pointer;
+                    transition: background-color 0.3s;
+                    display: block;
+                    margin: 8px auto;
+                    
+                    " class="read-more" onclick="goToPost()">start</button>
+
+                            <!-- <div id="title" style="padding: 8px;">
+                        anatomy quiz
+
+                    </div> -->
+
+
+                        </div>
+
+                        <div class="post"
+                            style="height:fit-content ;width: 10rem;background-color: #f9f9fa;border-radius: 8px;margin: 0px;">
+
+
+
+                            <div style="display: flex;align-items: center;padding: 8px;gap: 8px;">
+
+                                <div id="img"
+                                    style="width: 40px;height: 40px;border-radius: 50%;background-color: #000;">
+
+                                </div>
+                                <div>
+                                    <span style="font-weight: 700;color: #0b7f2e;">mahmoud</span>
+                                    <br>
+                                    <span style="font-size: 14px;">1 day</span>
+
+                                </div>
+
+
+
+                            </div>
+
+                            <h2 class="post-title"
+                                style=" font-size: 1.1em; margin: 10px 0;text-align: center;font-weight: 600;">anatomy
+                                quiz</h2>
+
+                            <button style=" background-color: #007BFF;
+                            color: white;
+                            border: none;
+                            border-radius: 5px;
+                            padding: 4px 10px;
+                            cursor: pointer;
+                            transition: background-color 0.3s;
+                            display: block;
+                            margin: 8px auto;
+                            
+                            " class="read-more" onclick="goToPost()">start</button>
+
+                            <!-- <div id="title" style="padding: 8px;">
+                                anatomy quiz
+
+                            </div> -->
+
+
+                        </div>
+                        <div class="post"
+                            style="height:fit-content ;width: 10rem;background-color: #f9f9fa;border-radius: 8px;margin: 0px;">
+
+
+
+                            <div style="display: flex;align-items: center;padding: 8px;gap: 8px;">
+
+                                <div id="img"
+                                    style="width: 40px;height: 40px;border-radius: 50%;background-color: #000;">
+
+                                </div>
+                                <div>
+                                    <span style="font-weight: 700;color: #0b7f2e;">mahmoud</span>
+                                    <br>
+                                    <span style="font-size: 14px;">1 day</span>
+
+                                </div>
+
+
+
+                            </div>
+
+                            <h2 class="post-title"
+                                style=" font-size: 1.1em; margin: 10px 0;text-align: center;font-weight: 600;">anatomy
+                                quiz</h2>
+
+                            <button style=" background-color: #007BFF;
+                        color: white;
+                        border: none;
+                        border-radius: 5px;
+                        padding: 4px 10px;
+                        cursor: pointer;
+                        transition: background-color 0.3s;
+                        display: block;
+                        margin: 8px auto;
+                        
+                        " class="read-more" onclick="goToPost()">start</button>
+
+                            <!-- <div id="title" style="padding: 8px;">
+                            anatomy quiz
+
+                        </div> -->
+
+
+                        </div>
+                        <div class="post"
+                            style="height:fit-content ;width: 10rem;background-color: #f9f9fa;border-radius: 8px;margin: 0px;">
+
+
+
+                            <div style="display: flex;align-items: center;padding: 8px;gap: 8px;">
+
+                                <div id="img"
+                                    style="width: 40px;height: 40px;border-radius: 50%;background-color: #000;">
+
+                                </div>
+                                <div>
+                                    <span style="font-weight: 700;color: #0b7f2e;">mahmoud</span>
+                                    <br>
+                                    <span style="font-size: 14px;">1 day</span>
+
+                                </div>
+
+
+
+                            </div>
+
+                            <h2 class="post-title"
+                                style=" font-size: 1.1em; margin: 10px 0;text-align: center;font-weight: 600;">anatomy
+                                quiz</h2>
+
+                            <button style=" background-color: #007BFF;
+                    color: white;
+                    border: none;
+                    border-radius: 5px;
+                    padding: 4px 10px;
+                    cursor: pointer;
+                    transition: background-color 0.3s;
+                    display: block;
+                    margin: 8px auto;
+                    
+                    " class="read-more" onclick="goToPost()">start</button>
+
+                            <!-- <div id="title" style="padding: 8px;">
+                        anatomy quiz
+
+                    </div> -->
+
+
+                        </div>
+
+
+
+
+
+
                     </div>
-             
+
+
+
+
+
+
+
+
+
+
+                    <!--notification  -->
+                    <script>
+                        const notificationButton = document.getElementById('notificationButton');
+                        const notificationDropdown = document.getElementById('notificationDropdown');
+
+                        notificationButton.addEventListener('click', (event) => {
+                            event.stopPropagation(); // Prevent the click from bubbling up to the window
+                            notificationDropdown.classList.toggle('show');
+                            const expanded = notificationDropdown.classList.contains('show');
+                            // Update aria-expanded attribute
+                            notificationDropdown.setAttribute('aria-hidden', !expanded);
+
+                            // For accessibility: focus on the dropdown when opened
+                            if (expanded) {
+                                notificationDropdown.focus();
+                            }
+                        });
+
+
+                        notificationDropdown.addEventListener('click', (event) => {
+                            event.stopPropagation(); // Prevent the click from bubbling up to the window
+                        });
+                        // Close the dropdown when clicking outside of it
+                        window.addEventListener('click', () => {
+
+                            notificationDropdown.classList.remove('show');
+                        });
+                        
+                        
+                        
+                        function timeAgo(date) {
+                            const now = new Date();
+                            const seconds = (now - date) / 1000;
+                            let interval = Math.floor(seconds / 31536000);
+
+                            if (interval == 1) return interval + " year ago";
+                            if (interval > 1) return interval + " years ago";
+                            interval = Math.floor(seconds / 2592000);
+                            if (interval == 1) return interval + " month ago";
+                            if (interval > 1) return interval + " months ago";
+                            interval = Math.floor(seconds / 86400);
+                            if (interval == 1) return interval + " day ago";
+                            if (interval > 1) return interval + " days ago";
+                            interval = Math.floor(seconds / 3600);
+                            if (interval == 1) return interval + " hour ago";
+                            if (interval > 1) return interval + " hours ago";
+                            interval = Math.floor(seconds / 60);
+                            if (interval == 1) return interval + " minute ago";
+                            if (interval > 1) return interval + " minutes ago";
+                            return seconds + " seconds ago";
+                        }
+
+
+
+                        // Function to render notifications
+                        function renderNotifications() {
+                            fetch("api/v1/users/notifications", {
+                                method: "get",
+                                headers: {
+                                    'Content-type': 'application/json; charset=UTF-8',
+                                },
+                            }).then((response) => {
+                                response.json().then((res) => {
+                                    notifications = res.notifications
+                                    const container = document.getElementById('notificationContainer');
+                                    container.innerHTML = ''; // Clear existing notifications
+                                    console.log(notifications)
+                                    const options = {
+                                        // weekday: 'long',
+                                        // year: 'numeric',
+                                        // month: 'numeric',
+                                        // day: 'numeric',
+                                        hour: '2-digit',
+                                        minute: '2-digit',
+                                        // hour12: false
+                                    };
+
+                                    // const localDateStr = dateObj.toLocaleString(undefined, options);
+
+                                    notifications.forEach(notification => {
+                                        const t = new Date(notification.time)
+
+                                        const time = t.toLocaleString(undefined, options)
+                                        const item = document.createElement('div');
+                                        item.className = 'notification-item';
+                                        item.innerHTML = `
+  
+                                       <div>
+                                        <img src="${notification.avatar}" alt="Avatar" class="avatar">
+                                      </div>
+
+                                        <div style="flex-grow: 1;">
+                              
+                                            <div class="notification-message">${notification.message}</div>
+                                            <div class="notification-time">
+                                                <span class="notification-time">${time}
+                                                </span> 
+                                                <span class="notification-time">${timeAgo(t)}
+                                                </span>  
+                                            </div>
+
+
+                                            <div class="action-div">
+     
+                                                
+                                              
+                                                <a  class=" btn btn-primary btn-sm" href=${notification.href}>
+                                                  Start
+                                                </a> 
+   
+                                            </div>
+                                            
+                             
+                                        
+                                   
+                                        </div>
+                                  
+
+
+                             
+
+            `;
+                                        container.appendChild(item);
+                                    });
+
+                                    // Update badge count
+                                    const unreadCount = notifications.length; // Adjust this with actual unread logic
+                                    document.getElementById('notificationBadge').textContent = unreadCount;
+
+
+                                }
+                                )
+                            }).catch((err) => { console.log(err) })
+                        }
+
+
+                        // Initial rendering of notifications
+                        renderNotifications();
+
+
+
+                    </script>
 
 
                     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
@@ -608,6 +1293,8 @@
                                         document.getElementById('formRegister').addEventListener('submit', function (e) {
                                             e.preventDefault();
                                             const email = document.getElementById('registerEmail').value;
+                                            const username = document.getElementById('registerUserName').value;
+
                                             const password = document.getElementById('registerPassword').value;
                                             const confirmPassword = document.getElementById('registerConfirmPassword').value;
                                             let valid = true;
@@ -634,7 +1321,7 @@
                                                         'Content-type': 'application/json; charset=UTF-8',
                                                     },
                                                     body: JSON.stringify({
-                                                        // username: username,
+                                                        username: username,
                                                         // name: name,
                                                         email: email,
                                                         password: password,
@@ -688,6 +1375,15 @@
                                     });
                                 </script>
                                 <%}%>
+
+
+
+
 </body>
 
-</html>
+</html>  
+<!-- 
+<a  class=" btn btn-outline-danger btn-sm" href=${notification.href}>
+    Decline
+  </a> -->
+  

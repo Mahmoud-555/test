@@ -1,0 +1,887 @@
+<!doctybe html>
+  <html>
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link rel="stylesheet" href="/stylesheets/styles.css"> -->
+    <!-- quiz style -->
+    <style>
+      * {
+        margin: 0;
+
+        padding: 0;
+        box-sizing: border-box
+      }
+
+      ::-webkit-scrollbar {
+        width: 0px;
+        height: 0px;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        width: 100vw;
+
+      }
+
+      .container {
+        min-height: 100vh;
+        position: relative;
+
+        margin: auto;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 800px;
+      }
+
+      h1 {
+        text-align: center;
+      }
+
+      .question {
+        display: flex;
+        align-items: center;
+
+        /* min-height: 3rem; */
+        
+        /* padding: 0 0 20px; */
+        margin-bottom: 1rem;
+        font-size: 1.2rem;
+        animation: fadeIn1 2s;
+
+      }
+
+      .answers {
+
+        margin-top: 20px;
+      }
+
+      .answer-button {
+        animation: fadeIn1 2s;
+        display: block;
+        width: 100%;
+        padding: 1rem;
+        margin-bottom: 16px;
+        margin-top: 16px;
+        border: none;
+        border-radius: 8px;
+        background-color: #fff;
+        color: #007bff;
+        font-size: 1.03rem;
+        cursor: pointer;
+        text-align: left;
+        transition: background-color 0.3s, color 0.3s, transform 0.2s;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        min-height: 3rem;
+
+
+      }
+
+      .answer-button:hover {
+        background-color: #e0f7fa;
+        /* color: #fff; */
+        transform: translateY(-2px);
+
+      }
+
+      .answer-button.selected {
+        background-color: #007bff;
+        color: #fff;
+      }
+
+      .correct {
+        background-color: #c8e6c9;
+        /* لون الخلفية للإجابة الصحيحة */
+      }
+
+      .selected-answer {
+        border: 2px solid #388e3c;
+        /* لون حدود الإجابة الصحيحة */
+      }
+
+      .incorrect {
+        background-color: #ffebee;
+        /* لون الخلفية للإجابة الخاطئة */
+        border: 2px solid #d32f2f;
+        /* لون حدود الإجابة الخاطئة */
+      }
+
+      .timer-container {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        z-index: 10;
+        /* لضمان بقاء المؤقت فوق العناصر الأخرى */
+      }
+
+      canvas {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: #fff;
+        border: 2px solid #007bff;
+      }
+
+      .timer {
+        margin: 0;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -ms-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+        font-size: .8rem;
+        color: #333;
+        z-index: 1;
+      }
+
+
+
+      #quiz {
+        min-height: 20rem;
+        margin-top: 2rem;
+        /* Make space for the timer */
+      }
+
+
+
+
+      #results {
+        margin-top: 20px;
+        font-size: 18px;
+        text-align: center;
+      }
+
+      .results-container {
+        margin: 20px 0;
+        background-color: #f9f9f9;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        text-align: center;
+      }
+
+      .results-title {
+        font-size: 24px;
+        margin-bottom: 20px;
+        color: #333;
+      }
+
+      .results-score {
+        font-size: 20px;
+        margin-bottom: 30px;
+        color: #28a745;
+      }
+
+      .results-score strong {
+        font-weight: bold;
+      }
+    </style>
+    <style>
+      * {
+        margin: 0;
+
+        padding: 0;
+        box-sizing: border-box
+      }
+
+      ::-webkit-scrollbar {
+        width: 0px;
+        height: 0px;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        width: 100vw;
+        /* display: flex; */
+
+      }
+
+
+      .container {
+        display: none;
+        min-height: 100vh;
+        position: relative;
+
+        margin: auto;
+        background-color: #fff;
+        padding: 20px;
+        padding-top: 8px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 800px;
+        animation: fadeIn1 .4s ;
+      }
+
+      h1 {
+        text-align: center;
+      }
+
+      .question {
+        display: flex;
+        align-items: center;
+
+        min-height: 4rem;
+        padding: 0 0 20px;
+        /* margin-bottom: 1rem; */
+        font-size: 1.2rem;
+        animation: fadeIn1 2s;
+
+      }
+
+      .answers {
+
+        margin-bottom: 20px;
+      }
+
+      .answer-button {
+        display: block;
+        width: 100%;
+        padding: 15px;
+        margin-bottom: 10px;
+        border: none;
+        border-radius: 8px;
+        background-color: #fff;
+        color: #007bff;
+        font-size: 1.03rem;
+        cursor: pointer;
+        text-align: left;
+        transition: background-color 0.3s, color 0.3s, transform 0.2s;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        animation: fadeIn1 2s;
+
+
+      }
+
+      .answer-button:hover {
+        background-color: #e0f7fa;
+        /* color: #fff; */
+        transform: translateY(-2px);
+
+      }
+
+      .answer-button.selected {
+        background-color: #007bff;
+        color: #fff;
+      }
+
+      .correct {
+        background-color: #c8e6c9;
+        /* لون الخلفية للإجابة الصحيحة */
+      }
+
+      .selected-answer {
+        border: 2px solid #388e3c;
+        /* لون حدود الإجابة الصحيحة */
+      }
+
+      .incorrect {
+        background-color: #ffebee;
+        /* لون الخلفية للإجابة الخاطئة */
+        border: 2px solid #d32f2f;
+        /* لون حدود الإجابة الخاطئة */
+      }
+
+      .navigation {
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 20px;
+      }
+
+
+      .navigation-button:hover:not(.disabled) {
+        background-color: #218838;
+      }
+
+
+      .question-navigation {
+        display: flex;
+        gap: 5px;
+        flex: 1;
+        justify-content: flex-start;
+
+      }
+
+
+      .timer-container {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        z-index: 10;
+        /* لضمان بقاء المؤقت فوق العناصر الأخرى */
+      }
+
+      canvas {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: #fff;
+        border: 2px solid #007bff;
+      }
+
+      .timer {
+        margin: 0;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -ms-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+        font-size: .8rem;
+        color: #333;
+        z-index: 1;
+      }
+
+
+
+      #quiz {
+        min-height: 20rem;
+        margin-top: 2rem;
+        /* Make space for the timer */
+      }
+
+      .navigation-button {
+        display: inline-block;
+        width: 120px;
+        padding: 10px;
+        border: none;
+        background-color: #28a745;
+        color: #fff;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 5px;
+        margin: 0 5px;
+        transition: background-color 0.3s;
+      }
+
+      .navigation-button.disabled {
+        background-color: #6c757d;
+        cursor: not-allowed;
+        opacity: 0.6;
+      }
+
+      .navigation-button:hover:not(.disabled) {
+        background-color: #218838;
+      }
+
+
+      .question-navigation-container {
+        /* width:80%; */
+        overflow-x: auto;
+        white-space: nowrap;
+        padding: 10px 0;
+        /* margin-top: 20px; */
+      }
+
+
+
+      .question-navigation button {
+        background-color: #007bff;
+        color: #fff;
+        border: 2px solid #007bff;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        font-size: 12px;
+        cursor: pointer;
+        transition: background-color 0.3s, color 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+
+      .question-navigation button.answered {
+        background-color: #28a745;
+      }
+
+      .question-navigation button.selected {
+        background-color: #0056b3;
+
+
+
+
+
+
+      }
+
+      .question-navigation button:hover {
+        background-color: #0056b3;
+      }
+
+
+
+      .end-test-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+      }
+
+      #results {
+        margin-top: 20px;
+        font-size: 18px;
+        text-align: center;
+      }
+
+      .results-container {
+        margin: 20px 0;
+        background-color: #f9f9f9;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        text-align: center;
+      }
+
+      .results-title {
+        font-size: 24px;
+        margin-bottom: 20px;
+        color: #333;
+      }
+
+      .results-score {
+        font-size: 20px;
+        margin-bottom: 30px;
+        color: #28a745;
+      }
+
+      .results-score strong {
+        font-weight: bold;
+      }
+
+
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+
+        }
+
+        to {
+          opacity: 1;
+          scale: 1.3;
+
+
+        }
+      }
+
+      @keyframes fadeIn1 {
+        from {
+          opacity: 0;
+        }
+
+        to {
+
+          opacity: 1;
+        }
+      }
+    </style>
+
+    <title>اجابة استفهام</title>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/javascripts/sockets/challengeStartSocket.js"></script>
+
+    <style>
+      #copyIcon {
+        flex-shrink: 0;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+      }
+
+      #copyIcon:hover {
+        transform: scale(1.1);
+      }
+
+      #onlineusers {
+        min-height: 86px;
+      }
+
+      .gradient-circle {
+
+        width: 37px;
+        /* عرض الدائرة */
+        height: 37px;
+        /* ارتفاع الدائرة */
+
+        background-color: #1e190d;
+        ;
+        /* لون الخلفية للـ div */
+        border-radius: 50%;
+        /* لجعل الشكل دائري */
+        position: relative;
+        /* لجعل العناصر المطلقة تعمل بشكل صحيح */
+        display: flex;
+        /* لمركز المحتوى */
+        justify-content: center;
+        /* لمركز المحتوى أفقياً */
+        align-items: center;
+        /* لمركز المحتوى عمودياً */
+        /* border:  solid transparent; */
+        /* الحدود الأساسية بسمك 1rem */
+        box-sizing: border-box;
+        /* لاحتساب الحدود في حجم العنصر */
+
+      }
+
+      .gradient-circle::before {
+        content: '';
+        position: absolute;
+        top: -4px;
+        /* ضعه على الحافة العليا */
+        left: -4px;
+        /* ضعه على الحافة اليسرى */
+        right: -4px;
+        /* ضعه على الحافة اليمنى */
+        bottom: -4px;
+        /* ضعه على الحافة السفلى */
+        background: linear-gradient(58deg, #5AA4E8 0%, #5AA4E8 48%, #137489 84%, #137489 100%);
+
+        /* background: linear-gradient(38deg, #5AA4E8, #137489);  */
+        /* تدرج الألوان */
+        border-radius: 50%;
+        /* لجعل الشكل دائري */
+        z-index: -1;
+        /* إرسال الخلفية إلى الخلف */
+      }
+
+      .num {
+        animation: fadeIn 1s;
+        font-size: 100px;
+        display: none;
+      }
+
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+
+        }
+
+        to {
+          opacity: 1;
+          scale: 1.3;
+
+
+        }
+      }
+
+      @keyframes fadeIn1 {
+        from {
+          opacity: 0;
+        }
+
+        to {
+
+          opacity: 1;
+        }
+      }
+    </style>
+
+  </head>
+
+  <body style=" min-height: 100vh; background: #03101f;">
+
+    <header id="main-header"
+      style="width: 92%; height: 55px; display: flex;justify-content: space-between;align-items: center;margin: auto;">
+
+      <a id="back" href="/challenge">
+        <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"
+          style="width: 40px; height: 40px;" preserveAspectRatio="none">
+          <path d="M25 30L15 20L25 10" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+          </path>
+        </svg>
+
+      </a>
+
+      <h1 id="header-h1" style=" font-size: 24px; color: #fff;margin: 0;padding: 8px;">
+        respiratory system
+      </h1>
+
+    </header>
+
+
+    <section id="ready-section">
+      <!-- link -->
+      <div id="invitation-link"
+        style="margin:25px auto;padding: 0 8px;border-radius: 4px;background-color: rgb(217 217 217 / 4%);width: 92%;height: 30px;display: flex;justify-content: space-between;align-items: center;gap: 4px;/* margin: auto; */">
+        <div id="invLink" style=" font-size: 14px; text-align: left; color: rgba(255,255,255,0.7);overflow: overlay;">
+          hello
+        </div>
+
+        <svg id="copyIcon" onclick=copy(this) width="16" height="16" viewBox="0 0 16 16" fill="none"
+          xmlns="http://www.w3.org/2000/svg" style="width: 16px; height: 16px;cursor: pointer;"
+          preserveAspectRatio="none">
+          <g clip-path="url(#clip0_117_172)">
+            <path style="transition: all 0.3s ease;"
+              d="M3.33325 10H2.66659C2.31296 10 1.97382 9.85956 1.72378 9.60952C1.47373 9.35947 1.33325 9.02033 1.33325 8.66671V2.66671C1.33325 2.31309 1.47373 1.97395 1.72378 1.7239C1.97382 1.47385 2.31296 1.33337 2.66659 1.33337H8.66659C9.02021 1.33337 9.35935 1.47385 9.60939 1.7239C9.85944 1.97395 9.99992 2.31309 9.99992 2.66671V3.33337M7.33325 6.00004H13.3333C14.0696 6.00004 14.6666 6.59699 14.6666 7.33337V13.3334C14.6666 14.0698 14.0696 14.6667 13.3333 14.6667H7.33325C6.59687 14.6667 5.99992 14.0698 5.99992 13.3334V7.33337C5.99992 6.59699 6.59687 6.00004 7.33325 6.00004Z"
+              stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
+          </g>
+          <defs>
+            <clipPath id="clip0_117_172">
+              <rect width="16" height="16" fill="white"></rect>
+            </clipPath>
+          </defs>
+        </svg>
+
+
+      </div>
+
+
+      <div id="readyUsers-header" style="width:92%; height: 43px; margin: auto;padding: 1rem; border-radius: 4px; background: rgba(217,217,217,0.02); box-shadow: 0px 4px 4px 0 rgba(0,0,0,0.25);display: flex;align-items: center;
+    justify-content: space-between;
+">
+        <p style="font-weight: 600;background-color: rgb(217, 217, 217, 0);width: 100%;font-size: 17px;color: #fff;">
+          Ready users
+        </p>
+
+        <div style="display: flex;gap: 4px;color: rgba(255, 255, 255, 0.995);">
+          <span id="readyUsersNum">123</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person"
+            viewBox="0 0 16 16">
+            <path
+              d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z" />
+          </svg>
+
+        </div>
+      </div>
+
+      <div id="readyUsers" class="grid-container"
+        style="overflow:scroll;width:92%; height: 208px;margin: auto;padding: 1rem; background: rgba(217,217,217,0.1);display: grid;grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));gap: 1rem;justify-items: center;justify-content: space-around;">
+
+      </div>
+
+      <div id="start" onclick="start(this)" style="display: flex; justify-content: center; align-items: center; width: 84px; height: 30px;padding:4px 20px;border-radius: 4px; background: #15962a;margin: 1rem auto;cursor: pointer; font-size: 1rem; font-weight: 700; color: #fff">
+        Start
+      </div>
+
+    </section>
+
+    <div id="timerContair"
+      style="height: 92vw;width: 92%;margin: auto;display: none;justify-content: center;align-items: center;flex-direction: column;gap:16px">
+
+      <p
+        style="width: 92%;  font-size: 54px; font-weight: 700; text-align: left; color: #baffe9;text-align: center;padding: 8px;">
+        Get ready
+      </p>
+
+      <div id="startTimer"
+        style="width: 50%;height: 50%; background-color: #03101f;border-radius: 50%;display: flex;justify-content: center;align-items: center;color: #fff; visibility:visible;">
+
+
+      </div>
+
+    </div>
+
+    <!-- competition -->
+    <div id="competition" class="container">
+
+      <div style="display: flex;justify-content: space-between;align-items: center; ">
+        <div class="timer-container">
+          <canvas id="timerCanvas" width="50" height="50"></canvas>
+          <div id="questionTimer" class="timer">00:00</div>
+        </div>
+
+
+        <div
+          style="background: linear-gradient(90deg, #0891ff, #ff2a2a);-webkit-background-clip: text;/* width: 100%; */-webkit-text-fill-color: transparent;/* padding: 0 8px; */">
+          <div style="
+            font-weight: 800;
+            padding: 4px;
+        ">
+            Score : <span id="score">0</span>
+
+          </div>
+
+          <div style="
+            font-weight: 800;
+            padding: 4px;
+        ">
+
+            Rank : <span id="rank"></span>
+          </div>
+
+        </div>
+
+       
+      </div>
+
+
+
+
+
+      <p style="display: none;" id="questionNum"
+      >
+        1/10
+      </p>
+
+
+      <div id="quiz"></div>
+
+
+
+
+
+      <div id="results" style="display: none;">
+        <div id="scoreDiv" class="results-container">
+          <h2 class="results-title">نتائج الاختبار</h2>
+          <p id="score" class="results-score"></p>
+          <button id="retry" class="navigation-button">إعادة الاختبار</button>
+        </div>
+
+      </div>
+
+
+
+    </div>
+
+
+
+  </body>
+
+
+
+  <script>
+
+    const Id = "<%= challengeId %>"
+
+    if (Id) {
+      invLink = document.getElementById("invLink")
+      invLink.innerText = `${location.origin}/challenge/${Id}`
+    } else {
+      console.log(Id)
+    }
+
+    function copy(e) {
+
+      // Get the text field
+      var copyText = document.getElementById("invLink");
+      const originalIcon = 'M3.33325 10H2.66659C2.31296 10 1.97382 9.85956 1.72378 9.60952C1.47373 9.35947 1.33325 9.02033 1.33325 8.66671V2.66671C1.33325 2.31309 1.47373 1.97395 1.72378 1.7239C1.97382 1.47385 2.31296 1.33337 2.66659 1.33337H8.66659C9.02021 1.33337 9.35935 1.47385 9.60939 1.7239C9.85944 1.97395 9.99992 2.31309 9.99992 2.66671V3.33337M7.33325 6.00004H13.3333C14.0696 6.00004 14.6666 6.59699 14.6666 7.33337V13.3334C14.6666 14.0698 14.0696 14.6667 13.3333 14.6667H7.33325C6.59687 14.6667 5.99992 14.0698 5.99992 13.3334V7.33337C5.99992 6.59699 6.59687 6.00004 7.33325 6.00004Z';
+      // Modern check mark icon path for success
+      const successIcon = 'M1 12.5L5 16L15 6'; // Check mark path
+
+
+      // Copy the text inside the text field
+      navigator.clipboard.writeText(copyText.innerHTML).then(() => {
+
+
+
+
+
+
+        // Change icon to success icon
+        e.getElementsByTagName("path")[0].setAttribute('d', successIcon);
+        e.getElementsByTagName("path")[0].setAttribute("stroke", "rgb(0, 255, 41)")
+
+        setTimeout(() => {
+          e.getElementsByTagName("path")[0].setAttribute('d', originalIcon);  // Revert to original icon
+          e.getElementsByTagName("path")[0].setAttribute("stroke", "white")
+
+        }, 1500);  // Keep success icon for 1.5 seconds
+
+
+
+
+
+
+
+      }).catch(err => {
+
+        console.error('Failed to copy text: ', err);
+      });;
+
+
+    }
+
+  </script>
+
+
+
+
+  <script>
+    let timerInterval;
+    const canvas = document.getElementById('timerCanvas');
+    const ctx = canvas.getContext('2d');
+    const radius = canvas.width / 2;
+
+
+
+
+
+    async function getCompetitionInfo() {
+
+      try {
+        const response = await fetch(`/api/v1/Challanges/${Id}`);
+        const res = await response.json();
+        console.log(res)
+
+      } catch (error) {
+        console.error('Error fetching test:', error);
+      }
+    }
+    getCompetitionInfo()
+
+    // function startTimer(duration) {
+    //   clearInterval(timerInterval);
+
+    //   timerElement = document.getElementById("question-timer")
+    //   let timeRemaining = duration
+    //   const minutes = Math.floor(timeRemaining / 60);
+    //   const seconds = timeRemaining % 60;
+    //   // timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    //   timerElement.textContent = `${timeRemaining}`;
+    //   console.log(timerElement.textContent)
+
+    //   drawTimerCircle(timeRemaining, duration);
+
+    //   timeRemaining--;
+
+    //   timerInterval = setInterval(() => {
+    //     const minutes = Math.floor(timeRemaining / 60);
+    //     const seconds = timeRemaining % 60;
+    //     // timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    //     timerElement.textContent = `${timeRemaining}`;
+
+    //     console.log(timerElement.textContent)
+
+    //     drawTimerCircle(timeRemaining, duration);
+
+    //     timeRemaining--;
+
+    //     if (timeRemaining < 0) {
+    //       clearInterval(timerInterval);
+    //       // showResults();
+    //     }
+    //   }, 1000);
+    // }
+
+    function drawTimerCircle(timeRemaining, duration) {
+      const percentage = timeRemaining / duration;
+      const endAngle = 2 * Math.PI * (1 - percentage);
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.beginPath();
+      ctx.arc(radius, radius, radius - 1, -Math.PI / 2, endAngle - Math.PI / 2);
+      ctx.lineWidth = 10;
+      ctx.strokeStyle = '#FF7b0f'; // لون الشريط الدائري
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(radius, radius, radius - 10, 0, 2 * Math.PI);
+      ctx.lineWidth = 10;
+      ctx.strokeStyle = '#f4f4f4'; // خلفية الشريط الدائري
+      ctx.stroke();
+    }
+
+    document.getElementById('quiz').addEventListener('click', selectAnswer);
+
+  </script>
+
+  </html>

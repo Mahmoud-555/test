@@ -19,6 +19,7 @@ const {
   changeUserPassword,
   getLoggedUserData,
   updateLoggedUserPassword,
+  getNotifications,
 //   updateLoggedUserData,
 //   deleteLoggedUserData,
 } = require('../services/userService');
@@ -52,6 +53,7 @@ res.status(200).json(
 });
 
 
+router.get('/notifications', getNotifications);
 router.get('/getMe', getLoggedUserData);
 router.put('/changeMyPassword', updateLoggedUserPassword);
 // router.put('/updateMe', updateLoggedUserValidator, updateLoggedUserData);
