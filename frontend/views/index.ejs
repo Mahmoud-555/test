@@ -173,7 +173,6 @@
             width: 5%;
             height: 100%;
         }
-<<<<<<< Updated upstream
 
 
         @keyframes fadeIn {
@@ -339,35 +338,6 @@
 
 
 
-=======
-    </style>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            getUserData()
-        });
-
-        function getUserData() {
-
-            fetch("api/v1/users/getMe", {
-                method: "get",
-                headers: {
-                    'Content-type': 'application/json; charset=UTF-8',
-                },
-                // body: JSON.stringify({ email: email, password: password })
-            }).then((response) => {
-                response.json().then((userData) => {
-                    document.getElementById("profile-img").src = userData.data.profileImage
-
-                    document.getElementById("balance").innerHTML = userData.data.balance
-
-                    document.getElementById("username").innerHTML = userData.data.username
-                }
-                )
-            }).catch((err) => { console.log(err) })
-
-        }
-    </script>
->>>>>>> Stashed changes
 </head>
 
 <body>
@@ -396,22 +366,16 @@
                 </div>
                 <div
                     style="display: flex; justify-content: flex-start; align-items: center; flex-grow: 0; flex-shrink: 0; position: relative; gap: 20px;padding: 10px;">
-<<<<<<< Updated upstream
 
 
                     <svg id="notificationButton" width="14" height="15" viewBox="0 0 14 15" fill="none"
                         xmlns="http://www.w3.org/2000/svg" style="flex-grow: 0; flex-shrink: 0;cursor: pointer;"
-=======
-                    <svg id="notificationButton" width="14" height="15" viewBox="0 0 14 15" fill="none"
-                        xmlns="http://www.w3.org/2000/svg" style="flex-grow: 0; flex-shrink: 0;"
->>>>>>> Stashed changes
                         preserveAspectRatio="none">
                         <path
                             d="M7 0.5C6.56902 0.5 6.1557 0.663888 5.85095 0.955612C5.54621 1.24733 5.375 1.643 5.375 2.05556V2.32078C3.48188 2.96167 2.125 4.69067 2.125 6.72222V10.6111H1.3125C1.09701 10.6111 0.890349 10.6931 0.737976 10.8389C0.585603 10.9848 0.5 11.1826 0.5 11.3889C0.5 11.5952 0.585603 11.793 0.737976 11.9389C0.890349 12.0847 1.09701 12.1667 1.3125 12.1667H12.6875C12.903 12.1667 13.1097 12.0847 13.262 11.9389C13.4144 11.793 13.5 11.5952 13.5 11.3889C13.5 11.1826 13.4144 10.9848 13.262 10.8389C13.1097 10.6931 12.903 10.6111 12.6875 10.6111H11.875V6.72222C11.8751 5.75695 11.5627 4.81538 10.9806 4.02714C10.3986 3.23889 9.57562 2.64275 8.625 2.32078V2.05556C8.625 1.643 8.45379 1.24733 8.14905 0.955612C7.8443 0.663888 7.43098 0.5 7 0.5ZM7 14.5C6.56902 14.5 6.1557 14.3361 5.85095 14.0444C5.54621 13.7527 5.375 13.357 5.375 12.9444H8.625C8.625 13.357 8.45379 13.7527 8.14905 14.0444C7.8443 14.3361 7.43098 14.5 7 14.5Z"
                             fill="white"></path>
                     </svg>
 
-<<<<<<< Updated upstream
                     <span class="badge" id="notificationBadge">33</span>
 
                     <!-- notification -->
@@ -452,8 +416,6 @@
 
 
 
-=======
->>>>>>> Stashed changes
 
                     <svg width="6" height="21" viewBox="0 0 6 21" fill="none" xmlns="http://www.w3.org/2000/svg"
                         style="flex-grow: 0; flex-shrink: 0;" preserveAspectRatio="none">
@@ -1031,7 +993,6 @@
 
                     </div>
 
-<<<<<<< Updated upstream
 
 
 
@@ -1183,8 +1144,6 @@
 
 
                     </script>
-=======
->>>>>>> Stashed changes
 
 
                     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"

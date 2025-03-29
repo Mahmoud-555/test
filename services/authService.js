@@ -26,11 +26,6 @@ exports.signup = asyncHandler(async (req, res, next) => {
     User.findOne({ email: req.body.email })
         .then((userData) => {
             if (userData) {
-<<<<<<< Updated upstream
-
-=======
- 
->>>>>>> Stashed changes
                 return next(createError(400, "email is alredy exist"))
             } else {
 

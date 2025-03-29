@@ -2,10 +2,6 @@ var express = require('express');
 var router = express.Router();
 const authService = require('../services/authService');
 
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes
 const {createChallange,inviteUsers,getChallange,checkAnsers,getResult,getCompetitionInfo}=require('../services/challangeService')
 
 router.use(authService.protect);
@@ -25,10 +21,6 @@ router.post('/:id',checkAnsers)
 
 
 
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes
 async function getRandomQuestions(categoryLimits) {
   const results = {};
 

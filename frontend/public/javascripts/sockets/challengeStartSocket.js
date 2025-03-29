@@ -140,12 +140,8 @@ socket.on("newQuestion", (question,timeRemaining, questionNum, competitionLength
   buildQuiz(question,timeRemaining, questionNum, competitionLength)
 })
 
-<<<<<<< Updated upstream
 socket.on("result",(result)=>{
   
-=======
-socket.on("result",(scores)=>{
->>>>>>> Stashed changes
 
 })
 
@@ -156,10 +152,6 @@ socket.on("result",(scores)=>{
 
 
 
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes
 function buildQuiz(data,timeRemaining, questionNum, competitionLength) {
   const quizContainer = document.getElementById('quiz');
   const questionNumDiv = document.getElementById('questionNum');
