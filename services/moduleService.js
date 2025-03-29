@@ -27,6 +27,7 @@ exports.resizeImage = asyncHandler(async (req, res, next) => {
   next();
 });
 
+
 // @desc    Get list of categories
 // @route   GET /api/v1/categories
 // @access  Public

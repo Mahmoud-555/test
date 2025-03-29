@@ -22,9 +22,12 @@ var myschema = new schema({
 
 
 
+<<<<<<< Updated upstream
 
 
 
+=======
+>>>>>>> Stashed changes
 var Mymodel = mongoose.model('user', myschema);
 module.exports = Mymodel
 

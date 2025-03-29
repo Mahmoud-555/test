@@ -14,5 +14,6 @@ var myschema = new schema({
 
 
 
+
 var Mymodel = mongoose.model('lecture', myschema);
 module.exports = Mymodel

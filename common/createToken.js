@@ -5,4 +5,5 @@ const createToken = (payload) =>
     expiresIn: process.env.JWT_EXPIRE_TIME,
   });
 
+
 module.exports = createToken;

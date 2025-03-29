@@ -292,6 +292,7 @@ document.getElementsByClassName("fa-bars")[0].addEventListener("click", () => {
 
 
 
+
 // sign up function
 function regester(event) {
    event.preventDefault()

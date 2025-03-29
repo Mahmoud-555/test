@@ -17,6 +17,7 @@ exports.createQuestionValidator = [
   validatorMiddleware,
 ];
 
+
 exports.updateQuestionValidator = [
   check('id').isMongoId().withMessage('Invalid category id format'),
   body('name')

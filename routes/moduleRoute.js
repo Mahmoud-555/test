@@ -17,6 +17,7 @@ const {
 //   deleteModuleValidator,
 // } = require('../validators/moduleValidator');
 
+
 const authService = require('../services/authService');
 
 // mergeParams: Allow us to access parameters on other routers

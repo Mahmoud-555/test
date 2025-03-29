@@ -17,6 +17,7 @@ exports.createLectureValidator = [
   validatorMiddleware,
 ];
 
+
 exports.updateLectureValidator = [
   check('id').isMongoId().withMessage('Invalid category id format'),
   body('name')

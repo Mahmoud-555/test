@@ -21,3 +21,4 @@ router.post('/verifyEmail', verifyEmail);
 router.put('/resetPassword', resetPassword);
 
 module.exports = router;
+

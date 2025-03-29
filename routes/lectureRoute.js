@@ -24,6 +24,7 @@ const authService = require('../services/authService');
 const router = express.Router({ mergeParams: true });
 
 
+
 router
   .route('/')
   .post(
