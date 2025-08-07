@@ -27,10 +27,92 @@ exports.resizeImage = asyncHandler(async (req, res, next) => {
   next();
 });
 
+
 // @desc    Get list of categories
 // @route   GET /api/v1/categories
 // @access  Public
-exports.getSubjects = factory.getAll(Subject);
+// exports.getSubjects = factory.getAll(Subject);
+exports.getSubjects = factory.aggregateAll(Subject,"Subject",  [
+    // Lookup subcategories
+    {
+      $lookup: {
+        from: 'lectures',
+        localField: '_id',
+        foreignField: 'subject',
+        as: 'lectures'
+      }
+    },
+    // Lookup subsubcategories for each subcategory
+    {
+      $lookup: {
+        from: 'questions',
+        localField: 'lectures._id',
+        foreignField: 'lecture',
+        as: 'questions'
+      }
+    },
+    // Add counts
+    {
+      $addFields: {
+        lectureCount: { $size: '$lectures' },
+        questionCount: { $size: '$questions' }
+      }
+    },
+    // Optionally remove arrays if you only want counts
+    {
+      $project: {
+        lectures: 0,
+        questions: 0
+      }
+    }
+  ]);
+
+
+// exports.getSubjects = asyncHandler(async (req, res, next) => {
+//   const subjects = await Subject.aggregate(
+//     [
+//     // Lookup subcategories
+//     {
+//       $lookup: {
+//         from: 'lectures',
+//         localField: '_id',
+//         foreignField: 'subject',
+//         as: 'lectures'
+//       }
+//     },
+//     // Lookup subsubcategories for each subcategory
+//     {
+//       $lookup: {
+//         from: 'questions',
+//         localField: 'lectures._id',
+//         foreignField: 'lecture',
+//         as: 'questions'
+//       }
+//     },
+//     // Add counts
+//     {
+//       $addFields: {
+//         lectureCount: { $size: '$lectures' },
+//         questionCount: { $size: '$questions' }
+//       }
+//     },
+//     // Optionally remove arrays if you only want counts
+//     {
+//       $project: {
+//         lectures: 0,
+//         questions: 0
+//       }
+//     }
+//   ])
+//     .sort('-createdAt');
+//   res
+//     .status(200)
+//     .json({ results: subjects.length, data: subjects });
+
+
+
+// })
+
 
 // @desc    Get specific subject by id
 // @route   GET /api/v1/Subjects/:id

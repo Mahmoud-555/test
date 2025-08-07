@@ -5,7 +5,10 @@
     box-sizing: border-box
 }
 
-
+::-webkit-scrollbar {
+    width: 0px;
+    height: 0px;
+  }
 
 body {
     font-family: Arial, sans-serif;
@@ -13,6 +16,7 @@ body {
     width: 100vw;
 
 }
+
 
 
 .container {
@@ -62,7 +66,7 @@ h1 {
 
 .answer-button:hover {
     background-color: #0056b3;
-    color: #fff;
+    /* color: #fff; */
 }
 
 .navigation {
@@ -87,25 +91,6 @@ h1 {
   
 }
 
-
-
-.timer-container {
-/*     position: absolute; */
-    top: 20px;
-    left: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-.timer-container {
-    position: absolute;
-    top: 20px; /* المسافة من أعلى العنصر */
-    left: 20px; /* المسافة من يسار العنصر */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    z-index: 10; /* لضمان بقاء المؤقت فوق العناصر الأخرى */
-}
 .timer {
     font-size: 16px;
     color: #333;

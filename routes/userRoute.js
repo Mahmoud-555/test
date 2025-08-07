@@ -5,7 +5,7 @@ const {
   updateUserValidator,
   deleteUserValidator,
   changeUserPasswordValidator,
-//   updateLoggedUserValidator,
+  updateLoggedUserValidator,
 } = require('../validators/userValidator');
 
 const {
@@ -19,9 +19,11 @@ const {
   changeUserPassword,
   getLoggedUserData,
   updateLoggedUserPassword,
-//   updateLoggedUserData,
+  getNotifications,
+  updateLoggedUserData,
 //   deleteLoggedUserData,
 } = require('../services/userService');
+
 
 const authService = require('../services/authService');
 
@@ -52,9 +54,10 @@ res.status(200).json(
 });
 
 
+router.get('/notifications', getNotifications);
 router.get('/getMe', getLoggedUserData);
 router.put('/changeMyPassword', updateLoggedUserPassword);
-// router.put('/updateMe', updateLoggedUserValidator, updateLoggedUserData);
+router.put('/',uploadUserImage, resizeImage, updateLoggedUserValidator, updateLoggedUserData);
 // router.delete('/deleteMe', deleteLoggedUserData);
 
 // Admin

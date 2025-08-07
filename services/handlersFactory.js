@@ -6,6 +6,7 @@ exports.deleteOne = (Model) =>
   asyncHandler(async (req, res, next) => {
     const { id } = req.params;
     const document = await Model.findByIdAndDelete(id);
+    // console.log(document);
 
     if (!document) {
       return next(createError(404, `No document for this id ${req.params.id}`))
@@ -13,7 +14,7 @@ exports.deleteOne = (Model) =>
     }
 
     // Trigger "remove" event when update document
-    document.remove();
+    // document.remove();
     res.status(204).send();
   });
 
@@ -26,7 +27,7 @@ exports.updateOne = (Model) =>
     if (!document) {
       return next(createError(404, `No document for this id ${req.params.id}`))
 
-     
+
     }
     // Trigger "save" event when update document
     document.save();
@@ -58,7 +59,7 @@ exports.getOne = (Model, populationOpt) =>
     res.status(200).json({ data: document });
   });
 
-exports.getAll = (Model, modelName = '') =>
+exports.getAll = (Model, modelName = '', populateOptions = '' ) =>
   asyncHandler(async (req, res) => {
     let filter = {};
     if (req.filterObj) {
@@ -67,17 +68,93 @@ exports.getAll = (Model, modelName = '') =>
     // Build query
     const documentsCounts = await Model.countDocuments();
     const apiFeatures = new ApiFeatures(Model.find(filter), req.query)
-      .paginate(documentsCounts)
+      // .paginate(documentsCounts)
       .filter()
       .search(modelName)
       .limitFields()
       .sort();
 
     // Execute query
-    const { mongooseQuery, paginationResult } = apiFeatures;
+    let { mongooseQuery, paginationResult } = apiFeatures;
+    if (populateOptions) {
+      mongooseQuery = mongooseQuery.populate(populateOptions);
+    }
+
+
     const documents = await mongooseQuery;
 
     res
       .status(200)
       .json({ results: documents.length, paginationResult, data: documents });
+  });
+
+exports.aggregateAll = (Model, modelName = '', populateStages = []) =>
+  asyncHandler(async (req, res) => {
+    const { page = 1, limit = 10, sort, fields, keyword, ...filters } = req.query;
+    const skip = (page - 1) * limit;
+
+    const pipeline = [];
+
+    // ✅ Filtering
+    if (Object.keys(filters).length > 0) {
+      const matchStage = {};
+      for (const key in filters) {
+        matchStage[key] = filters[key];
+      }
+      pipeline.push({ $match: matchStage });
+    }
+
+    // ✅ Search (regex on a model-specific field)
+    if (keyword && modelName) {
+      pipeline.push({
+        $match: {
+          [modelName]: { $regex: keyword, $options: 'i' }
+        }
+      });
+    }
+
+    // ✅ Add population stages (e.g., $lookup)
+    if (populateStages.length > 0) {
+      pipeline.push(...populateStages);
+    }
+
+    // ✅ Sorting
+    if (sort) {
+      const sortStage = {};
+      sort.split(',').forEach(field => {
+        const direction = field.startsWith('-') ? -1 : 1;
+        sortStage[field.replace('-', '')] = direction;
+      });
+      pipeline.push({ $sort: sortStage });
+    } else {
+      pipeline.push({ $sort: { createdAt: -1 } }); // default sort
+    }
+
+    // ✅ Field limiting
+    if (fields) {
+      const projectStage = {};
+      fields.split(',').forEach(field => {
+        projectStage[field] = 1;
+      });
+      pipeline.push({ $project: projectStage });
+    }
+
+    // ✅ Pagination
+    // const totalDocs = await Model.countDocuments(); // optionally filter this count
+    // pipeline.push({ $skip: skip });
+    // pipeline.push({ $limit: parseInt(limit) });
+
+    // ✅ Execute
+    const documents = await Model.aggregate(pipeline);
+
+    res.status(200).json({
+      results: documents.length,
+      // paginationResult: {
+      //   currentPage: +page,
+      //   limit: +limit,
+      //   totalPages: Math.ceil(totalDocs / limit),
+      //   totalDocs
+      // },
+      data: documents
+    });
   });

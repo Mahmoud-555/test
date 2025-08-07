@@ -1,0 +1,256 @@
+*{
+    margin: 0;
+
+    padding: 0;
+    box-sizing: border-box
+}
+
+
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    width: 100vw;
+
+}
+
+
+.container {
+    /* min-height: 100vh; */
+    position: relative;
+
+    margin:auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 800px;
+}
+
+h1 {
+    text-align: center;
+}
+
+.question {
+    display:flex;
+    align-items: center;
+
+    min-height: 4rem;
+    padding:0 0 20px;
+    /* margin-bottom: 1rem; */
+    font-size: 1.2rem;
+}
+
+.answers {
+
+    margin-bottom: 20px;
+}
+
+.answer-button {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 10px;
+    border: none;
+    border-radius: 8px;
+    background-color: #fff;
+    color: #007bff;
+    font-size: 1.03rem;
+    cursor: pointer;
+    text-align: left;
+    transition: background-color 0.3s, color 0.3s, transform 0.2s;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+
+}
+
+.answer-button:hover {
+    background-color: #e0f7fa;
+    /* color: #fff; */
+    transform: translateY(-2px);
+
+}
+.answer-button.selected {
+    background-color: #007bff;
+    color: #fff;
+}
+.correct {
+    background-color: #c8e6c9; /* لون الخلفية للإجابة الصحيحة */
+}
+
+.selected-answer {
+    border: 2px solid #388e3c;
+     /* لون حدود الإجابة الصحيحة */
+}
+.incorrect {
+    background-color: #ffebee; /* لون الخلفية للإجابة الخاطئة */
+    border: 2px solid #d32f2f; /* لون حدود الإجابة الخاطئة */
+}
+
+.navigation {
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+
+.navigation-button:hover:not(.disabled) {
+    background-color: #218838;
+}
+
+
+.question-navigation {
+    display: flex;
+    gap: 5px;
+    flex: 1;
+    justify-content: flex-start;
+  
+}
+
+
+
+.timer-container {
+/*     position: absolute; */
+    top: 20px;
+    left: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.timer-container {
+    position: absolute;
+    top: 20px; /* المسافة من أعلى العنصر */
+    left: 20px; /* المسافة من يسار العنصر */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 10; /* لضمان بقاء المؤقت فوق العناصر الأخرى */
+}
+.timer {
+    font-size: 1rem;
+    color: #333;
+    margin-top: -35px;
+    z-index: 1;
+/*     position: relative; */
+}
+canvas {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #fff;
+    border: 2px solid #007bff;
+}
+#quiz {
+    min-height: 20rem;
+    margin-top: 2rem; /* Make space for the timer */
+}
+
+.navigation-button {
+    display: inline-block;
+    width: 120px;
+    padding: 10px;
+    border: none;
+    background-color: #28a745;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin: 0 5px;
+    transition: background-color 0.3s;
+}
+
+.navigation-button.disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.navigation-button:hover:not(.disabled) {
+    background-color: #218838;
+}
+
+
+.question-navigation-container {
+  /* width:80%; */
+    overflow-x: auto;
+    white-space: nowrap;
+    padding: 10px 0;
+    /* margin-top: 20px; */
+}
+
+
+
+.question-navigation button {
+    background-color: #007bff;
+    color: #fff;
+    border: 2px solid #007bff;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.question-navigation button.answered {
+    background-color: #28a745;
+}
+
+.question-navigation button.selected {
+    background-color: #0056b3;
+  
+  
+  
+  
+  
+  
+}
+
+.question-navigation button:hover {
+    background-color: #0056b3;
+}
+
+
+
+.end-test-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+#results {
+    margin-top: 20px;
+    font-size: 18px;
+    text-align: center;
+}
+
+.results-container {
+    margin: 20px 0;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    text-align: center;
+  }
+
+  .results-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+  }
+
+  .results-score {
+    font-size: 20px;
+    margin-bottom: 30px;
+    color: #28a745;
+  }
+
+  .results-score strong {
+    font-weight: bold;
+  }

@@ -1,10 +1,20 @@
 const mongoose = require("mongoose")
 const schema = mongoose.Schema
 var myschema = new schema({
-    module: { type: String ,trim:true },
-    moduleImage:String,
+  module: { type: String, trim: true },
+  moduleImage: String,
+  subject: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'subject',
+    required: [true, 'module must be belong to subject'],
+  },
 
-},{timestamps:true});
+  type: { type: String, trim: true, default: "academy" },
+
+
+
+}, { timestamps: true });
+
 
 
 

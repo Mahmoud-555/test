@@ -3,14 +3,213 @@
 
 <head>
 
-    
+    <style>
+        /* Main Leaderboard Container */
+        .leaderboard-container {
+            width: 90%;
+            max-width: 1200px;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            /* Glassmorphism effect */
+        }
+
+        /* Header Section */
+        .leaderboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #444;
+        }
+
+        .leaderboard-header h1 {
+            font-size: 40px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .filters {
+            display: flex;
+            gap: 15px;
+        }
+
+        .filter-button {
+            background: linear-gradient(45deg, #ff6a00, #ff9e00);
+            /* Neon Orange */
+            padding: 10px 20px;
+            border: none;
+            border-radius: 30px;
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .filter-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(255, 154, 0, 0.5);
+        }
+
+        /* Grid Layout for Leaderboard Cards */
+        .leaderboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        /* Card Design */
+        .leaderboard-card {
+            background: rgba(255, 255, 255, 0.1);
+            /* Frosted Glass Effect */
+            border-radius: 15px;
+            padding: 25px;
+            position: relative;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            backdrop-filter: blur(8px);
+        }
+
+        .leaderboard-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 6px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Rank Badge */
+        .rank-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: #ff6a00;
+            /* Neon Orange */
+            padding: 10px 15px;
+            border-radius: 50%;
+            font-size: 22px;
+            font-weight: 700;
+            color: #fff;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Player Info */
+        .player-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .player-avatar {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            border: 4px solid #ff6a00;
+            margin-bottom: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .player-avatar:hover {
+            transform: scale(1.1);
+        }
+
+        .player-name {
+            font-size: 22px;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .player-score {
+            font-size: 18px;
+            font-weight: 700;
+            color: #ff9e00;
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #444;
+            border-radius: 5px;
+            margin-top: 15px;
+        }
+
+        .progress {
+            height: 100%;
+            border-radius: 5px;
+            background: linear-gradient(45deg, #ff6a00, #ff9e00);
+        }
+
+        /* Footer */
+        .leaderboard-footer {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 14px;
+            color: #aaa;
+        }
+
+        /* Animation for Smooth Transitions */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .leaderboard-header h1 {
+                font-size: 32px;
+            }
+
+            .filter-button {
+                padding: 8px 16px;
+                font-size: 14px;
+            }
+
+            .leaderboard-card {
+                padding: 20px;
+            }
+
+            .player-info {
+                margin-top: 15px;
+            }
+
+            .player-name {
+                font-size: 18px;
+            }
+
+            .player-score {
+                font-size: 16px;
+            }
+        }
+    </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>my app</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="/stylesheets/index-style.css">
+
+
+
+    <!--     
     <style>
+        ::-webkit-scrollbar {
+            width: 0px;
+            height: 0px;
+        }
+
         .gradient-circle {
+
 
             width: 37px;
             /* عرض الدائرة */
@@ -58,7 +257,9 @@
             /* إرسال الخلفية إلى الخلف */
         }
 
-
+        a {
+            text-decoration: none;
+        }
 
         .modal-content {
             border-radius: 1rem;
@@ -102,9 +303,31 @@
 
 
 
+        @media only screen and (max-width: 600px) {
+            #posts {
+                display: grid !important;
+                grid-template-columns: 1fr 1fr
+            }
+
+            .post {
+                width: 100% !important;
 
 
+            }
+        }
 
+        @media only screen and (max-width: 400px) {
+            #posts {
+                display: grid !important;
+                grid-template-columns: 1fr
+            }
+
+            .post {
+                width: 100% !important;
+
+
+            }
+        }
 
 
         P {
@@ -138,39 +361,342 @@
             width: 5%;
             height: 100%;
         }
-    </style>
-      <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                getUserData()
-            });
 
-            function getUserData() {
 
-                fetch("api/v1/users/getMe", {
-                    method: "get",
-                    headers: {
-                        'Content-type': 'application/json; charset=UTF-8',
-                    },
-                    // body: JSON.stringify({ email: email, password: password })
-                }).then((response) => {
-                    response.json().then((userData) => {
-                        document.getElementById("profile-img").src = userData.data.profileImage
-
-                        document.getElementById("balance").innerHTML = userData.data.balance
-
-                        document.getElementById("username").innerHTML = userData.data.username
-                    }
-                    )
-                }).catch((err) => { console.log(err) })
-
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
             }
-        </script >
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .dropdown {
+            display: none;
+            /* Hidden by default */
+            position: absolute;
+            background-color: white;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            width: 300px;
+            z-index: 100;
+            margin-top: 10px;
+            overflow: hidden;
+            animation: fadeIn 0.3s ease;
+            top: 39px;
+            right: 33px;
+        }
+
+
+        .dropdown-header {
+            padding: 10px 15px;
+            background-color: #f7f9fc;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eaeaea;
+        }
+
+        .dropdown-header h5 {
+            margin: 0;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .clear-button {
+            background: #FF5733;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .clear-button:hover {
+            background-color: #FF5733;
+        }
+
+        #notificationContainer {
+            max-height: 350px;
+            overflow: scroll;
+        }
+
+        .notification-item {
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #f1f1f1;
+            transition: background-color 0.3s;
+        }
+
+        .notification-item:hover {
+            background-color: #f9f9f9;
+        }
+
+        .notification-item:last-child {
+            border-bottom: none;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .notification-message {
+            flex-grow: 1;
+            margin-right: 5px;
+        }
+
+        .notification-time {
+            font-size: 12px;
+            color: #aaa;
+        }
+
+        .view-all {
+            display: block;
+            padding: 10px 15px;
+            text-align: center;
+            color: #FF5733;
+            text-decoration: none;
+        }
+
+        .view-all:hover {
+            background-color: #f9f9f9;
+        }
+
+        /* Show class */
+        .dropdown.show {
+            display: block;
+        }
+
+        .badge {
+            background-color: #FF5733;
+            /* styling based on examples */
+            border-radius: 50%;
+            padding: 4px;
+            position: absolute;
+            top: 4px;
+            left: 18px;
+            font-size: 8px;
+            color: white;
+            width: 1rem;
+        }
+    </style> -->
+
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function () {
+            getUserData()
+        });
+
+        function getUserData() {
+
+            fetch("api/v1/users/getMe", {
+                method: "get",
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                },
+                // body: JSON.stringify({ email: email, password: password })
+            }).then((response) => {
+                response.json().then((userData) => {
+                    document.getElementById("profile-img").src = userData.data.profileImage
+
+                    document.getElementById("balance").innerHTML = userData.data.balance
+
+                    document.getElementById("username").innerHTML = userData.data.username
+                }
+                )
+            }).catch((err) => { console.log(err) })
+
+        }
+    </script>
+    <%if(isSignIn){%>
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="/javascripts/initSocket.js"></script>
+        <%}%>
+
+
+
+
+
 </head>
 
-<body style=" background: #03101f;min-height: 100vh;">
+<body>
+
+    <header style="
+    border-width: 0;
+    padding: 0.75rem 2.5rem;
+    border-style: solid;
+    border-bottom-width: 1px;
+    border-bottom-color: rgb(40 48 57);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Spline Sans', 'Noto Sans', sans-serif;
+    margin-bottom:5rem ;
+    ">
+        <div style="
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+
+    ">
+            <div style="
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: rgb(255 255 255 )">
+
+                <div style="width: 1rem;height: 1rem;">
+                    <svg style="    vertical-align: unset;" viewBox="0 0 48 48" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path d="M44 4H30.6666V17.3334H17.3334V30.6666H4V44H44V4Z" fill="currentColor"></path>
+                    </svg>
+                </div>
+                <h2 style="
+                line-height: 1.25;
+                letter-spacing: -0.015em;
+                font-weight: 700;
+                font-size: 1.125rem;
+                margin: 0;
+                ">MedConnect</h2>
+            </div>
+
+            <div style="
+            display: flex;
+            align-items: center;
+            gap: 2.25rem;
+            ">
+                <a style="
+                line-height: 1.5;
+                font-weight:500;
+                font-size:0.875rem;
+                color: rgb(255 255 255 )
+                " href="">Home</a>
+                <a style="
+                line-height: 1.5;
+                font-weight:500;
+                font-size:0.875rem;
+                color: rgb(255 255 255 )
+                " href="posts">Posts</a>
+                <a style="
+                line-height: 1.5;
+                font-weight:500;
+                font-size:0.875rem;
+                color: rgb(255 255 255 )
+
+                " href="">Network</a>
+                <a style="
+                line-height: 1.5;
+                font-weight:500;
+                font-size:0.875rem;
+                color: rgb(255 255 255 )
+
+                " href="">Jobs</a>
+                <a style="
+                line-height: 1.5;
+                font-weight:500;
+                font-size:0.875rem;
+                color: rgb(255 255 255 )
+
+                " href="">Messages</a>
+                <a style="
+                line-height: 1.5;
+                font-weight:500;
+                font-size:0.875rem;
+                color: rgb(255 255 255 )
+
+                " href="">Notifications</a>
+
+            </div>
+
+        </div>
+
+
+
+
+        <div style="
+        display: flex;
+        gap: 2rem;
+        justify-content: flex-end;
+        flex: 1 1 0%;
+        ">
+            <label style="display: flex;
+        flex-direction: column;
+        max-width: 16rem;
+        min-width: 10rem;
+        height: 2.5rem;
+        ">
+                <div style="display: flex;
+        border-radius: 0.75rem;
+        align-items: stretch;
+        flex: 1 1 0%;
+        width: 100%;
+        height: 100%;
+        ">
+                    <div style="
+                    color:rgb(156 170 186 ) ;
+                    padding-left: 1rem;
+                    background-color:rgb(40 48 57 ) ;
+                    border: none;
+                    border-top-left-radius: 0.75rem;
+                    border-bottom-left-radius: 0.75rem;
+                    justify-content: center;
+                    align-items: center;
+                    display: flex;
+                    ">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="currentColor"
+                            viewBox="0 0 256 256">
+                            <path
+                                d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z">
+                            </path>
+                        </svg>
+
+                    </div>
+
+                    <input class="#9caaba" placeholder="Search" style="
+                    color:rgb(255 255 255 ) ;
+                    line-height: 1.5;
+                    font-weight: 400;
+                    font-size: 1rem;
+                    padding-left: 0.5rem;
+                    padding-right: 1rem;
+                    background-color:rgb(40 48 57);
+                    border: none;
+                    border-radius: 0.75rem;
+                    border-top-left-radius: 0px;
+                    border-bottom-left-radius: 0px;
+                    flex: 1 1 0%;
+                    display: flex;
+                    width: 100%;
+                    height: 100%;
+                    outline: 0px;
+
+
+                    ">
+                </div>
+            </label>
+
+
+        </div>
+
+    </header>
+
+
+
+
+
+
     <%if(isSignIn){%>
         <header
-            style="overflow: hidden; height: 55px; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; background: rgba(125,150,239,0.1); border-width: 0px; border-color: #000; box-shadow: 5px 4px 21px 0 rgba(0,0,0,0.25);padding:6px 10px;">
+            style=" height: 55px; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px; background: rgba(125,150,239,0.1); border-width: 0px; border-color: #000; box-shadow: 5px 4px 21px 0 rgba(0,0,0,0.25);padding:6px 10px;">
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <div
                     style="display: flex; justify-content: flex-start; align-items: center; flex-grow: 0; flex-shrink: 0; position: relative; gap: 20px;">
@@ -178,7 +704,11 @@
                     <div class="gradient-circle">
                         <div
                             style="display: flex;border-radius: 50%; overflow: hidden; align-items: center;justify-content: center; height: 100%;">
-                            <img id="profile-img" style="height: 43px;width: 43px;" src="" />
+                            <div
+                                style="height: 10px; width: 10px;background-color: greenyellow;position: absolute;top: 0;left: 32px;border-radius: 50%;">
+                            </div>
+                            <a href="/profile"> <img id="profile-img" style="height: 43px;width: 43px;" src="" />
+                            </a>
                         </div>
                     </div>
 
@@ -190,14 +720,57 @@
                 </div>
                 <div
                     style="display: flex; justify-content: flex-start; align-items: center; flex-grow: 0; flex-shrink: 0; position: relative; gap: 20px;padding: 10px;">
-                    <svg id="notificationButton" width="14" height="15" viewBox="0 0 14 15" fill="none" xmlns="http://www.w3.org/2000/svg"
-                        style="flex-grow: 0; flex-shrink: 0;" preserveAspectRatio="none">
+
+
+                    <svg id="notificationButton" width="14" height="15" viewBox="0 0 14 15" fill="none"
+                        xmlns="http://www.w3.org/2000/svg" style="flex-grow: 0; flex-shrink: 0;cursor: pointer;"
+                        preserveAspectRatio="none">
                         <path
                             d="M7 0.5C6.56902 0.5 6.1557 0.663888 5.85095 0.955612C5.54621 1.24733 5.375 1.643 5.375 2.05556V2.32078C3.48188 2.96167 2.125 4.69067 2.125 6.72222V10.6111H1.3125C1.09701 10.6111 0.890349 10.6931 0.737976 10.8389C0.585603 10.9848 0.5 11.1826 0.5 11.3889C0.5 11.5952 0.585603 11.793 0.737976 11.9389C0.890349 12.0847 1.09701 12.1667 1.3125 12.1667H12.6875C12.903 12.1667 13.1097 12.0847 13.262 11.9389C13.4144 11.793 13.5 11.5952 13.5 11.3889C13.5 11.1826 13.4144 10.9848 13.262 10.8389C13.1097 10.6931 12.903 10.6111 12.6875 10.6111H11.875V6.72222C11.8751 5.75695 11.5627 4.81538 10.9806 4.02714C10.3986 3.23889 9.57562 2.64275 8.625 2.32078V2.05556C8.625 1.643 8.45379 1.24733 8.14905 0.955612C7.8443 0.663888 7.43098 0.5 7 0.5ZM7 14.5C6.56902 14.5 6.1557 14.3361 5.85095 14.0444C5.54621 13.7527 5.375 13.357 5.375 12.9444H8.625C8.625 13.357 8.45379 13.7527 8.14905 14.0444C7.8443 14.3361 7.43098 14.5 7 14.5Z"
                             fill="white"></path>
                     </svg>
+
+                    <span class="badge" id="notificationBadge">33</span>
+
+                    <!-- notification -->
+
+
+                    <!-- <div id="notification-dropdown"
+                        style="display: none;background-color: white;padding: 8px;width: 250px;height: 400px;position: absolute;top: 39px;right: 33px;border-radius: 8px;z-index: 1000;animation: fadeIn 0.3s ease;">
+                        
+                        
+                        
+                        <h6 style="">
+                            Notifications
+                        </h6>
+
+                        <hr>
+
+
                     
-                    
+                    </div>
+                     -->
+
+
+                    <div class="dropdown" id="notificationDropdown" aria-hidden="true">
+                        <div class="dropdown-header">
+
+                            <h5>Notifications</h5>
+                            <button class="clear-button">Clear All</button>
+                        </div>
+                        <div id="notificationContainer"></div>
+                        <a href="#" class="view-all">View All</a>
+                    </div>
+
+
+
+
+
+
+
+
+
+
                     <svg width="6" height="21" viewBox="0 0 6 21" fill="none" xmlns="http://www.w3.org/2000/svg"
                         style="flex-grow: 0; flex-shrink: 0;" preserveAspectRatio="none">
                         <path
@@ -208,6 +781,12 @@
             </div>
         </header>
         <%}%>
+
+
+
+
+
+
             <%if(!isSignIn){%>
                 <!-- Modal -->
                 <div class="modal fade" id="authModal" tabindex="-1" aria-labelledby="authModalLabel"
@@ -248,6 +827,15 @@
                                             <input type="email" class="form-control" id="registerEmail" required>
                                             <div class="error-message" id="registerEmailError"></div>
                                         </div>
+
+                                        <div class="mb-3">
+                                            <label for="registerUserName" class="form-label">username</label>
+                                            <input type="text" class="form-control" id="registerUserName" required>
+                                            <div class="error-message" id="registerUserNameError"></div>
+                                        </div>
+
+
+
                                         <div class="mb-3">
                                             <label for="registerPassword" class="form-label">Password</label>
                                             <input type="password" class="form-control" id="registerPassword" required>
@@ -320,6 +908,13 @@
 
                 </header>
                 <%}%>
+
+                    <!-- <div style="height: 40px;margin: 5px;background-color: #0057b350;">
+
+</div> -->
+
+
+
                     <!-- points -->
                     <div
                         style="display: flex; justify-content: space-between; align-items: center;height: 59px; padding-left: 21px; padding-right: 21px; padding-top: 0px; padding-bottom: 0px; border-radius: 8px; background: linear-gradient(to right, #182e51 0%, #3668b7 100%);width: 92%;margin:1.2rem auto;">
@@ -327,7 +922,8 @@
                             <span
                                 style="flex-grow: 0; flex-shrink: 0; width: 163px; font-size: 14px; font-weight: 500; text-align: left; color: rgba(255,255,255,0.87);">welcome
                                 back!</span><br />
-                                <span id="username" style="flex-grow: 0; flex-shrink: 0; width: 163px; font-size: 12px; font-weight: 300; text-align: left; color: #e7e0e0;">
+                            <span id="username"
+                                style="flex-grow: 0; flex-shrink: 0; width: 163px; font-size: 12px; font-weight: 300; text-align: left; color: #e7e0e0;">
                                 Mahmoud ahmed mohamed
                             </span>
                         </p>
@@ -356,7 +952,7 @@
                             </p>
                         </div>
                     </div>
-                    <div id="carouselContainer"
+                    <!-- <div id="carouselContainer"
                         style="width: 92%; height: 124px;border-radius: 8px; background: #d9d9d9;margin: auto;">
 
 
@@ -394,7 +990,7 @@
 
 
 
-                    </div>
+                    </div> -->
                     <div style="width: 92%;margin:1.2rem auto;display: flex;flex-wrap: wrap;gap: 1rem">
                         <div
                             style="min-width: 144px; height: 86px; border-radius: 8px; background: linear-gradient(to right, #0f1d34 0%, #1d3863 100%); display: flex;display: flex; align-items: center;justify-content: space-around;flex-grow: 1">
@@ -412,29 +1008,35 @@
                                     style="width: 49.28px; height: 86px; object-fit: contain;" />
                             </div>
                         </div>
-                        <div
-                            style="min-width: 144px; height: 86px; border-radius: 8px; background: linear-gradient(to right, #0f1d34 0%, #1d3863 100%);display: flex;display: flex; align-items: center; justify-content: space-around;flex-grow: 1">
 
-                            <p
-                                style="width: 65.24px; height: 23px; font-size: 9px; font-weight: 500; text-align: left; color: #fff;">
-                                challange your freinds </p>
+                        <a style="flex-grow: 1;" href="challenge">
 
+                            <div
+                                style="min-width: 144px; height: 86px; border-radius: 8px; background: linear-gradient(to right, #0f1d34 0%, #1d3863 100%);display: flex;display: flex; align-items: center; justify-content: space-around;flex-grow: 1">
 
-
-
-                            <div style="width: 49.28px; height: 86px;position: relative;">
-                                <img src="images/m5_8.png.png"
-                                    style="width: 49.28px; height: 82.84px; position: absolute; left: 1.89px; top: 1.5px; object-fit: contain;" />
-                                <img src="images/m5_8.png.png"
-                                    style="width: 36.61px; height: 61.65px; position: absolute;left: -16.13px; top: 16.69px; object-fit: contain;" />
-                                <img src="images/m5_8.png.png"
-                                    style="width: 33.79px; height: 56.83px; position: absolute; left: 29.83px;top: 20.62px; object-fit: contain;" />
+                                <p
+                                    style="width: 65.24px; height: 23px; font-size: 9px; font-weight: 500; text-align: left; color: #fff;">
+                                    challenge your freinds </p>
 
 
 
 
+                                <div style="width: 49.28px; height: 86px;position: relative;">
+                                    <img src="images/m5_8.png.png"
+                                        style="width: 49.28px; height: 82.84px; position: absolute; left: 1.89px; top: 1.5px; object-fit: contain;" />
+                                    <img src="images/m5_8.png.png"
+                                        style="width: 36.61px; height: 61.65px; position: absolute;left: -16.13px; top: 16.69px; object-fit: contain;" />
+                                    <img src="images/m5_8.png.png"
+                                        style="width: 33.79px; height: 56.83px; position: absolute; left: 29.83px;top: 20.62px; object-fit: contain;" />
+
+
+
+
+                                </div>
                             </div>
-                        </div>
+                        </a>
+
+
                         <a style="flex-grow: 1;" href="test">
                             <div
                                 style="min-width: 144px; height: 86px; border-radius: 8px; background: linear-gradient(to right, #0f1d34 0%, #1d3863 100%); position: relative;display: flex;display: flex; align-items: center;justify-content: space-around;flex-grow: 1">
@@ -450,244 +1052,848 @@
                                 </div>
                             </div>
                         </a>
+
                     </div>
+
+
+
+
+
+
+                    <!-- live contests -->
+                    <!-- 
+                    <section id="live-contests" style="color: #fff;width: 92%;margin: auto;">
+                       
+                        <h3 style="padding: 2rem 0;border-bottom: 2px solid #444;">
+                            Live contests
+                        </h3>
+
+                        <div class="leaderboard-grid" style="padding: 1rem 0;">
+                            <div class="leaderboard-card">
+                                <div class="rank-badge">#1</div>
+                                <div class="player-info">
+                                    <img class="player-avatar" src="https://via.placeholder.com/100" alt="Player Avatar">
+                                    <h3 class="player-name">Jane Doe</h3>
+                                    <p class="player-score">1200</p>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress" style="width: 75%;"></div>
+                                </div>
+                            </div>
+                
+                            </div>
+                    </section>
+                -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                     <p
-                        style="font-size: 14px; font-weight: 500; text-align: left; color: #fff;margin: auto;width: 92%;">
-                        history
+                        style="font-size: 22px; font-weight: 500; text-align: left; color: #fff;margin:auto ;width: 92%;">
+                        Quiz
                     </p>
-                    <div>
+
+                    <div id="posts" style="border-radius: 8px;margin: 82px auto;width: 92%;;border: solid 2px;display: flex;flex-wrap: wrap;margin: auto;padding: 18px;gap: 18px;border-left: none;
+    border-right: none;">
+
+
+
+
+
+
+                        <div class="post"
+                            style="height:fit-content ;width: 10rem;background-color: #f9f9fa;border-radius: 8px;margin: 0px;">
+
+
+
+                            <div style="display: flex;align-items: center;padding: 8px;gap: 8px;">
+
+                                <div id="img"
+                                    style="width: 40px;height: 40px;border-radius: 50%;background-color: #000;">
+
+                                </div>
+                                <div>
+                                    <span style="font-weight: 700;color: #0b7f2e;">mahmoud</span>
+                                    <br>
+                                    <span style="font-size: 14px;">1 day</span>
+
+                                </div>
+
+
+
+                            </div>
+
+                            <h2 class="post-title"
+                                style=" font-size: 1.1em; margin: 10px 0;text-align: center;font-weight: 600;">anatomy
+                                quiz</h2>
+
+                            <button style=" background-color: #007BFF;
+                            color: white;
+                            border: none;
+                            border-radius: 5px;
+                            padding: 4px 10px;
+                            cursor: pointer;
+                            transition: background-color 0.3s;
+                            display: block;
+                            margin: 8px auto;
+                            
+                            " class="read-more" onclick="goToPost()">start</button>
+
+                            <!-- <div id="title" style="padding: 8px;">
+                                anatomy quiz
+
+                            </div> -->
+
+
+                        </div>
+                        <div class="post"
+                            style="height:fit-content ;width: 10rem;background-color: #f9f9fa;border-radius: 8px;margin: 0px;">
+
+
+
+                            <div style="display: flex;align-items: center;padding: 8px;gap: 8px;">
+
+                                <div id="img"
+                                    style="width: 40px;height: 40px;border-radius: 50%;background-color: #000;">
+
+                                </div>
+                                <div>
+                                    <span style="font-weight: 700;color: #0b7f2e;">mahmoud</span>
+                                    <br>
+                                    <span style="font-size: 14px;">1 day</span>
+
+                                </div>
+
+
+
+                            </div>
+
+                            <h2 class="post-title"
+                                style=" font-size: 1.1em; margin: 10px 0;text-align: center;font-weight: 600;">anatomy
+                                quiz</h2>
+
+                            <button style=" background-color: #007BFF;
+                        color: white;
+                        border: none;
+                        border-radius: 5px;
+                        padding: 4px 10px;
+                        cursor: pointer;
+                        transition: background-color 0.3s;
+                        display: block;
+                        margin: 8px auto;
+                        
+                        " class="read-more" onclick="goToPost()">start</button>
+
+                            <!-- <div id="title" style="padding: 8px;">
+                            anatomy quiz
+
+                        </div> -->
+
+
+                        </div>
+                        <div class="post"
+                            style="height:fit-content ;width: 10rem;background-color: #f9f9fa;border-radius: 8px;margin: 0px;">
+
+
+
+                            <div style="display: flex;align-items: center;padding: 8px;gap: 8px;">
+
+                                <div id="img"
+                                    style="width: 40px;height: 40px;border-radius: 50%;background-color: #000;">
+
+                                </div>
+                                <div>
+                                    <span style="font-weight: 700;color: #0b7f2e;">mahmoud</span>
+                                    <br>
+                                    <span style="font-size: 14px;">1 day</span>
+
+                                </div>
+
+
+
+                            </div>
+
+                            <h2 class="post-title"
+                                style=" font-size: 1.1em; margin: 10px 0;text-align: center;font-weight: 600;">anatomy
+                                quiz</h2>
+
+                            <button style=" background-color: #007BFF;
+                    color: white;
+                    border: none;
+                    border-radius: 5px;
+                    padding: 4px 10px;
+                    cursor: pointer;
+                    transition: background-color 0.3s;
+                    display: block;
+                    margin: 8px auto;
+                    
+                    " class="read-more" onclick="goToPost()">start</button>
+
+                            <!-- <div id="title" style="padding: 8px;">
+                        anatomy quiz
+
+                    </div> -->
+
+
+                        </div>
+
+                        <div class="post"
+                            style="height:fit-content ;width: 10rem;background-color: #f9f9fa;border-radius: 8px;margin: 0px;">
+
+
+
+                            <div style="display: flex;align-items: center;padding: 8px;gap: 8px;">
+
+                                <div id="img"
+                                    style="width: 40px;height: 40px;border-radius: 50%;background-color: #000;">
+
+                                </div>
+                                <div>
+                                    <span style="font-weight: 700;color: #0b7f2e;">mahmoud</span>
+                                    <br>
+                                    <span style="font-size: 14px;">1 day</span>
+
+                                </div>
+
+
+
+                            </div>
+
+                            <h2 class="post-title"
+                                style=" font-size: 1.1em; margin: 10px 0;text-align: center;font-weight: 600;">anatomy
+                                quiz</h2>
+
+                            <button style=" background-color: #007BFF;
+                            color: white;
+                            border: none;
+                            border-radius: 5px;
+                            padding: 4px 10px;
+                            cursor: pointer;
+                            transition: background-color 0.3s;
+                            display: block;
+                            margin: 8px auto;
+                            
+                            " class="read-more" onclick="goToPost()">start</button>
+
+                            <!-- <div id="title" style="padding: 8px;">
+                                anatomy quiz
+
+                            </div> -->
+
+
+                        </div>
+                        <div class="post"
+                            style="height:fit-content ;width: 10rem;background-color: #f9f9fa;border-radius: 8px;margin: 0px;">
+
+
+
+                            <div style="display: flex;align-items: center;padding: 8px;gap: 8px;">
+
+                                <div id="img"
+                                    style="width: 40px;height: 40px;border-radius: 50%;background-color: #000;">
+
+                                </div>
+                                <div>
+                                    <span style="font-weight: 700;color: #0b7f2e;">mahmoud</span>
+                                    <br>
+                                    <span style="font-size: 14px;">1 day</span>
+
+                                </div>
+
+
+
+                            </div>
+
+                            <h2 class="post-title"
+                                style=" font-size: 1.1em; margin: 10px 0;text-align: center;font-weight: 600;">anatomy
+                                quiz</h2>
+
+                            <button style=" background-color: #007BFF;
+                        color: white;
+                        border: none;
+                        border-radius: 5px;
+                        padding: 4px 10px;
+                        cursor: pointer;
+                        transition: background-color 0.3s;
+                        display: block;
+                        margin: 8px auto;
+                        
+                        " class="read-more" onclick="goToPost()">start</button>
+
+                            <!-- <div id="title" style="padding: 8px;">
+                            anatomy quiz
+
+                        </div> -->
+
+
+                        </div>
+                        <div class="post"
+                            style="height:fit-content ;width: 10rem;background-color: #f9f9fa;border-radius: 8px;margin: 0px;">
+
+
+
+                            <div style="display: flex;align-items: center;padding: 8px;gap: 8px;">
+
+                                <div id="img"
+                                    style="width: 40px;height: 40px;border-radius: 50%;background-color: #000;">
+
+                                </div>
+                                <div>
+                                    <span style="font-weight: 700;color: #0b7f2e;">mahmoud</span>
+                                    <br>
+                                    <span style="font-size: 14px;">1 day</span>
+
+                                </div>
+
+
+
+                            </div>
+
+                            <h2 class="post-title"
+                                style=" font-size: 1.1em; margin: 10px 0;text-align: center;font-weight: 600;">anatomy
+                                quiz</h2>
+
+                            <button style=" background-color: #007BFF;
+                    color: white;
+                    border: none;
+                    border-radius: 5px;
+                    padding: 4px 10px;
+                    cursor: pointer;
+                    transition: background-color 0.3s;
+                    display: block;
+                    margin: 8px auto;
+                    
+                    " class="read-more" onclick="goToPost()">start</button>
+
+                            <!-- <div id="title" style="padding: 8px;">
+                        anatomy quiz
+
+                    </div> -->
+
+
+                        </div>
+
+
+
+
+
+
                     </div>
-             
-
-
-                    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-                        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-                        crossorigin="anonymous"></script>
-                    <%if(isSignIn){%>
 
 
 
 
-                        <%}%>
-                            <%if(!isSignIn){%>
-                                <script>
-                                    document.addEventListener('DOMContentLoaded', function () {
-
-
-                                        const authModalLabel = document.getElementById('authModalLabel');
-                                        const loginForm = document.getElementById('loginForm');
-                                        const registerForm = document.getElementById('registerForm');
-                                        const forgotPasswordForm = document.getElementById('forgotPasswordForm');
-
-                                        // Open modal
-                                        document.getElementById('openModal').addEventListener('click', function () {
-                                            showForm(loginForm);
-                                            authModalLabel.textContent = 'Login';
-                                            clearErrors();
-                                        });
-
-                                        // Show register form
-                                        document.getElementById('showRegister').addEventListener('click', function (e) {
-                                            e.preventDefault();
-                                            transitionForms(loginForm, registerForm, 'Sign Up');
-                                        });
-
-                                        // Show login form
-                                        document.getElementById('showLogin').addEventListener('click', function (e) {
-                                            e.preventDefault();
-                                            transitionForms(registerForm, loginForm, 'Login');
-                                        });
-
-                                        // Show forgot password form
-                                        document.getElementById('forgotPassword').addEventListener('click', function (e) {
-                                            e.preventDefault();
-                                            transitionForms(loginForm, forgotPasswordForm, 'Forgot Password');
-                                        });
-
-                                        // Show login form from forgot password
-                                        document.getElementById('showLoginFromForgot').addEventListener('click', function (e) {
-                                            e.preventDefault();
-                                            transitionForms(forgotPasswordForm, loginForm, 'Login');
-                                        });
-
-                                        function clearErrors() {
-                                            document.querySelectorAll('.error-message').forEach(error => error.textContent = '');
-                                        }
-
-                                        function showForm(form) {
-                                            form.classList.add('active');
-                                            form.style.display = 'block';
-                                            setTimeout(() => {
-                                                form.style.opacity = '1';
-                                            }, 10);
-                                        }
-
-                                        function hideForm(form) {
-                                            form.style.opacity = '0';
-                                            setTimeout(() => {
-                                                form.style.display = 'none';
-                                                form.classList.remove('active');
-                                            }, 200);
-                                        }
-
-                                        function transitionForms(currentForm, nextForm, label) {
-                                            hideForm(currentForm);
-                                            setTimeout(() => {
-                                                showForm(nextForm);
-                                                authModalLabel.textContent = label;
-                                            }, 200);
-                                        }
-
-                                        // Reset all forms when modal is closed
-                                        const modalElement = document.getElementById('authModal');
-                                        modalElement.addEventListener('hidden.bs.modal', function () {
-                                            hideForm(loginForm);
-                                            hideForm(registerForm);
-                                            hideForm(forgotPasswordForm);
-                                            showForm(loginForm);
-                                            authModalLabel.textContent = 'Login';
-                                            clearErrors();
-                                        });
-
-                                        // Validate login form
-                                        document.getElementById('formLogin').addEventListener('submit', function (e) {
-                                            e.preventDefault();
-                                            const email = document.getElementById('loginEmail').value;
-                                            const password = document.getElementById('loginPassword').value;
-                                            let valid = true;
-
-                                            clearErrors();
-                                            if (!email) {
-                                                document.getElementById('loginEmailError').textContent = 'Please enter your email.';
-                                                valid = false;
-                                            }
-                                            if (!password) {
-                                                document.getElementById('loginPasswordError').textContent = 'Please enter your password.';
-                                                valid = false;
-                                            }
-                                            if (valid) {
-
-                                                fetch("api/v1/auth/login", {
-                                                    method: "post",
-                                                    headers: {
-                                                        'Content-type': 'application/json; charset=UTF-8',
-                                                    },
-                                                    body: JSON.stringify({ email: email, password: password })
-                                                }).then((response) => {
-                                                    response.json().then((userData) => {
-                                                        document.location.pathname = "/"
-
-                                                        // localStorage.setItem('userData', JSON.stringify(userData));
-
-
-                                                        if (userData) {
-                                                            if (userData.profileImage) {
-                                                                // document.getElementById("account").innerHTML = '  <button class="profile-data"><div class="profile-img"></div>         <i class="fa-solid fa-caret-down"></i>                    </button>'
-                                                                // document.getElementsByClassName("profile-img")[0].innerHTML = "  <img  src='' alt='profile'  >   ";
-                                                                // document.querySelector(".profile-img img").src = userData.profileImage;
-
-
-                                                            }
-
-                                                        }
 
 
 
-
-                                                        console.log(userData);
-
-                                                    }
-                                                    )
-                                                }).catch((err) => { console.log(err) })
-
-
-                                            }
-                                        });
-
-                                        // Validate register form
-                                        document.getElementById('formRegister').addEventListener('submit', function (e) {
-                                            e.preventDefault();
-                                            const email = document.getElementById('registerEmail').value;
-                                            const password = document.getElementById('registerPassword').value;
-                                            const confirmPassword = document.getElementById('registerConfirmPassword').value;
-                                            let valid = true;
-
-                                            clearErrors();
-                                            if (!email) {
-                                                document.getElementById('registerEmailError').textContent = 'Please enter your email.';
-                                                valid = false;
-                                            }
-                                            if (!password) {
-                                                document.getElementById('registerPasswordError').textContent = 'Please enter your password.';
-                                                valid = false;
-                                            }
-                                            if (password !== confirmPassword) {
-                                                document.getElementById('registerConfirmPasswordError').textContent = 'Passwords do not match.';
-                                                valid = false;
-                                            }
-                                            if (valid) {
-
-
-                                                fetch("api/v1/auth/signup", {
-                                                    method: "post",
-                                                    headers: {
-                                                        'Content-type': 'application/json; charset=UTF-8',
-                                                    },
-                                                    body: JSON.stringify({
-                                                        // username: username,
-                                                        // name: name,
-                                                        email: email,
-                                                        password: password,
-                                                        passwordConfirm: confirmPassword
-                                                    })
-                                                }).then((response) => {
-                                                    response.json().then((userData) => {
-
-                                                        localStorage.setItem('userData', JSON.stringify(userData));
-
-
-
-                                                        if (userData) {
-                                                            if (userData.profileImage) {
-
-                                                                document.getElementsByClassName("profile-img")[0].innerHTML = "  <img  src='' alt='profile'  >   ";
-                                                                document.querySelector(".profile-img img").src = userData.profileImage;
-
-
-                                                            }
-
-                                                        }
-
-
-
-
-                                                        console.log(userData);
-
-                                                    }
-                                                    )
-                                                })
-
-                                            }
-                                        });
-
-                                        // Validate forgot password form
-                                        document.getElementById('formForgotPassword').addEventListener('submit', function (e) {
-                                            e.preventDefault();
-                                            const email = document.getElementById('forgotEmail').value;
-                                            let valid = true;
-
-                                            clearErrors();
-                                            if (!email) {
-                                                document.getElementById('forgotEmailError').textContent = 'Please enter your email.';
-                                                valid = false;
-                                            }
-                                            if (valid) {
-                                                alert('Password reset instructions sent!');
-                                            }
-                                        });
-                                    });
-                                </script>
-                                <%}%>
 </body>
 
+<!--notification  -->
+<script>
+    const notificationButton = document.getElementById('notificationButton');
+    const notificationDropdown = document.getElementById('notificationDropdown');
+
+    notificationButton.addEventListener('click', (event) => {
+        event.stopPropagation(); // Prevent the click from bubbling up to the window
+        notificationDropdown.classList.toggle('show');
+        const expanded = notificationDropdown.classList.contains('show');
+        // Update aria-expanded attribute
+        notificationDropdown.setAttribute('aria-hidden', !expanded);
+
+        // For accessibility: focus on the dropdown when opened
+        if (expanded) {
+            notificationDropdown.focus();
+        }
+    });
+
+
+    notificationDropdown.addEventListener('click', (event) => {
+        event.stopPropagation(); // Prevent the click from bubbling up to the window
+    });
+    // Close the dropdown when clicking outside of it
+    window.addEventListener('click', () => {
+
+        notificationDropdown.classList.remove('show');
+    });
+
+
+
+    function timeAgo(date) {
+        const now = new Date();
+        const seconds = (now - date) / 1000;
+        let interval = Math.floor(seconds / 31536000);
+
+        if (interval == 1) return interval + " year ago";
+        if (interval > 1) return interval + " years ago";
+        interval = Math.floor(seconds / 2592000);
+        if (interval == 1) return interval + " month ago";
+        if (interval > 1) return interval + " months ago";
+        interval = Math.floor(seconds / 86400);
+        if (interval == 1) return interval + " day ago";
+        if (interval > 1) return interval + " days ago";
+        interval = Math.floor(seconds / 3600);
+        if (interval == 1) return interval + " hour ago";
+        if (interval > 1) return interval + " hours ago";
+        interval = Math.floor(seconds / 60);
+        if (interval == 1) return interval + " minute ago";
+        if (interval > 1) return interval + " minutes ago";
+
+        interval = Math.floor(seconds / 1);
+        if (interval == 1) return interval + " second ago";
+        if (interval > 1) return interval + " seconds ago";
+        return " Now";
+    }
+
+
+
+    // Function to render notifications
+    function renderNotifications() {
+        fetch("api/v1/users/notifications", {
+            method: "get",
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+            },
+        }).then((response) => {
+            response.json().then((res) => {
+                notifications = res.notifications
+                const container = document.getElementById('notificationContainer');
+                container.innerHTML = ''; // Clear existing notifications
+                console.log(notifications)
+                const options = {
+                    // weekday: 'long',
+                    // year: 'numeric',
+                    // month: 'numeric',
+                    // day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+
+                    // hour12: false
+                };
+
+                // const localDateStr = dateObj.toLocaleString(undefined, options);
+
+                notifications.forEach(notification => {
+                    const t = new Date(notification.time)
+
+                    const time = t.toLocaleString('en-US', options)
+                    const item = document.createElement('div');
+                    item.className = 'notification-item';
+                    if (notification.type === "invitation") {
+
+                        item.innerHTML = `
+
+<div>
+ <img src="${notification.avatar}" alt="Avatar" class="avatar">
+</div>
+
+ <div style="flex-grow: 1;">
+
+     <div class="notification-message">${notification.message}</div>
+     <div class="notification-time">
+         <span class="notification-time">${time}
+         </span> 
+         <span class="notification-time">${timeAgo(t)}
+         </span>  
+     </div>
+
+
+     <div class="action-div">
+
+         
+       
+         <a  class=" btn btn-primary btn-sm" href=${notification.href}>
+           Start
+         </a> 
+
+     </div>
+     
+
+ 
+
+ </div>
+`;
+
+                    }
+                    else if (notification.type === "friend request") {
+
+                        item.innerHTML = `
+<div>
+ <img src="${notification.avatar}" alt="Avatar" class="avatar">
+</div>
+
+ <div style="flex-grow: 1;">
+
+     <div class="notification-message">${notification.message}</div>
+     <div class="notification-time">
+         <span class="notification-time">${time}
+         </span> 
+         <span class="notification-time">${timeAgo(t)}
+         </span>  
+     </div>
+
+
+     <div class="action-div">
+                 
+         <button id="decline" class=" btn btn-outline-dark btn-sm" href=${notification.href}> Decline </button> 
+         <button id="accept" class=" btn btn-primary btn-sm" href=${notification.href}> Accept </button> 
+
+    </div>
+ 
+
+ </div>
+`
+
+                        item.querySelector("#decline").addEventListener("click", async () => {
+
+                            const res = await fetch(`/api/v1/friends/friend-request-response`, {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                },
+                                body: JSON.stringify({ "userId": notification.from, status: "declined" })
+                            });
+
+                            if (res.ok) {
+                                removeWithFade(item);
+                                for (let index = 0; index < item.querySelector(".action-div").getElementsByTagName("button").length; index++) {
+                                    item.querySelector(".action-div").getElementsByTagName("button")[index].disabled = true;
+
+                                }
+
+                            }
+
+                        })
+
+                        item.querySelector("#accept").addEventListener("click", async () => {
+
+                            const res = await fetch(`/api/v1/friends/friend-request-response`, {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                },
+                                body: JSON.stringify({ "userId": notification.from, status: "accepted" })
+                            });
+                            if (res.ok) {
+                                removeWithFade(item);
+                                for (let index = 0; index < item.querySelector(".action-div").getElementsByTagName("button").length; index++) {
+                                    item.querySelector(".action-div").getElementsByTagName("button")[index].disabled = true;
+
+                                }
+                            }
+
+
+
+                        })
+
+                    }
+                    else if (notification.type === "mention") {
+                        item.innerHTML = `
+                                <div>
+                                    <img src="${notification.avatar}" alt="Avatar" class="avatar">
+                                </div>
+                                <div style="flex-grow: 1;">
+                                    <div class="notification-message">${notification.message} <a href="${notification.href}" class="mention-link">Go to comment</a></div>
+                                    <div class="notification-time">
+                                        <span class="notification-time">${time}</span> 
+                                        <span class="notification-time">${timeAgo(t)}</span> 
+                                    </div>
+                                </div>
+                            `;
+                    }
+                    else if (notification.type === "comment") {
+                        item.innerHTML = `
+                                <div>
+                                    <img src="${notification.avatar}" alt="Avatar" class="avatar">
+                                </div>
+                                <div style="flex-grow: 1;">
+                                    <div class="notification-message">${notification.message} <a href="${notification.href}" class="mention-link">Go to comment</a></div>
+                                    <div class="notification-time">
+                                        <span class="notification-time">${time}</span> 
+                                        <span class="notification-time">${timeAgo(t)}</span> 
+                                    </div>
+                                </div>
+                            `;
+                    }
+
+
+                    container.appendChild(item);
+                });
+
+                // Update badge count
+                const unreadCount = notifications.length; // Adjust this with actual unread logic
+                document.getElementById('notificationBadge').textContent = unreadCount;
+
+
+            }
+            )
+        }).catch((err) => { console.log(err) })
+    }
+
+    function removeWithFade(notification) {
+        notification.classList.add('fade-out');
+        setTimeout(() => notification.style.display = "none", 300);
+    }
+    // Initial rendering of notifications
+    renderNotifications();
+
+
+
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
+<%if(isSignIn){%>
+
+
+
+
+    <%}%>
+        <%if(!isSignIn){%>
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+
+
+                    const authModalLabel = document.getElementById('authModalLabel');
+                    const loginForm = document.getElementById('loginForm');
+                    const registerForm = document.getElementById('registerForm');
+                    const forgotPasswordForm = document.getElementById('forgotPasswordForm');
+
+                    // Open modal
+                    document.getElementById('openModal').addEventListener('click', function () {
+                        showForm(loginForm);
+                        authModalLabel.textContent = 'Login';
+                        clearErrors();
+                    });
+
+                    // Show register form
+                    document.getElementById('showRegister').addEventListener('click', function (e) {
+                        e.preventDefault();
+                        transitionForms(loginForm, registerForm, 'Sign Up');
+                    });
+
+                    // Show login form
+                    document.getElementById('showLogin').addEventListener('click', function (e) {
+                        e.preventDefault();
+                        transitionForms(registerForm, loginForm, 'Login');
+                    });
+
+                    // Show forgot password form
+                    document.getElementById('forgotPassword').addEventListener('click', function (e) {
+                        e.preventDefault();
+                        transitionForms(loginForm, forgotPasswordForm, 'Forgot Password');
+                    });
+
+                    // Show login form from forgot password
+                    document.getElementById('showLoginFromForgot').addEventListener('click', function (e) {
+                        e.preventDefault();
+                        transitionForms(forgotPasswordForm, loginForm, 'Login');
+                    });
+
+                    function clearErrors() {
+                        document.querySelectorAll('.error-message').forEach(error => error.textContent = '');
+                    }
+
+                    function showForm(form) {
+                        form.classList.add('active');
+                        form.style.display = 'block';
+                        setTimeout(() => {
+                            form.style.opacity = '1';
+                        }, 10);
+                    }
+
+                    function hideForm(form) {
+                        form.style.opacity = '0';
+                        setTimeout(() => {
+                            form.style.display = 'none';
+                            form.classList.remove('active');
+                        }, 200);
+                    }
+
+                    function transitionForms(currentForm, nextForm, label) {
+                        hideForm(currentForm);
+                        setTimeout(() => {
+                            showForm(nextForm);
+                            authModalLabel.textContent = label;
+                        }, 200);
+                    }
+
+                    // Reset all forms when modal is closed
+                    const modalElement = document.getElementById('authModal');
+                    modalElement.addEventListener('hidden.bs.modal', function () {
+                        hideForm(loginForm);
+                        hideForm(registerForm);
+                        hideForm(forgotPasswordForm);
+                        showForm(loginForm);
+                        authModalLabel.textContent = 'Login';
+                        clearErrors();
+                    });
+
+                    // Validate login form
+                    document.getElementById('formLogin').addEventListener('submit', function (e) {
+                        e.preventDefault();
+                        const email = document.getElementById('loginEmail').value;
+                        const password = document.getElementById('loginPassword').value;
+                        let valid = true;
+
+                        clearErrors();
+                        if (!email) {
+                            document.getElementById('loginEmailError').textContent = 'Please enter your email.';
+                            valid = false;
+                        }
+                        if (!password) {
+                            document.getElementById('loginPasswordError').textContent = 'Please enter your password.';
+                            valid = false;
+                        }
+                        if (valid) {
+
+                            fetch("api/v1/auth/login", {
+                                method: "post",
+                                headers: {
+                                    'Content-type': 'application/json; charset=UTF-8',
+                                },
+                                body: JSON.stringify({ email: email, password: password })
+                            }).then((response) => {
+                                response.json().then((userData) => {
+                                    document.location.pathname = "/"
+
+                                    // localStorage.setItem('userData', JSON.stringify(userData));
+
+
+                                    if (userData) {
+                                        if (userData.profileImage) {
+                                            // document.getElementById("account").innerHTML = '  <button class="profile-data"><div class="profile-img"></div>         <i class="fa-solid fa-caret-down"></i>                    </button>'
+                                            // document.getElementsByClassName("profile-img")[0].innerHTML = "  <img  src='' alt='profile'  >   ";
+                                            // document.querySelector(".profile-img img").src = userData.profileImage;
+
+
+                                        }
+
+                                    }
+
+
+
+
+                                    console.log(userData);
+
+                                }
+                                )
+                            }).catch((err) => { console.log(err) })
+
+
+                        }
+                    });
+
+                    // Validate register form
+                    document.getElementById('formRegister').addEventListener('submit', function (e) {
+                        e.preventDefault();
+                        const email = document.getElementById('registerEmail').value;
+                        const username = document.getElementById('registerUserName').value;
+
+                        const password = document.getElementById('registerPassword').value;
+                        const confirmPassword = document.getElementById('registerConfirmPassword').value;
+                        let valid = true;
+
+                        clearErrors();
+                        if (!email) {
+                            document.getElementById('registerEmailError').textContent = 'Please enter your email.';
+                            valid = false;
+                        }
+                        if (!password) {
+                            document.getElementById('registerPasswordError').textContent = 'Please enter your password.';
+                            valid = false;
+                        }
+                        if (password !== confirmPassword) {
+                            document.getElementById('registerConfirmPasswordError').textContent = 'Passwords do not match.';
+                            valid = false;
+                        }
+                        if (valid) {
+
+
+                            fetch("api/v1/auth/signup", {
+                                method: "post",
+                                headers: {
+                                    'Content-type': 'application/json; charset=UTF-8',
+                                },
+                                body: JSON.stringify({
+                                    username: username,
+                                    // name: name,
+                                    email: email,
+                                    password: password,
+                                    passwordConfirm: confirmPassword
+                                })
+                            }).then((response) => {
+                                response.json().then((userData) => {
+
+                                    localStorage.setItem('userData', JSON.stringify(userData));
+
+
+
+                                    if (userData) {
+                                        if (userData.profileImage) {
+
+                                            document.getElementsByClassName("profile-img")[0].innerHTML = "  <img  src='' alt='profile'  >   ";
+                                            document.querySelector(".profile-img img").src = userData.profileImage;
+
+
+                                        }
+
+                                    }
+
+
+
+
+                                    console.log(userData);
+
+                                }
+                                )
+                            })
+
+                        }
+                    });
+
+                    // Validate forgot password form
+                    document.getElementById('formForgotPassword').addEventListener('submit', function (e) {
+                        e.preventDefault();
+                        const email = document.getElementById('forgotEmail').value;
+                        let valid = true;
+
+                        clearErrors();
+                        if (!email) {
+                            document.getElementById('forgotEmailError').textContent = 'Please enter your email.';
+                            valid = false;
+                        }
+                        if (valid) {
+                            alert('Password reset instructions sent!');
+                        }
+                    });
+                });
+            </script>
+            <%}%>
+
+
+
 </html>
+<!-- 
+<a  class=" btn btn-outline-danger btn-sm" href=${notification.href}>
+    Decline
+  </a> -->

@@ -1,7 +1,7 @@
 * {
     padding: 0;
     margin: 0;
-    color: white;
+    /* color: white; */
     font-family: sans-serif;
 }
 
@@ -12,6 +12,7 @@ body {
     display: flex;
     background-color: #001;
 }
+
 
 
 .profile {
@@ -48,12 +49,14 @@ body {
     position: sticky;
     top: 0;
     background-color: #123;
-    width: 60px;
+    width: 96px;
     height: 100vh;
     padding: 20px;
     overflow: hidden;
     transition: .5s;
     flex-shrink: 0;
+        color: white;
+
 }
 
 
@@ -80,6 +83,8 @@ ul li a {
     align-items: center;
     gap: 40px;
     transition: .5s;
+        color: white;
+
 }
 
 

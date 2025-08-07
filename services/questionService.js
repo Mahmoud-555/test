@@ -22,6 +22,7 @@ exports.resizeQuestionImages = asyncHandler(async (req, res, next) => {
 
   if (req.files && req.files.images && req.files.images.length > 0) {
 
+    
     req.body.images = [];
     await Promise.all(
       req.files.images.map(async (img, index) => {
@@ -31,10 +32,10 @@ exports.resizeQuestionImages = asyncHandler(async (req, res, next) => {
           .resize(2000, 1333)
           .toFormat('jpeg')
           .jpeg({ quality: 95 })
-          .toFile(`uploads/question/${imageName}`);
+          .toFile(`./frontend/public/uploads/questions/${imageName}`);
 
         // Save image into our db
-        req.body.images.push(imageName);
+        req.body.images.push(`/uploads/questions/${imageName}`);
       })
     );
 

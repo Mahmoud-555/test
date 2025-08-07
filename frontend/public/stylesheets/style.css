@@ -83,6 +83,7 @@ header span .profile-img i {
 }
 
 
+
 .profile-data {
     display: flex;
     align-items: center;
@@ -336,6 +337,83 @@ footer {
 
 .dropdown-content a:hover {
     background-color: #ddd;
+}
+
+#media-preview {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 12px;
+    padding: 8px;
+    margin-top: 8px;
+}
+
+.media-preview-item {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background-color: #222;
+}
+
+.media-preview-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 16px rgba(11, 121, 238, 0.7);
+}
+
+.media-preview-item img,
+.media-preview-item video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: 12px;
+}
+
+.media-preview-item .play-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    width: 40px;
+    height: 40px;
+    background: rgba(11, 121, 238, 0.8);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 8px rgba(11, 121, 238, 0.9);
+}
+
+.media-preview-item .play-icon svg {
+    fill: white;
+    width: 20px;
+    height: 20px;
+}
+
+.media-preview-item .remove-btn {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    color: #333;
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 24px;
+    text-align: center;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    user-select: none;
+}
+
+.media-preview-item .remove-btn:hover {
+    background: rgba(255, 0, 0, 0.9);
+    color: white;
 }
 
 .dropdown:hover .dropdown-content {

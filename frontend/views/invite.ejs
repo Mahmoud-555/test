@@ -1,0 +1,677 @@
+<!doctybe html>
+  <html>
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/stylesheets/styles.css">
+    <title>اجابة استفهام</title>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/javascripts/socket.js">
+
+
+
+
+      // document.getElementById('createButton').onclick = function() {
+      //     playerName = document.getElementById('playerName').value;
+      //     if (playerName) {
+      //         gameId = uuidv4(); // إنشاء معرف لعبة فريد
+      //         socket.emit('joinGame', { gameId, playerName });
+      //         startGame(gameId);
+      //     } else {
+      //         alert("يرجى إدخال اسم المستخدم!");
+      //     }
+      // };
+
+      // document.getElementById('joinButton').onclick = function() {
+      //     const inviteUrl = document.getElementById('invitation').value;
+      //     if (inviteUrl) {
+      //         const parts = inviteUrl.split('/');
+      //         gameId = parts[parts.length - 1];
+      //         playerName = document.getElementById('playerName').value;
+      //         socket.emit('joinGame', { gameId, playerName });
+      //         startGame(gameId);
+      //     } else {
+      //         alert("يرجى إدخال رابط صالح للعبة!");
+      //     }
+      // };
+
+      // function startGame(id) {
+      //     document.getElementById('gameContainer').style.display = 'none';
+      //     document.getElementById('quiz').style.display = 'block';
+      //     socket.emit('getQuestion', id);
+      // }
+
+      // socket.on('gameJoined', (gameId) => {
+      //     console.log("Joined game: " + gameId);
+      // });
+
+      // socket.on('question', (question) => {
+      //     const quizContainer = document.getElementById('quiz');
+      //     quizContainer.innerHTML = '';
+
+      //     const questionElement = document.createElement('div');
+      //     questionElement.classList.add('question');
+      //     questionElement.innerText = question.question;
+
+      //     question.options.forEach((option, opIndex) => {
+      //         const optionElement = document.createElement('div');
+      //         optionElement.classList.add('options');
+      //         optionElement.innerHTML = `<input type="radio" name="option" value="${opIndex}" /> ${option}`;
+      //         questionElement.appendChild(optionElement);
+      //     });
+
+      //     const submitButton = document.createElement('button');
+      //     submitButton.innerText = 'إرسال إجابة';
+      //     submitButton.onclick = () => {
+      //         const selectedOption = document.querySelector(`input[name="option"]:checked`);
+      //         if (selectedOption) {
+      //             const answer = parseInt(selectedOption.value);
+      //             socket.emit('answer', { gameId, playerName, answer });
+      //             selectedOption.checked = false; // إعادة تعيين الاختيار
+      //         } else {
+      //             alert("يرجى اختيار إجابة!");
+      //         }
+      //     };
+
+      //     questionElement.appendChild(submitButton);
+      //     quizContainer.appendChild(questionElement);
+      //     startTimer(15); // 15 ثانية لكل سؤال
+      // });
+
+      // function startTimer(seconds) {
+      //     let remainingTime = seconds;
+      //     document.getElementById('timer').innerText = `الوقت المتبقي: ${remainingTime} ث`;
+      //     document.getElementById('timer').classList.remove('hidden');
+
+      //     timer = setInterval(() => {
+      //         remainingTime--;
+      //         document.getElementById('timer').innerText = `الوقت المتبقي: ${remainingTime} ث`;
+      //         if (remainingTime <= 0) {
+      //             clearInterval(timer);
+      //             document.getElementById('timer').classList.add('hidden');
+      //             alert("انتهى الوقت للإجابة!");
+      //             socket.emit('answer', { gameId, playerName, answer: -1 }); // -1 تُشير إلى عدم الإجابة
+      //         }
+      //     }, 1000);
+      // }
+
+      // socket.on('scoreUpdate', (scores) => {
+      //     const scoresElement = document.getElementById('scores');
+      //     scoresElement.innerHTML = '';
+      //     for (const player in scores) {
+      //         scoresElement.innerHTML += `${player}: ${scores[player]}<br>`;
+      //     }
+      // });
+
+      // socket.on('nextQuestion', (index) => {
+      //     socket.emit('getQuestion', gameId);
+      // });
+
+      // socket.on('endGame', (scores) => {
+      //     clearInterval(timer);
+      //     const quizContainer = document.getElementById('quiz');
+      //     quizContainer.innerHTML = "<h2>انتهت اللعبة!</h2>";
+      //     const scoresElement = document.getElementById('scores');
+      //     scoresElement.innerHTML = '<h3>النقاط النهائية:</h3>';
+      //     for (const player in scores) {
+      //         scoresElement.innerHTML += `${player}: ${scores[player]}<br>`;
+      //     }
+      //     document.getElementById('timer').classList.add('hidden');
+      // });
+
+      // // دالة UUID لإنشاء معرّف فريد لكل لعبة
+      // function uuidv4() {
+      //     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+      //         const r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+      //         return v.toString(16);
+      //     });
+      // }
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script>
+      function generateQRCode() {
+        const invLink = document.getElementById("invLink").innerText;
+        const qrCodeContainer = document.getElementById("qrcode");
+        qrCodeContainer.innerHTML = "";
+        if (invLink) {
+          new QRCode(qrCodeContainer, {
+            text: invLink,
+            width: 150,
+            height: 150,
+            colorDark: "#5AA4E8",
+            colorLight: "#0a1a2a",
+            correctLevel: QRCode.CorrectLevel.H
+          });
+        }
+      }
+
+      window.onload = function () {
+        generateQRCode();
+      };
+
+      // Modal open/close functions
+      function openModal() {
+        document.getElementById('qrModal').style.display = 'flex';
+      }
+
+      function closeModal() {
+        document.getElementById('qrModal').style.display = 'none';
+      }
+    </script>
+
+    <style>
+      #copyIcon {
+        flex-shrink: 0;
+        cursor: pointer;
+        transition: transform 0.3s ease;
+      }
+
+      #copyIcon:hover {
+        transform: scale(1.1);
+      }
+
+      #onlineusers {
+        min-height: 86px;
+      }
+
+      .gradient-circle {
+
+        width: 37px;
+        /* عرض الدائرة */
+        height: 37px;
+        /* ارتفاع الدائرة */
+
+        background-color: #1e190d;
+        ;
+        /* لون الخلفية للـ div */
+        border-radius: 50%;
+        /* لجعل الشكل دائري */
+        position: relative;
+        /* لجعل العناصر المطلقة تعمل بشكل صحيح */
+        display: flex;
+        /* لمركز المحتوى */
+        justify-content: center;
+        /* لمركز المحتوى أفقياً */
+        align-items: center;
+        /* لمركز المحتوى عمودياً */
+        /* border:  solid transparent; */
+        /* الحدود الأساسية بسمك 1rem */
+        box-sizing: border-box;
+        /* لاحتساب الحدود في حجم العنصر */
+
+      }
+
+      .gradient-circle::before {
+        content: '';
+        position: absolute;
+        top: -4px;
+        /* ضعه على الحافة العليا */
+        left: -4px;
+        /* ضعه على الحافة اليسرى */
+        right: -4px;
+        /* ضعه على الحافة اليمنى */
+        bottom: -4px;
+        /* ضعه على الحافة السفلى */
+        background: linear-gradient(58deg, #5AA4E8 0%, #5AA4E8 48%, #137489 84%, #137489 100%);
+
+        /* background: linear-gradient(38deg, #5AA4E8, #137489);  */
+        /* تدرج الألوان */
+        border-radius: 50%;
+        /* لجعل الشكل دائري */
+        z-index: -1;
+        /* إرسال الخلفية إلى الخلف */
+      }
+
+      /* Modal styles */
+      #qrModal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.7);
+        justify-content: center;
+        align-items: center;
+      }
+
+      #qrModalContent {
+        background: #0a1a2a;
+        border-radius: 16px;
+        box-shadow: 0 0 15px 3px rgba(90, 164, 232, 0.7);
+        padding: 20px;
+        width: 220px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        position: relative;
+      }
+
+      #qrModalContent span {
+        font-size: 14px;
+        font-weight: 700;
+        color: #5AA4E8;
+        text-shadow: 0 0 5px #5AA4E8;
+      }
+
+      #closeModalBtn {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        background: transparent;
+        border: none;
+        color: #5AA4E8;
+        font-size: 20px;
+        cursor: pointer;
+      }
+    </style>
+
+  </head>
+
+  <body style=" min-height: 100vh; background: #03101f;">
+
+
+
+
+
+
+
+
+
+    <header
+      style="width: 92%; height: 55px; display: flex;justify-content: space-between;align-items: center;margin: auto;">
+
+      <a id="back" href="/challenge">
+        <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"
+          style="width: 40px; height: 40px;" preserveAspectRatio="none">
+          <path d="M25 30L15 20L25 10" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+          </path>
+        </svg>
+
+      </a>
+
+
+
+
+
+      <h1 id="header-h1" style=" font-size: 24px; color: #fff;margin: 0;padding: 8px;">
+
+      </h1>
+
+
+
+    </header>
+
+    <div
+      style="margin: 25px auto; padding: 0 8px; border-radius: 4px; background-color: rgb(217 217 217 / 4%); width: 92%; height: auto; display: flex; flex-direction: column; align-items: center; gap: 12px;">
+      <p id="invLink"
+        style="font-size: 14px; text-align: center; color: rgba(255,255,255,0.7); overflow-wrap: break-word; max-width: 100%;">
+        hello
+      </p>
+      <svg id="copyIcon" onclick="copy(this)" width="16" height="16" viewBox="0 0 16 16" fill="none"
+        xmlns="http://www.w3.org/2000/svg" style="width: 16px; height: 16px; cursor: pointer; margin-bottom: 8px;"
+        preserveAspectRatio="none">
+        <g clip-path="url(#clip0_117_172)">
+          <path style="transition: all 0.3s ease;"
+            d="M3.33325 10H2.66659C2.31296 10 1.97382 9.85956 1.72378 9.60952C1.47373 9.35947 1.33325 9.02033 1.33325 8.66671V2.66671C1.33325 2.31309 1.47373 1.97395 1.72378 1.7239C1.97382 1.47385 2.31296 1.33337 2.66659 1.33337H8.66659C9.02021 1.33337 9.35935 1.47385 9.60939 1.7239C9.85944 1.97395 9.99992 2.31309 9.99992 2.66671V3.33337M7.33325 6.00004H13.3333C14.0696 6.00004 14.6666 6.59699 14.6666 7.33337V13.3334C14.6666 14.0698 14.0696 14.6667 13.3333 14.6667H7.33325C6.59687 14.6667 5.99992 14.0698 5.99992 13.3334V7.33337C5.99992 6.59699 6.59687 6.00004 7.33325 6.00004Z"
+            stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
+        </g>
+        <defs>
+          <clipPath id="clip0_117_172">
+            <rect width="16" height="16" fill="white"></rect>
+          </clipPath>
+        </defs>
+      </svg>
+
+
+      <!-- Button to open QR code modal -->
+      <button onclick="openModal()"
+        style="padding: 8px 16px; border-radius: 8px; background-color: #5AA4E8; color: white; border: none; cursor: pointer;">
+        Show QR Code
+      </button>
+
+      <!-- QR Code Modal -->
+      <div id="qrModal" onclick="closeModal()"
+        style="display:none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.7); justify-content: center; align-items: center;">
+        <div id="qrModalContent" onclick="event.stopPropagation()"
+          style="background: #0a1a2a; border-radius: 16px; box-shadow: 0 0 15px 3px rgba(90, 164, 232, 0.7); padding: 20px; width: 220px; display: flex; flex-direction: column; align-items: center; gap: 12px; position: relative;">
+          <button id="closeModalBtn" onclick="closeModal()"
+            style="position: absolute; top: 8px; right: 8px; background: transparent; border: none; color: #5AA4E8; font-size: 20px; cursor: pointer;">×</button>
+          <div id="qrcode-container"
+            style="padding: 20px; background: #0a1a2a; border-radius: 16px; box-shadow: 0 0 15px 3px rgba(90, 164, 232, 0.7); display: flex; flex-direction: column; align-items: center; gap: 12px; width: 180px; transition: transform 0.3s ease;">
+            <span style="font-size: 14px; font-weight: 700; color: #5AA4E8; text-shadow: 0 0 5px #5AA4E8;">Scan QR
+              Code</span>
+            <div id="qrcode"></div>
+          </div>
+          <div id="qrcode"></div>
+        </div>
+      </div>
+    </div>
+
+
+
+
+    <!-- online -->
+    <div id="onlineUsers" style="display: flex;gap: 1rem;overflow: scroll;padding: 1rem 4% ;margin:auto;">
+
+    </div>
+
+
+
+
+
+
+
+
+    <div style="width:92%; height: 43px; margin: auto;padding: 1rem; border-radius: 4px; background: rgba(217,217,217,0.02); box-shadow: 0px 4px 4px 0 rgba(0,0,0,0.25);display: flex;align-items: center;
+    justify-content: space-between;
+">
+      <input placeholder="username" style="border: navajowhite;
+      font-weight: 600;flex-grow: 1;
+      
+      background-color: rgb(217, 217, 217, 0);
+      width: 144.69px;
+      height: 41px;
+      font-size: 20px;
+      text-align: left;
+      color: #fff;
+      outline: none;">
+
+      <svg width="27" height="27" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg"
+        style="width: 27px; height: 27px;" preserveAspectRatio="xMidYMid meet">
+        <path
+          d="M12.375 19.125H14.625V14.625H19.125V12.375H14.625V7.875H12.375V12.375H7.875V14.625H12.375V19.125ZM13.5 24.75C11.9438 24.75 10.4813 24.4594 9.1125 23.8781C7.74375 23.2781 6.55312 22.4719 5.54063 21.4594C4.52813 20.4469 3.72188 19.2563 3.12188 17.8875C2.54062 16.5187 2.25 15.0562 2.25 13.5C2.25 11.9437 2.54062 10.4812 3.12188 9.1125C3.72188 7.74375 4.52813 6.55312 5.54063 5.54062C6.55312 4.52812 7.74375 3.73125 9.1125 3.15C10.4813 2.55 11.9438 2.25 13.5 2.25C15.0563 2.25 16.5188 2.55 17.8875 3.15C19.2563 3.73125 20.4469 4.52812 21.4594 5.54062C22.4719 6.55312 23.2688 7.74375 23.85 9.1125C24.45 10.4812 24.75 11.9437 24.75 13.5C24.75 15.0562 24.45 16.5187 23.85 17.8875C23.2688 19.2563 22.4719 20.4469 21.4594 21.4594C20.4469 22.4719 19.2563 23.2781 17.8875 23.8781C16.5188 24.4594 15.0563 24.75 13.5 24.75ZM13.5 22.5C16.0125 22.5 18.1406 21.6281 19.8844 19.8844C21.6281 18.1406 22.5 16.0125 22.5 13.5C22.5 10.9875 21.6281 8.85938 19.8844 7.11562C18.1406 5.37187 16.0125 4.5 13.5 4.5C10.9875 4.5 8.85938 5.37187 7.11562 7.11562C5.37187 8.85938 4.5 10.9875 4.5 13.5C4.5 16.0125 5.37187 18.1406 7.11562 19.8844C8.85938 21.6281 10.9875 22.5 13.5 22.5Z"
+          fill="#00FF29"></path>
+      </svg>
+    </div>
+
+
+
+    <div id="invitedUsers" style="overflow:scroll;width:92%; height: 208px;margin: auto;padding: 1rem; background: rgba(217,217,217,0.1); 
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(60px, 80px)); 
+      gap: 1rem;justify-items: center;">
+
+
+      <!--  
+
+   <div style="width: 60px; height: 61px;text-align: center;
+      ">
+        <img style="" src="/images/uploads/ellipse-3.png" />
+        <p
+          style="width: 60px; height: 17px;font-size: 12px; font-weight: 900; font-style: italic; text-align: left; color: #fff;">
+          momo123
+        </p>
+        <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 17px; height: 17px;position: relative;
+                top: -66px;
+                left: 19px;cursor: pointer;" preserveAspectRatio="xMidYMid meet">
+          <path
+            d="M4.95825 14.875C4.56867 14.875 4.23516 14.7363 3.95773 14.4589C3.6803 14.1814 3.54159 13.8479 3.54159 13.4583V4.25H2.83325V2.83333H6.37492V2.125H10.6249V2.83333H14.1666V4.25H13.4583V13.4583C13.4583 13.8479 13.3195 14.1814 13.0421 14.4589C12.7647 14.7363 12.4312 14.875 12.0416 14.875H4.95825ZM12.0416 4.25H4.95825V13.4583H12.0416V4.25ZM6.37492 12.0417H7.79159V5.66667H6.37492V12.0417ZM9.20825 12.0417H10.6249V5.66667H9.20825V12.0417Z"
+            fill="#FF002E"></path>
+        </svg>
+      </div>  
+      <div style="width: 60px; height: 61px;text-align: center;
+      ">
+        <img style="" src="/images/uploads/ellipse-3.png" />
+        <p
+          style="width: 60px; height: 17px;font-size: 12px; font-weight: 900; font-style: italic; text-align: left; color: #fff;">
+          momo123
+        </p>
+        <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 17px; height: 17px;position: relative;
+                top: -66px;
+                left: 19px;cursor: pointer;" preserveAspectRatio="xMidYMid meet">
+          <path
+            d="M4.95825 14.875C4.56867 14.875 4.23516 14.7363 3.95773 14.4589C3.6803 14.1814 3.54159 13.8479 3.54159 13.4583V4.25H2.83325V2.83333H6.37492V2.125H10.6249V2.83333H14.1666V4.25H13.4583V13.4583C13.4583 13.8479 13.3195 14.1814 13.0421 14.4589C12.7647 14.7363 12.4312 14.875 12.0416 14.875H4.95825ZM12.0416 4.25H4.95825V13.4583H12.0416V4.25ZM6.37492 12.0417H7.79159V5.66667H6.37492V12.0417ZM9.20825 12.0417H10.6249V5.66667H9.20825V12.0417Z"
+            fill="#FF002E"></path>
+        </svg>
+      </div>
+      <div style="width: 60px; height: 61px;text-align: center;
+      ">
+        <img style="" src="/images/uploads/ellipse-3.png" />
+        <p
+          style="width: 60px; height: 17px;font-size: 12px; font-weight: 900; font-style: italic; text-align: left; color: #fff;">
+          momo123
+        </p>
+        <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 17px; height: 17px;position: relative;
+                top: -66px;
+                left: 19px;cursor: pointer;" preserveAspectRatio="xMidYMid meet">
+          <path
+            d="M4.95825 14.875C4.56867 14.875 4.23516 14.7363 3.95773 14.4589C3.6803 14.1814 3.54159 13.8479 3.54159 13.4583V4.25H2.83325V2.83333H6.37492V2.125H10.6249V2.83333H14.1666V4.25H13.4583V13.4583C13.4583 13.8479 13.3195 14.1814 13.0421 14.4589C12.7647 14.7363 12.4312 14.875 12.0416 14.875H4.95825ZM12.0416 4.25H4.95825V13.4583H12.0416V4.25ZM6.37492 12.0417H7.79159V5.66667H6.37492V12.0417ZM9.20825 12.0417H10.6249V5.66667H9.20825V12.0417Z"
+            fill="#FF002E"></path>
+        </svg>
+      </div>
+      <div style="width: 60px; height: 61px;text-align: center;
+      ">
+        <img style="" src="/images/uploads/ellipse-3.png" />
+        <p
+          style="width: 60px; height: 17px;font-size: 12px; font-weight: 900; font-style: italic; text-align: left; color: #fff;">
+          momo123
+        </p>
+        <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 17px; height: 17px;position: relative;
+                top: -66px;
+                left: 19px;cursor: pointer;" preserveAspectRatio="xMidYMid meet">
+          <path
+            d="M4.95825 14.875C4.56867 14.875 4.23516 14.7363 3.95773 14.4589C3.6803 14.1814 3.54159 13.8479 3.54159 13.4583V4.25H2.83325V2.83333H6.37492V2.125H10.6249V2.83333H14.1666V4.25H13.4583V13.4583C13.4583 13.8479 13.3195 14.1814 13.0421 14.4589C12.7647 14.7363 12.4312 14.875 12.0416 14.875H4.95825ZM12.0416 4.25H4.95825V13.4583H12.0416V4.25ZM6.37492 12.0417H7.79159V5.66667H6.37492V12.0417ZM9.20825 12.0417H10.6249V5.66667H9.20825V12.0417Z"
+            fill="#FF002E"></path>
+        </svg>
+      </div>
+      <div style="width: 60px; height: 61px;text-align: center;
+      ">
+        <img style="" src="/images/uploads/ellipse-3.png" />
+        <p
+          style="width: 60px; height: 17px;font-size: 12px; font-weight: 900; font-style: italic; text-align: left; color: #fff;">
+          momo123
+        </p>
+        <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 17px; height: 17px;position: relative;
+                top: -66px;
+                left: 19px;cursor: pointer;" preserveAspectRatio="xMidYMid meet">
+          <path
+            d="M4.95825 14.875C4.56867 14.875 4.23516 14.7363 3.95773 14.4589C3.6803 14.1814 3.54159 13.8479 3.54159 13.4583V4.25H2.83325V2.83333H6.37492V2.125H10.6249V2.83333H14.1666V4.25H13.4583V13.4583C13.4583 13.8479 13.3195 14.1814 13.0421 14.4589C12.7647 14.7363 12.4312 14.875 12.0416 14.875H4.95825ZM12.0416 4.25H4.95825V13.4583H12.0416V4.25ZM6.37492 12.0417H7.79159V5.66667H6.37492V12.0417ZM9.20825 12.0417H10.6249V5.66667H9.20825V12.0417Z"
+            fill="#FF002E"></path>
+        </svg>
+      </div>
+      <div style="width: 60px; height: 61px;text-align: center;
+      ">
+        <img style="" src="/images/uploads/ellipse-3.png" />
+        <p
+          style="width: 60px; height: 17px;font-size: 12px; font-weight: 900; font-style: italic; text-align: left; color: #fff;">
+          momo123
+        </p>
+        <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 17px; height: 17px;position: relative;
+                top: -66px;
+                left: 19px;cursor: pointer;" preserveAspectRatio="xMidYMid meet">
+          <path
+            d="M4.95825 14.875C4.56867 14.875 4.23516 14.7363 3.95773 14.4589C3.6803 14.1814 3.54159 13.8479 3.54159 13.4583V4.25H2.83325V2.83333H6.37492V2.125H10.6249V2.83333H14.1666V4.25H13.4583V13.4583C13.4583 13.8479 13.3195 14.1814 13.0421 14.4589C12.7647 14.7363 12.4312 14.875 12.0416 14.875H4.95825ZM12.0416 4.25H4.95825V13.4583H12.0416V4.25ZM6.37492 12.0417H7.79159V5.66667H6.37492V12.0417ZM9.20825 12.0417H10.6249V5.66667H9.20825V12.0417Z"
+            fill="#FF002E"></path>
+        </svg>
+      </div>
+      <div style="width: 60px; height: 61px;text-align: center;
+      ">
+        <img style="" src="/images/uploads/ellipse-3.png" />
+        <p
+          style="width: 60px; height: 17px;font-size: 12px; font-weight: 900; font-style: italic; text-align: left; color: #fff;">
+          momo123
+        </p>
+        <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 17px; height: 17px;position: relative;
+                top: -66px;
+                left: 19px;cursor: pointer;" preserveAspectRatio="xMidYMid meet">
+          <path
+            d="M4.95825 14.875C4.56867 14.875 4.23516 14.7363 3.95773 14.4589C3.6803 14.1814 3.54159 13.8479 3.54159 13.4583V4.25H2.83325V2.83333H6.37492V2.125H10.6249V2.83333H14.1666V4.25H13.4583V13.4583C13.4583 13.8479 13.3195 14.1814 13.0421 14.4589C12.7647 14.7363 12.4312 14.875 12.0416 14.875H4.95825ZM12.0416 4.25H4.95825V13.4583H12.0416V4.25ZM6.37492 12.0417H7.79159V5.66667H6.37492V12.0417ZM9.20825 12.0417H10.6249V5.66667H9.20825V12.0417Z"
+            fill="#FF002E"></path>
+        </svg>
+      </div>
+      <div style="width: 60px; height: 61px;text-align: center;
+      ">
+        <img style="" src="/images/uploads/ellipse-3.png" />
+        <p
+          style="width: 60px; height: 17px;font-size: 12px; font-weight: 900; font-style: italic; text-align: left; color: #fff;">
+          momo123
+        </p>
+        <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 17px; height: 17px;position: relative;
+                top: -66px;
+                left: 19px;cursor: pointer;" preserveAspectRatio="xMidYMid meet">
+          <path
+            d="M4.95825 14.875C4.56867 14.875 4.23516 14.7363 3.95773 14.4589C3.6803 14.1814 3.54159 13.8479 3.54159 13.4583V4.25H2.83325V2.83333H6.37492V2.125H10.6249V2.83333H14.1666V4.25H13.4583V13.4583C13.4583 13.8479 13.3195 14.1814 13.0421 14.4589C12.7647 14.7363 12.4312 14.875 12.0416 14.875H4.95825ZM12.0416 4.25H4.95825V13.4583H12.0416V4.25ZM6.37492 12.0417H7.79159V5.66667H6.37492V12.0417ZM9.20825 12.0417H10.6249V5.66667H9.20825V12.0417Z"
+            fill="#FF002E"></path>
+        </svg>
+      </div>
+      <div style="width: 60px; height: 61px;text-align: center;
+      ">
+        <img style="" src="/images/uploads/ellipse-3.png" />
+        <p
+          style="width: 60px; height: 17px;font-size: 12px; font-weight: 900; font-style: italic; text-align: left; color: #fff;">
+          momo123
+        </p>
+        <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 17px; height: 17px;position: relative;
+                top: -66px;
+                left: 19px;cursor: pointer;" preserveAspectRatio="xMidYMid meet">
+          <path
+            d="M4.95825 14.875C4.56867 14.875 4.23516 14.7363 3.95773 14.4589C3.6803 14.1814 3.54159 13.8479 3.54159 13.4583V4.25H2.83325V2.83333H6.37492V2.125H10.6249V2.83333H14.1666V4.25H13.4583V13.4583C13.4583 13.8479 13.3195 14.1814 13.0421 14.4589C12.7647 14.7363 12.4312 14.875 12.0416 14.875H4.95825ZM12.0416 4.25H4.95825V13.4583H12.0416V4.25ZM6.37492 12.0417H7.79159V5.66667H6.37492V12.0417ZM9.20825 12.0417H10.6249V5.66667H9.20825V12.0417Z"
+            fill="#FF002E"></path>
+        </svg>
+      </div>
+      <div style="width: 60px; height: 61px;text-align: center;
+      ">
+        <img style="" src="/images/uploads/ellipse-3.png" />
+        <p
+          style="width: 60px; height: 17px;font-size: 12px; font-weight: 900; font-style: italic; text-align: left; color: #fff;">
+          momo123
+        </p>
+        <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 17px; height: 17px;position: relative;
+                top: -66px;
+                left: 19px;cursor: pointer;" preserveAspectRatio="xMidYMid meet">
+          <path
+            d="M4.95825 14.875C4.56867 14.875 4.23516 14.7363 3.95773 14.4589C3.6803 14.1814 3.54159 13.8479 3.54159 13.4583V4.25H2.83325V2.83333H6.37492V2.125H10.6249V2.83333H14.1666V4.25H13.4583V13.4583C13.4583 13.8479 13.3195 14.1814 13.0421 14.4589C12.7647 14.7363 12.4312 14.875 12.0416 14.875H4.95825ZM12.0416 4.25H4.95825V13.4583H12.0416V4.25ZM6.37492 12.0417H7.79159V5.66667H6.37492V12.0417ZM9.20825 12.0417H10.6249V5.66667H9.20825V12.0417Z"
+            fill="#FF002E"></path>
+        </svg>
+      </div>
+      <div style="width: 60px; height: 61px;text-align: center;
+      ">
+        <img style="" src="/images/uploads/ellipse-3.png" />
+        <p
+          style="width: 60px; height: 17px;font-size: 12px; font-weight: 900; font-style: italic; text-align: left; color: #fff;">
+          momo123
+        </p>
+        <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 17px; height: 17px;position: relative;
+                top: -66px;
+                left: 19px;cursor: pointer;" preserveAspectRatio="xMidYMid meet">
+          <path
+            d="M4.95825 14.875C4.56867 14.875 4.23516 14.7363 3.95773 14.4589C3.6803 14.1814 3.54159 13.8479 3.54159 13.4583V4.25H2.83325V2.83333H6.37492V2.125H10.6249V2.83333H14.1666V4.25H13.4583V13.4583C13.4583 13.8479 13.3195 14.1814 13.0421 14.4589C12.7647 14.7363 12.4312 14.875 12.0416 14.875H4.95825ZM12.0416 4.25H4.95825V13.4583H12.0416V4.25ZM6.37492 12.0417H7.79159V5.66667H6.37492V12.0417ZM9.20825 12.0417H10.6249V5.66667H9.20825V12.0417Z"
+            fill="#FF002E"></path>
+        </svg>
+      </div>
+      <div style="width: 60px; height: 61px;text-align: center;
+      ">
+        <img style="" src="/images/uploads/ellipse-3.png" />
+        <p
+          style="width: 60px; height: 17px;font-size: 12px; font-weight: 900; font-style: italic; text-align: left; color: #fff;">
+          momo123
+        </p>
+        <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 17px; height: 17px;position: relative;
+                top: -66px;
+                left: 19px;cursor: pointer;" preserveAspectRatio="xMidYMid meet">
+          <path
+            d="M4.95825 14.875C4.56867 14.875 4.23516 14.7363 3.95773 14.4589C3.6803 14.1814 3.54159 13.8479 3.54159 13.4583V4.25H2.83325V2.83333H6.37492V2.125H10.6249V2.83333H14.1666V4.25H13.4583V13.4583C13.4583 13.8479 13.3195 14.1814 13.0421 14.4589C12.7647 14.7363 12.4312 14.875 12.0416 14.875H4.95825ZM12.0416 4.25H4.95825V13.4583H12.0416V4.25ZM6.37492 12.0417H7.79159V5.66667H6.37492V12.0417ZM9.20825 12.0417H10.6249V5.66667H9.20825V12.0417Z"
+            fill="#FF002E"></path>
+        </svg>
+      </div>
+ -->
+
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+    <div onclick="inviteUsers()"
+      style="display: flex; justify-content: center; align-items: center; width: 84px; height: 30px;padding:4px 20px;border-radius: 4px; background: #15962a;margin: 1rem auto;cursor: pointer;">
+      <p style="flex-grow: 0; flex-shrink: 0; font-size: 16px; font-weight: 700; text-align: left; color: #fff;
+">
+        Invite
+      </p>
+
+
+    </div>
+
+
+
+
+
+
+  </body>
+
+  <script>
+
+    testId = localStorage.getItem("testId") || ""
+    if (testId) {
+      invLink = document.getElementById("invLink")
+      invLink.innerText = `${location.origin}/challenge/${testId}`
+    } else {
+      document.location.pathname = "/challenge"
+
+    }
+
+
+
+
+
+
+    function copy(e) {
+
+      // Get the text field
+      var copyText = document.getElementById("invLink");
+      const originalIcon = 'M3.33325 10H2.66659C2.31296 10 1.97382 9.85956 1.72378 9.60952C1.47373 9.35947 1.33325 9.02033 1.33325 8.66671V2.66671C1.33325 2.31309 1.47373 1.97395 1.72378 1.7239C1.97382 1.47385 2.31296 1.33337 2.66659 1.33337H8.66659C9.02021 1.33337 9.35935 1.47385 9.60939 1.7239C9.85944 1.97395 9.99992 2.31309 9.99992 2.66671V3.33337M7.33325 6.00004H13.3333C14.0696 6.00004 14.6666 6.59699 14.6666 7.33337V13.3334C14.6666 14.0698 14.0696 14.6667 13.3333 14.6667H7.33325C6.59687 14.6667 5.99992 14.0698 5.99992 13.3334V7.33337C5.99992 6.59699 6.59687 6.00004 7.33325 6.00004Z';
+      // Modern check mark icon path for success
+      const successIcon = 'M1 12.5L5 16L15 6'; // Check mark path
+
+
+      // Copy the text inside the text field
+      navigator.clipboard.writeText(copyText.innerHTML).then(() => {
+
+
+
+
+
+
+        // Change icon to success icon
+        e.getElementsByTagName("path")[0].setAttribute('d', successIcon);
+        e.getElementsByTagName("path")[0].setAttribute("stroke", "rgb(0, 255, 41)")
+
+        setTimeout(() => {
+          e.getElementsByTagName("path")[0].setAttribute('d', originalIcon);  // Revert to original icon
+          e.getElementsByTagName("path")[0].setAttribute("stroke", "white")
+
+        }, 1500);  // Keep success icon for 1.5 seconds
+
+
+
+
+
+
+
+      }).catch(err => {
+        console.error('Failed to copy text: ', err);
+      });;
+
+
+    }
+
+
+
+  </script>
+
+
+  </html>

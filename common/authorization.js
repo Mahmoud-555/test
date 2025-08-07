@@ -6,14 +6,15 @@ var createError = require('http-errors');
 
 
 
+
 adminAuth = (req, res, next) => {
 
     const token = req.cookies.token
     if (token) {
-        jwt.verify(token,  process.env.JWT_SECRET_KEY, (err, decoded) => {
+        jwt.verify(token, process.env.JWT_SECRET_KEY, (err, decoded) => {
 
             if (err) {
-                res.json(err)  
+                req.json(err)
             } else {
                 const userId = decoded.userId
 
@@ -29,8 +30,8 @@ adminAuth = (req, res, next) => {
 
                     })
                     .catch((err) => {
-                        console.log("err",err)
-                         })
+                        console.log("err", err)
+                    })
 
             }
 
@@ -48,10 +49,10 @@ adminAuth = (req, res, next) => {
 userAuth = (req, res, next) => {
     const token = req.cookies.token
     if (token) {
-        jwt.verify(token,  process.env.JWT_SECRET_KEY, (err, decoded) => {
+        jwt.verify(token, process.env.JWT_SECRET_KEY, (err, decoded) => {
 
             if (err) {
-                res.json(err)  
+                res.json(err)
             } else {
                 const userId = decoded.userId
 
@@ -59,7 +60,7 @@ userAuth = (req, res, next) => {
                     .then((userData) => {
                         if (userData) {
                             const role = userData.role
-                            if (role === "admin"|role === "user") {
+                            if (role === "admin" | role === "user") {
                                 next()
                             } else { next(createError(401)) }
 
@@ -67,8 +68,8 @@ userAuth = (req, res, next) => {
 
                     })
                     .catch((err) => {
-                        console.log("err",err)
-                         })
+                        console.log("err", err)
+                    })
 
             }
 
@@ -90,22 +91,28 @@ isSignIn = (req, res, next) => {
         jwt.verify(token, process.env.JWT_SECRET_KEY, (err, decoded) => {
 
             if (err) {
-                res.json(err)  
+                req.isSignIn = false
+                next()
             } else {
                 const userId = decoded.userId
 
                 user.findOne({ _id: userId })
                     .then((userData) => {
                         if (userData) {
-                                next()
+                            req.user = userData
+                            req.isSignIn = true
+                            next()
 
-                        } else {   res.render('index',{"isSignIn":false});
-                    }
+                        } else {
+                            req.isSignIn = false
+                            next()
+                        }
 
                     })
                     .catch((err) => {
-                        console.log("err",err)
-                         })
+                        req.isSignIn = false
+                        next()
+                    })
 
             }
 
@@ -114,12 +121,14 @@ isSignIn = (req, res, next) => {
 
 
 
-    } else {  res.render('index',{"isSignIn":false});
-}
+    } else {
+        req.isSignIn = false
+        next()
+    }
 
 
 
 }
 
 
-module.exports = { adminAuth ,userAuth,isSignIn}
+module.exports = { adminAuth, userAuth, isSignIn }

@@ -16,10 +16,11 @@ exports.createFilterObj = (req, res, next) => {
   next();
 };
 
+
 // @desc    Get list of subcategories
 // @route   GET /api/v1/subcategories
 // @access  Public
-exports.getLectures = factory.getAll(Lecture);
+exports.getLectures = factory.getAll(Lecture,"Lecture",{ path: 'subject', select: 'subject' });
 
 // @desc    Get specific subcategory by id
 // @route   GET /api/v1/subcategories/:id

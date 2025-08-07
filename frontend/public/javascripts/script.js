@@ -1,15 +1,4 @@
-// const questions = [
-//     { question: "ما هي عاصمة فرنسا؟", answers: ["باريس", "برلين", "مدريد", "روما"], correct: "باريس" },
-//     { question: "من هو مؤلف كتاب '1984'؟", answers: ["جورج أورويل", "ألدوس هكسلي", "سلمان رشدي", "جون شتاينبك"], correct: "جورج أورويل" },
-//     { question: "ما هو أكبر كوكب في المجموعة الشمسية؟", answers: ["المشتري", "زحل", "أرض", "نبتون"], correct: "المشتري" },
-//     { question: "ما هو العنصر الكيميائي الذي يرمز له بالرمز O؟", answers: ["الأكسجين", "الكربون", "الهيدروجين", "النيتروجين"], correct: "الأكسجين" },
-//     { question: "من هو أول إنسان مشى على سطح القمر؟", answers: ["نيل أرمسترونغ", "بز ألدرين", "مايكل كولينز", "يوري جاجارين"], correct: "نيل أرمسترونغ" },
-//     { question: "ما هي أكبر قارة من حيث المساحة؟", answers: ["آسيا", "أفريقيا", "أوروبا", "أمريكا الشمالية"], correct: "آسيا" },
-//     { question: "ما هي اللغة الرسمية في البرازيل؟", answers: ["البرتغالية", "الإسبانية", "الإنجليزية", "الفرنسية"], correct: "البرتغالية" },
-//     { question: "من هو مؤسس شركة مايكروسوفت؟", answers: ["بيل غيتس", "ستيف جوبز", "مارك زوكربيرغ", "جاك ما"], correct: "بيل غيتس" },
-//     { question: "ما هو الحيوان الذي يعتبر أسرع حيوان بري؟", answers: ["النمر", "الفهد", "الأرنب", "الزرافة"], correct: "الفهد" },
-//     { question: "ما هو اسم أطول نهر في العالم؟", answers: ["نهر النيل", "نهر الأمازون", "نهر الغانج", "نهر اليانغتسي"], correct: "نهر النيل" }
-// ];
+
 questions = []
 
 let currentQuestionIndex = 0;
@@ -55,7 +44,7 @@ async function sendAnswers() {
         response.json().then((res) => {
             //   localStorage.setItem('testId',res.testId );
             //   document.location.pathname = "/test/start"
-            showResults(res.score)
+            showResults(res)
 
 
         }
@@ -188,26 +177,52 @@ function updateQuestionNavigation() {
     }
 }
 
-function showResults(score) {
+
+
+function showResults(res) {
+
     clearInterval(timerInterval); // إيقاف المؤقت عند انتهاء الاختبار
-
-
-    // questions.forEach((currentQuestion, questionNumber) => {
-    //     const userAnswer = userAnswers[questionNumber];
-    //     if (userAnswer === currentQuestion.correct) {
-    //         score++;
-    //     }
-    // });
-   
-   
-   
-   
     const resultsContainer = document.getElementById('results');
+    // resultsContainer.innerHTML = '';
+
+
+    res.testAnswers.forEach((currentQuestion) => {
+        const userAnswer = currentQuestion.userAnswer;
+        const resultItem = document.createElement('div');
+        const answerButtons = currentQuestion.answers.map(answer => {
+            let buttonClass = 'answer-button';
+            console.log(currentQuestion.correct)
+            if (answer === currentQuestion.correct[0]) {
+                buttonClass += ' correct';
+            }
+            if (userAnswer === answer) {
+                buttonClass += ' selected-answer'; // للأزرار المحددة
+            }
+          
+          
+            if (userAnswer !== 
+                currentQuestion.correct[0] && userAnswer === answer) {
+                buttonClass += ' incorrect'; // للأزرار غير الصحيحة
+            }
+            return `<button class="${buttonClass}" disabled>${answer}</button>`;
+        }).join('');
+resultItem.classList="results-container"
+  resultItem.innerHTML = `
+    <div class="question">${currentQuestion.question}</div>
+    <div class="answers">${answerButtons}</div>`;
+    resultsContainer.appendChild(resultItem);
+
+      
+    });
+  
 
     const scoreElement = document.getElementById('score');
 
+
+
+    scoreElement.innerHTML = `لقد حصلت على <strong>${res.score}</strong> من <strong>${questions.length}</strong> أسئلة صحيحة!`;
     // عرض النتيجة بشكل مناسب
-    scoreElement.innerHTML = `لقد حصلت على <strong>${score}</strong> من <strong>${questions.length}</strong> أسئلة صحيحة!`;
+    // scoreElement.innerHTML = `لقد حصلت على <strong>${score}</strong> من <strong>${res.testAnswers.length}</strong> أسئلة صحيحة!`;
     resultsContainer.style.display = 'block';
 
     // إخفاء الأسئلة والأزرار
@@ -216,11 +231,45 @@ function showResults(score) {
     document.querySelector('.end-test-container').style.display = 'none';
 
 
-    // إخفاء الأسئلة والأزرار
-    document.getElementById('quiz').style.display = 'none';
-    document.querySelector('.navigation').style.display = 'none';
-    document.querySelector('.end-test-container').style.display = 'none';
 }
+
+
+
+
+
+// function showResults(score) {
+//     clearInterval(timerInterval); // إيقاف المؤقت عند انتهاء الاختبار
+
+
+//     // questions.forEach((currentQuestion, questionNumber) => {
+//     //     const userAnswer = userAnswers[questionNumber];
+//     //     if (userAnswer === currentQuestion.correct) {
+//     //         score++;
+//     //     }
+//     // });
+   
+   
+   
+   
+//     const resultsContainer = document.getElementById('results');
+
+//     const scoreElement = document.getElementById('score');
+
+//     // عرض النتيجة بشكل مناسب
+//     scoreElement.innerHTML = `لقد حصلت على <strong>${score}</strong> من <strong>${questions.length}</strong> أسئلة صحيحة!`;
+//     resultsContainer.style.display = 'block';
+
+//     // إخفاء الأسئلة والأزرار
+//     document.getElementById('quiz').style.display = 'none';
+//     document.querySelector('.navigation').style.display = 'none';
+//     document.querySelector('.end-test-container').style.display = 'none';
+
+
+//     // إخفاء الأسئلة والأزرار
+//     document.getElementById('quiz').style.display = 'none';
+//     document.querySelector('.navigation').style.display = 'none';
+//     document.querySelector('.end-test-container').style.display = 'none';
+// }
 
 function selectAnswer(event) {
     if (event.target.classList.contains('answer-button')) {

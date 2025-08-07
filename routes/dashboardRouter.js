@@ -15,6 +15,7 @@ router.get('/',function(req,res,next) {
     res.render('dashboard')
     
   })
+  
 
 
   router.get('/clints',function(req,res,next) {

@@ -9,46 +9,38 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <style>
+    .subject {
+      cursor: pointer;
+      padding: 10px 15px;
+      border-radius: 4px;
+      background-color: rgba(0, 123, 255, 0.5);
+      color: white;
+      transition: background-color 0.3s;
+      flex: 1 1 auto;
+      margin: 4px;
+      text-align: center;
+    }
 
+    .subject:hover {
+      background-color: rgba(0, 123, 255, 0.7);
+    }
 
-.subject {
-            cursor: pointer;
-            padding: 10px 15px;
-            border-radius: 4px;
-            background-color: rgba(0, 123, 255, 0.5);
-            color: white;
-            transition: background-color 0.3s;
-            flex: 1 1 auto;
-            margin: 4px;
-            text-align: center;
-        }
+    input[type="radio"]:checked+.subject {
+      background-color: rgba(0, 123, 255, 1);
+    }
 
-        .subject:hover {
-            background-color: rgba(0, 123, 255, 0.7);
-        }
-
-        input[type="radio"]:checked + .subject {
-            background-color: rgba(0, 123, 255, 1);
-        }
-
-        .button-group {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-wrap: wrap;
-            width: 92%;
-            margin: 0.5rem auto;
-            padding: 8px;
-            border-radius: 4px;
-            background: rgba(217, 217, 217, 0.05);
-            box-shadow: 0px 4px 4px 0 rgba(0, 0, 0, 0.25);
-        }
-
-
-
-
-
-
+    .button-group {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      width: 92%;
+      margin: 0.5rem auto;
+      padding: 8px;
+      border-radius: 4px;
+      background: rgba(217, 217, 217, 0.05);
+      box-shadow: 0px 4px 4px 0 rgba(0, 0, 0, 0.25);
+    }
 
 
 
@@ -235,6 +227,137 @@
         margin-top: 1rem;
       }
     }
+
+
+
+    .lecture-container {
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+      /* background: #fff; */
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .lecture {
+      display: flex;
+      justify-content: left;
+      align-items: center;
+      padding: 15px 20px;
+      border-radius: 10px;
+      background: #ffffff;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      margin: 10px 0;
+      transition: all 0.3s ease;
+      position: relative;
+      /* لتحسين التداخل */
+    }
+
+    .lecture:hover {
+      background: #e0f7fa;
+      /* لون خلفية مهدئ عند التحويم */
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+    }
+
+    .lecture.selected {
+      background: #007bff;
+      /* لون اختيار المحاضرة */
+      color: white;
+      /* لون النص عند الاختيار */
+      border-left: 4px solid #0056b3;
+      /* إضافة خط جانبي لتأكيد التحديد */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+      /* تعزيز تأثير الظل */
+    }
+
+    .lecture-text {
+      font-size: 18px;
+      margin-left: 12px;
+      /* إضافة مساحة للجمل */
+      color: #333;
+      transition: color 0.3s;
+    }
+
+    .lecture.selected .lecture-text {
+      color: #fff;
+      /* تغيير لون النص عند الاختيار */
+    }
+
+    .lecture-icon {
+      background: #007bff;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      font-size: 18px;
+      margin-right: 15px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+
+    .lecture-container {
+      width: 100%;
+      max-width: 800px;
+      /* تحديد عرض أقصى للحاوية */
+      margin: 0 auto;
+      /* تمركز الحاوية */
+      padding: 20px;
+    }
+
+    .lecture {
+      display: flex;
+      justify-content: space-between;
+      /* توزيع النص بشكل جيد */
+      padding: 15px;
+      border-radius: 8px;
+      background: #ffffff;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      margin: 10px auto;
+      align-items: center;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
+      /* تأثيرات انتقال */
+    }
+
+    .lecture:hover {
+      /* background: rgba(0, 123, 255, 0.1); */
+      transform: translateY(-2px);
+      /* تحريك العلوي قليلاً */
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .lecture.selected {
+      background: #007bff;
+      color: white;
+      box-shadow: 0 8px 20px rgba(0, 123, 255, 0.3);
+    }
+
+    .lecture-text {
+      flex-grow: 1;
+      font-size: 18px;
+      /* زيادة حجمه للنص */
+      color: #333;
+      /* لون النص */
+      transition: color 0.3s;
+    }
+
+    .lecture.selected .lecture-text {
+      color: #fff;
+      /* تغيير لون النص للحرارة */
+    }
+
+    .lecture-icon {
+      font-size: 24px;
+      /* إضافة رمز أو أيقونة */
+      color: #007bff;
+      /* لون الرموز */
+      margin-left: 10px;
+    }
   </style>
 </head>
 
@@ -276,7 +399,8 @@
           style="background-image: url(/images/download-4.png);display: flex;justify-content: center;align-items: center;">
 
 
-          <p style="font-size: 20px; font-weight: 700;  color: #fff;text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);">
+          <p
+            style="font-size: 20px; font-weight: 700;  color: #fff;text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);text-align: center;">
             endocrine system
           </p>
 
@@ -423,35 +547,43 @@
       style="flex-wrap: wrap; display: flex; justify-content: center; align-items: center; width: 92%; gap: 8px; padding: 8px; border-radius: 4px; background: rgba(217,217,217,0.05); box-shadow: 0px 4px 4px 0 rgba(0,0,0,0.25); margin: 0.5rem auto;">
       <input type="radio" id="anatomy" name="subject" value="anatomy" style="display: none;"
         onclick="fetchLectures('anatomy')">
-      <label for="anatomy" class="subject">Anatomy</label>
+      <label for="anatomy" class="subject"><span style="font-size: 14px; margin-right: 1px;">🦴</span>Anatomy</label>
 
       <input type="radio" id="histology" name="subject" value="histology" style="display: none;"
         onclick="fetchLectures('histology')">
-      <label for="histology" class="subject">Histology</label>
+      <label for="histology" class="subject"> <span
+          style="font-size: 14px; margin-right: 1px;">🔬</span>Histology</label>
 
       <input type="radio" id="physiology" name="subject" value="physiology" style="display: none;"
         onclick="fetchLectures('physiology')">
-      <label for="physiology" class="subject">Physiology</label>
+      <label for="physiology" class="subject"><span
+          style="font-size: 14px; margin-right: 1px;">💪</span>Physiology</label>
 
       <input type="radio" id="biochemistry" name="subject" value="biochemistry" style="display: none;"
         onclick="fetchLectures('biochemistry')">
-      <label for="biochemistry" class="subject">Biochemistry</label>
+      <label for="biochemistry" class="subject"> <span
+          style="font-size: 14px; margin-right: 1px;">🧬</span>Biochemistry</label>
 
       <input type="radio" id="pathology" name="subject" value="pathology" style="display: none;"
         onclick="fetchLectures('pathology')">
-      <label for="pathology" class="subject">Pathology</label>
+      <label for="pathology" class="subject"><span
+          style="font-size: 14px; margin-right: 1px;">🦠</span>Pathology</label>
 
       <input type="radio" id="pharmacology" name="subject" value="pharmacology" style="display: none;"
         onclick="fetchLectures('pharmacology')">
-      <label for="pharmacology" class="subject">Pharmacology</label>
+      <label for="pharmacology" class="subject"><span
+          style="font-size: 14px; margin-right: 1px;">💊</span>Pharmacology</label>
 
       <input type="radio" id="microbiology" name="subject" value="microbiology" style="display: none;"
         onclick="fetchLectures('microbiology')">
-      <label for="microbiology" class="subject">Microbiology</label>
+      <label for="microbiology" class="subject"><span
+          style="font-size: 14px; margin-right: 1px;">🔬</span>Microbiology</label>
 
-      <input type="radio" id="forensic" name="subject" value="forensic" style="display: none;"
+      <input type="radio" id="parasitology" name="subject" value="forensic" style="display: none;"
         onclick="fetchLectures('forensic')">
-      <label for="forensic" class="subject">Forensic</label>
+      <label for="parasitology" class="subject">
+        <span style="font-size: 14px; margin-right: 1px;">🐛</span>Parasitology
+      </label>
     </div>
 
     <div
@@ -470,7 +602,8 @@
     <div class="lecture-container" id="lectureContainer"></div>
 
 
-
+    <button onclick="createTest()" type="button"
+      style="border: none;display: block;background-color: #15962A;font-size: 16px;color: #ffffff;border-radius: 4px;width: 84px;height: 30px;margin:0 auto 16px;">start</button>
   </section>
 
 
@@ -586,8 +719,6 @@
 
   })
 
-
-
   function getLectures(event) {
 
     const target = event.target;
@@ -640,28 +771,64 @@
 
   }
 
+  // function displayLectures(lectures) {
+  //   const container = document.getElementById('lectureContainer');
+  //   container.innerHTML = ''; // Clear existing lectures
+
+  //   for (const lecture of lectures) {
+  //     const isSelected = selectedLectures.includes(lecture._id);
+  //     const lectureDiv = document.createElement('div');
+  //     lectureDiv.style = `
+  //       display: flex;
+  //       padding: 8px;
+  //       width: 92%;
+  //       height: 43px;
+  //       border-radius: 4px;
+  //       background: rgba(217, 217, 217, 0.02);
+  //       box-shadow: 0px 4px 4px 0 rgba(0, 0, 0, 0.25);
+  //       margin: 8px auto;
+  //       align-items: center;
+  //       cursor: pointer;
+  //     `;
+  //     lectureDiv.id = lecture._id
+  //     lectureDiv.onclick = () => toggleLectureSelection(lecture._id, lectureDiv);
+  //     lectureDiv.innerHTML = `<span style="width: 144.69px; height: 23px; opacity: 0.45; font-size: 20px; text-align: left; color: #fff;">${lecture.lecture}</span>`;
+
+  //     if (isSelected) {
+  //       lectureDiv.classList.add('selected');
+  //     }
+
+  //     container.appendChild(lectureDiv);
+  //   }
+  // }
+
+  // function toggleLectureSelection(lecture, lectureDiv) {
+  //   const index = selectedLectures.indexOf(lecture);
+  //   if (index > -1) {
+  //     selectedLectures.splice(index, 1);
+  //     lectureDiv.classList.remove('selected');
+  //   } else {
+  //     selectedLectures.push(lecture);
+  //     lectureDiv.classList.add('selected');
+  //   }
+  //   console.log('المحاضرات المختارة:', selectedLectures);
+  // }
+
   function displayLectures(lectures) {
     const container = document.getElementById('lectureContainer');
-    container.innerHTML = ''; // Clear existing lectures
+    container.innerHTML = '';
 
     for (const lecture of lectures) {
       const isSelected = selectedLectures.includes(lecture._id);
       const lectureDiv = document.createElement('div');
-      lectureDiv.style = `
-        display: flex;
-        padding: 8px;
-        width: 92%;
-        height: 43px;
-        border-radius: 4px;
-        background: rgba(217, 217, 217, 0.02);
-        box-shadow: 0px 4px 4px 0 rgba(0, 0, 0, 0.25);
-        margin: 8px auto;
-        align-items: center;
-        cursor: pointer;
-      `;
-      lectureDiv.id = lecture._id
+      lectureDiv.className = 'lecture';
+      lectureDiv.id = lecture._id;
       lectureDiv.onclick = () => toggleLectureSelection(lecture._id, lectureDiv);
-      lectureDiv.innerHTML = `<span style="width: 144.69px; height: 23px; opacity: 0.45; font-size: 20px; text-align: left; color: #fff;">${lecture.lecture}</span>`;
+
+      lectureDiv.innerHTML = `
+        <div class="lecture-icon">&#x1F4DA;</div>
+        <span class="lecture-text">${lecture.lecture}</span>
+      `;
 
       if (isSelected) {
         lectureDiv.classList.add('selected');
@@ -670,6 +837,10 @@
       container.appendChild(lectureDiv);
     }
   }
+
+
+  // // نبحث عن فهرس الكائن الذي له id يساوي 2
+  // const index = objectsArray.findIndex(obj => obj.id === 2);
 
   function toggleLectureSelection(lecture, lectureDiv) {
     const index = selectedLectures.indexOf(lecture);
@@ -701,6 +872,37 @@
     }
     console.log('المحاضرات المختارة:', selectedLectures);
   }
+
+  async function createTest() {
+
+    fetch("api/v1/tests", {
+      method: "post",
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+      },
+      body: JSON.stringify({ selectedLectures: selectedLectures })
+    }).then((response) => {
+      response.json().then((res) => {
+        localStorage.setItem('testId',res.testId );
+        document.location.pathname = "/test/start"
+
+      }
+      )
+    }).catch((err) => { console.log(err) })
+
+
+
+  }
+
+
+
+
+
+
+
+
+
+
 
   document.getElementById('selectAll').onclick = selectAllLectures;
 </script>

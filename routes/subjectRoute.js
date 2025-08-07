@@ -1,11 +1,11 @@
 const express = require('express');
 
-const {
-  getSubjectValidator,
-  createSubjectValidator,
-  updateSubjectValidator,
-  deleteSubjectValidator,
-} = require('../validators/subjectValidator');
+// const {
+//   getSubjectValidator,
+//   createSubjectValidator,
+//   updateSubjectValidator,
+//   deleteSubjectValidator,
+// } = require('../validators/subjectValidator');
 
 const {
   getSubjects,
@@ -17,9 +17,10 @@ const {
   resizeImage,
 } = require('../services/subjectService');
 
+
 const authService = require('../services/authService');
 
-const subcategoriesRoute = require('./subSubjectRoute');
+// const subcategoriesRoute = require('./subSubjectRoute');
 
 const router = express.Router();
 
@@ -34,24 +35,26 @@ router
     authService.allowedTo('admin', 'manager'),
     uploadSubjectImage,
     resizeImage,
-    createSubjectValidator,
+    // createSubjectValidator,
     createSubject
   );
 router
   .route('/:id')
-  .get(getSubjectValidator, getSubject)
+  .get(
+    // getSubjectValidator,
+     getSubject)
   .put(
     authService.protect,
     authService.allowedTo('admin', 'manager'),
     uploadSubjectImage,
     resizeImage,
-    updateSubjectValidator,
+    // updateSubjectValidator,
     updateSubject
   )
   .delete(
     authService.protect,
     authService.allowedTo('admin'),
-    deleteSubjectValidator,
+    // deleteSubjectValidator,
     deleteSubject
   );
 

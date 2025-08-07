@@ -19,7 +19,7 @@ exports.createTest = asyncHandler(async (req, res, next) => {
       const questions = await Question.aggregate([
         { $match: { lecture: new mongoose.Types.ObjectId(lectureId) } },
         { $sample: { size: limit } }
-      ],"_id");
+      ], "_id");
       Result.push(...questions);
     }
     const newDoc = await Quiz.create({ type: "test", questions: Result, creator: req.user._id });
@@ -38,7 +38,7 @@ exports.createTest = asyncHandler(async (req, res, next) => {
 
 exports.getTest = asyncHandler(async (req, res, next) => {
   try {
-    let test =await Quiz.findOne({_id:req.params.id,creator:req.user._id}).populate("questions",["question","answers"])
+    let test = await Quiz.findOne({ _id: req.params.id, creator: req.user._id }).populate("questions", ["question", "answers"])
     res.status(200).json({ questions: test.questions });
 
   } catch (error) {
@@ -48,28 +48,35 @@ exports.getTest = asyncHandler(async (req, res, next) => {
 
 });
 
+
 exports.checkAnsers = asyncHandler(async (req, res, next) => {
- userAnswers=req.body.userAnswers
- score=0
- 
+  userAnswers = req.body.userAnswers
+
   try {
-    let test =await Quiz.findOne({_id:req.params.id,creator:req.user._id}).populate("questions",["question","answers","correct"])
+    let test = await Quiz.findOne({ _id: req.params.id, creator: req.user._id }).populate("questions", ["question", "answers", "correct"]);
     if (test) {
-     for (const question of test.questions) {
-      if (question.correct.length>0) {
-          if (question.correct[0]===(userAnswers[question._id]) ) {
-            score+=1
-
-          }
-        
-      }
-     }
-     res.status(200).json({score:score,testAnswers:test.questions})
-
-    } else {
-      
-    }
+      let score = 0;
+      let testAnswers = test.questions.map(question => {
+        const userAnswer = userAnswers[question._id] || null; // تأكد من وجود قيمة للإجابة
+        let isCorrect = false;
     
+        if (question.correct.length > 0 && question.correct[0] === userAnswer) {
+          score += 1;
+          isCorrect = true;
+        }
+    
+        return {
+          ...question.toObject(), // تحويل الكائن إلى كائن بسيط
+          userAnswer, // إضافة userAnswer
+          isCorrect // يمكنك إضافة حقل آخر إذا أردت معرفة ما إذا كانت الإجابة صحيحة أم لا
+        };
+      });
+    
+      res.status(200).json({ score, testAnswers });
+    } else {
+      res.status(404).json({ message: "Test not found." });
+    }
+
   } catch (error) {
     console.log(error)
   }

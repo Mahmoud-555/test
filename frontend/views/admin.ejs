@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin Page</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
+  <style>
+    body {
+      background-color: #03101f;
+      min-height: 100vh;
+      color: white;
+      padding: 1rem;
+    }
+
+    header {
+      width: 92%;
+      height: 55px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: auto;
+      margin-bottom: 1rem;
+    }
+
+    h1 {
+      font-size: 24px;
+      color: #fff;
+      margin: 0;
+      padding: 8px;
+    }
+
+    .container {
+      width: 92%;
+      max-width: 900px;
+      margin: 0 auto;
+      background: rgba(7, 22, 49, 0.8);
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .tabs {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+
+    .tab {
+      cursor: pointer;
+      padding: 10px 20px;
+      background-color: rgba(0, 123, 255, 0.5);
+      color: white;
+      border-radius: 4px 4px 0 0;
+      margin: 0 5px;
+      font-weight: 600;
+      transition: background-color 0.3s;
+    }
+
+    .tab.active {
+      background-color: rgba(0, 123, 255, 1);
+    }
+
+    .form-section {
+      display: none;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .form-section.active {
+      display: block;
+      opacity: 1;
+    }
+
+    label {
+      font-weight: 600;
+    }
+
+    input,
+    select,
+    textarea {
+      background-color: #0b1a3a;
+      border: none;
+      color: white;
+      padding: 0.5rem;
+      border-radius: 6px;
+      width: 100%;
+      margin-bottom: 1rem;
+    }
+
+    input[type="file"] {
+      padding: 0.25rem;
+    }
+
+    button {
+      background-color: #15962a;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      color: white;
+      font-size: 1.1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #0f6f1a;
+    }
+
+    .error-message {
+      color: #ff4d4d;
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>Admin Page</h1>
+  </header>
+
+  <div class="container">
+    <div class="tabs">
+      <div class="tab active" id="lectureTab">Create Lecture</div>
+      <div class="tab" id="questionTab">Create Question</div>
+    </div>
+
+    <section id="lectureSection" class="form-section active">
+      <h2>Create a New Lecture</h2>
+      <form id="createLectureForm">
+        <label for="lectureName">Lecture Name</label>
+        <input type="text" id="lectureName" name="lecture" required />
+
+        <label for="moduleId">Module ID</label>
+        <input type="text" id="moduleId" name="module" required />
+
+        <label for="subject">Subject</label>
+        <input type="text" id="subject" name="subject" required />
+
+        <button type="submit">Create Lecture</button>
+        <div class="error-message" id="lectureError"></div>
+        <div class="success-message" id="lectureSuccess" style="color: #4BB543; margin-bottom: 1rem;"></div>
+      </form>
+    </section>
+
+    <section id="questionSection" class="form-section">
+      <h2>Create a New Question</h2>
+      <form id="createQuestionForm" enctype="multipart/form-data">
+        <label for="question">Question Text</label>
+        <textarea id="question" name="question" rows="3" required></textarea>
+
+        <label for="answers">Answers (comma separated)</label>
+        <input type="text" id="answers" name="answers" placeholder="Answer1, Answer2, Answer3, Answer4" required />
+
+        <label for="correct">Correct Answers (comma separated, must match answers)</label>
+        <input type="text" id="correct" name="correct" placeholder="Answer1" required />
+
+        <label for="subjectQ">Subject</label>
+        <input type="text" id="subjectQ" name="subject" required />
+
+        <label for="level">Level</label>
+        <select id="level" name="level" required>
+          <option value="">Select level</option>
+          <option value="easy">Easy</option>
+          <option value="medium">Medium</option>
+          <option value="hard">Hard</option>
+        </select>
+
+        <label for="moduleQ">Module ID</label>
+        <input type="text" id="moduleQ" name="module" required />
+
+        <label for="lectureQ">Lecture ID</label>
+        <input type="text" id="lectureQ" name="lecture" required />
+
+        <label for="duration">Duration (minutes)</label>
+        <input type="number" id="duration" name="duration" min="1" value="1" required />
+
+        <label for="imageCover">Cover Image</label>
+        <input type="file" id="imageCover" name="imageCover" accept="image/*" />
+
+        <label for="images">Additional Images (up to 5)</label>
+        <input type="file" id="images" name="images" accept="image/*" multiple />
+
+        <button type="submit">Create Question</button>
+        <div class="error-message" id="questionError"></div>
+        <div class="success-message" id="questionSuccess" style="color: #4BB543; margin-bottom: 1rem;"></div>
+      </form>
+    </section>
+  </div>
+
+  <script src="/javascripts/admin.js"></script>
+</body>
+
+</html>

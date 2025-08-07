@@ -1,14 +1,24 @@
 const mongoose = require("mongoose")
 const schema = mongoose.Schema
 var myschema = new schema({
-    lecture: { type: String ,trim:true },
-    lectureImage:String,
-    questionNum:Number,
-    subject:String,
-    module:String,
+    lecture: { type: String, trim: true },
+    lectureImage: String,
+    questionNum: Number,
+    subject: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'subject',
+        
+    },
+    module: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'module',
+        
+    },
+    description: String
 
 
-},{timestamps:true});
+}, { timestamps: true });
+
 
 
 

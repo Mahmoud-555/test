@@ -6,6 +6,36 @@ let views = {
     "/dashboard/questions": questionsView,
     "/dashboard/posts": postsView
 }
+
+
+document.body.addEventListener("click", e => {
+    if (e.target.classList.contains("data-link")) {
+
+        e.preventDefault();
+        navigateTo(e.target.href);
+        view = location.pathname
+        setTimeout(() => {
+            document.getElementsByClassName("content")[0].innerHTML = views[view]
+            requistManager()
+        }, 250);
+
+    } else if (e.target.parentElement.classList.contains("data-link")) {
+
+        e.preventDefault();
+        navigateTo(e.target.parentElement.href);
+        view = location.pathname
+        setTimeout(() => {
+            document.getElementsByClassName("content")[0].innerHTML = views[view]
+            requistManager()
+        }, 250);
+
+
+    }
+
+
+})
+
+
 let view = location.pathname
 
 document.getElementsByClassName("content")[0].innerHTML = views[view]
@@ -26,14 +56,14 @@ window.addEventListener('popstate', function (e) {
 
 let userData = JSON.parse(localStorage.getItem("userData"))
 
-getSubjects()
-getLectures()
-getGrades()
-getBlocks()
+// getSubjects()
+// getLectures()
+// getGrades()
+// getBlocks()
 
 // fill options
 
-document.querySelector(".profile-img img").src = userData.profileImage
+// document.querySelector(".profile-img img").src = userData.profileImage
 
 
 
@@ -48,34 +78,34 @@ requistManager()
 
 
 async function getSubjects() {
-    let response = await fetch("/subjects")
+    let response = await fetch("/api/v1/subjects")
 
     let data = await response.json()
-    localStorage.setItem("subjects", JSON.stringify(data))
-
+    // localStorage.setItem("subjects", JSON.stringify(data))
+    return data
     console.log(data)
 }
 async function getLectures() {
-    let response = await fetch("/lectures")
+    let response = await fetch("/api/v1/lectures")
 
     let data = await response.json()
-    localStorage.setItem("lectures", JSON.stringify(data))
+    // localStorage.setItem("lectures", JSON.stringify(data))
 
     console.log(data)
 }
 async function getGrades() {
-    let response = await fetch("/grades")
+    let response = await fetch("/api/v1/grades")
 
     let data = await response.json()
-    localStorage.setItem("grades", JSON.stringify(data))
+    // localStorage.setItem("grades", JSON.stringify(data))
 
     console.log(data)
 }
 async function getBlocks() {
-    let response = await fetch("/blocks")
+    let response = await fetch("/api/v1/blocks")
 
     let data = await response.json()
-    localStorage.setItem("blocks", JSON.stringify(data))
+    // localStorage.setItem("blocks", JSON.stringify(data))
 
     console.log(data)
 }
@@ -88,7 +118,7 @@ async function getBlocks() {
 
 
 async function getU() {
-    let response = await fetch("/users")
+    let response = await fetch("/api/v1/users")
 
     let data = await response.json()
 
@@ -96,12 +126,12 @@ async function getU() {
 
     console.log(data)
     if (usersNum) {
-        usersNum.innerHTML = data.length
+        usersNum.innerHTML = data.data.length
     }
 
 }
 async function getQ() {
-    let response = await fetch("/questions")
+    let response = await fetch("/api/v1/questions")
     let data = await response.json()
 
     let questionsTable = document.getElementById('questionsTable')
@@ -111,13 +141,13 @@ async function getQ() {
     console.log(questionsTable)
 
     if (questionsNum) {
-        questionsNum.innerHTML = data.length
+        questionsNum.innerHTML = data.data.length
     }
 
     questionsTable.innerHTML = ""
 
-    for (let i = 0; i < data.length; i++) {
-        const element = data[i];
+    for (let i = 0; i < data.data.length; i++) {
+        const element = data.data[i];
 
         questionsTable.innerHTML += `<tr><td class="question">${element.question}</td><td><span class="price lecture">${element.lecture}</span></td><td><span class="count ">${element.answer}</span></td></tr>`
     }
@@ -129,62 +159,62 @@ async function getQ() {
 
 
 function fillOptions() {
-    let subjectinput = document.getElementById("subject")
-    let lectureinput = document.getElementById("lecture")
-    let gradeinput = document.getElementById("grade")
-    let blockinput = document.getElementById("block")
+    // let subjectinput = document.getElementById("subject")
+    // let lectureinput = document.getElementById("lecture")
+    // let gradeinput = document.getElementById("grade")
+    // let blockinput = document.getElementById("block")
 
-    let subject = document.getElementById("subjects")
-    let lecture = document.getElementById("lectures")
-    let grade = document.getElementById("grades")
-    let block = document.getElementById("blocks")
-
-
-
-    blockinput.addEventListener("focus", () => {
-        block.innerHTML = ""
-
-        let blocks = JSON.parse(localStorage.getItem("blocks"))
+    // let subject = document.getElementById("subjects")
+    // let lecture = document.getElementById("lectures")
+    // let grade = document.getElementById("grades")
+    // let block = document.getElementById("blocks")
 
 
-        for (let i = 0; i < blocks.length; i++) {
-            block.innerHTML += `<option value="${blocks[i].block}">`
-        }
-        block.innerHTML += `<option value="Add new block"></option>`
 
-    })
+    // blockinput.addEventListener("focus", () => {
+    //     block.innerHTML = ""
 
-    subjectinput.addEventListener("focus", () => {
-        subject.innerHTML = ""
-
-        let subjects = JSON.parse(localStorage.getItem("subjects"))
+    //     let blocks = JSON.parse(localStorage.getItem("blocks"))
 
 
-        for (let i = 0; i < subjects.length; i++) {
-            subject.innerHTML += `<option value="${subjects[i].subject}">`
-        }
-        subject.innerHTML += `<option value="Add new subject"></option>`
+    //     for (let i = 0; i < blocks.length; i++) {
+    //         block.innerHTML += `<option value="${blocks[i].block}">`
+    //     }
+    //     block.innerHTML += `<option value="Add new block"></option>`
 
-    })
-    lectureinput.addEventListener("focus", () => {
-        let lectures = JSON.parse(localStorage.getItem("lectures"))
-        lecture.innerHTML = ""
-        for (let i = 0; i < lectures.length; i++) {
-            lecture.innerHTML += `<option value="${lectures[i].lecture}">`
+    // })
 
-        }
-        lecture.innerHTML += `<option value="Add new lecture"></option>`
+    // subjectinput.addEventListener("focus", () => {
+    //     subject.innerHTML = ""
 
-    })
-    gradeinput.addEventListener("focus", () => {
-        let grades = JSON.parse(localStorage.getItem("grades"))
-        grade.innerHTML = ""
-        for (let i = 0; i < grades.length; i++) {
-            grade.innerHTML += `<option value="${grades[i].grade}">`
+    //     let subjects = JSON.parse(localStorage.getItem("subjects"))
 
-        }
-        grade.innerHTML += `<option value="Add new grade"></option>`
-    })
+
+    //     for (let i = 0; i < subjects.length; i++) {
+    //         subject.innerHTML += `<option value="${subjects[i].subject}">`
+    //     }
+    //     subject.innerHTML += `<option value="Add new subject"></option>`
+
+    // })
+    // lectureinput.addEventListener("focus", () => {
+    //     let lectures = JSON.parse(localStorage.getItem("lectures"))
+    //     lecture.innerHTML = ""
+    //     for (let i = 0; i < lectures.data.length; i++) {
+    //         lecture.innerHTML += `<option value="${lectures.data[i].lecture}">`
+
+    //     }
+    //     lecture.innerHTML += `<option value="Add new lecture"></option>`
+
+    // })
+    // gradeinput.addEventListener("focus", () => {
+    //     let grades = JSON.parse(localStorage.getItem("grades"))
+    //     grade.innerHTML = ""
+    //     for (let i = 0; i < grades.length; i++) {
+    //         grade.innerHTML += `<option value="${grades[i].grade}">`
+
+    //     }
+    //     grade.innerHTML += `<option value="Add new grade"></option>`
+    // })
 
 }
 
@@ -220,7 +250,7 @@ function createNewBlock() {
                     response.json().then((result) => {
                         let blocks = JSON.parse(localStorage.getItem("blocks"))
                         blocks.push(result)
-                        localStorage.setItem("blocks", JSON.stringify(blocks))
+                        // localStorage.setItem("blocks", JSON.stringify(blocks))
 
 
                     })
@@ -264,7 +294,7 @@ function createNewSubject() {
                     response.json().then((result) => {
                         let subjects = JSON.parse(localStorage.getItem("subjects"))
                         subjects.push(result)
-                        localStorage.setItem("subjects", JSON.stringify(subjects))
+                        // localStorage.setItem("subjects", JSON.stringify(subjects))
 
 
                     })
@@ -311,7 +341,7 @@ function createNewLecture() {
                     response.json().then((result) => {
                         let lectures = JSON.parse(localStorage.getItem("lectures"))
                         lectures.push(result)
-                        localStorage.setItem("lectures", JSON.stringify(lectures))
+                        // localStorage.setItem("lectures", JSON.stringify(lectures))
 
 
                     })
@@ -349,7 +379,7 @@ function createNewGrade() {
                     response.json().then((result) => {
                         let grades = JSON.parse(localStorage.getItem("grades"))
                         grades.push(result)
-                        localStorage.setItem("grades", JSON.stringify(grades))
+                        // localStorage.setItem("grades", JSON.stringify(grades))
 
 
                     })
@@ -408,11 +438,7 @@ function createQ() {
 
 }
 
-function navigateTo(url) {
-    history.pushState(null, null, url)
-    console.log(location.pathname)
 
-}
 
 
 
@@ -423,24 +449,24 @@ function requistManager() {
     } else if (view == "/dashboard/clints") {
         getU()
     } else if (view == "/dashboard/questions") {
-        fillOptions()
-        getQ()
-        createNewBlock()
-        createNewSubject()
-        createNewLecture()
-        createNewGrade()
+        // fillOptions()
+        // getQ()
+        // createNewBlock()
+        // createNewSubject()
+        // createNewLecture()
+        // createNewGrade()
 
 
 
 
 
-        let form = document.getElementsByTagName("form")[0]
+        // let form = document.getElementsByTagName("form")[0]
 
 
-        form.addEventListener("submit", function (event) {
-            event.preventDefault();
-            createQ()
-        });
+        // form.addEventListener("submit", function (event) {
+        //     event.preventDefault();
+        //     createQ()
+        // });
 
     } else if (view == "/dashboard/posts") {
 
@@ -450,35 +476,11 @@ function requistManager() {
 
 
 
+function navigateTo(url) {
+    history.pushState(null, null, url)
+    console.log(location.pathname)
 
-
-document.body.addEventListener("click", e => {
-    if (e.target.classList.contains("data-link")) {
-
-        e.preventDefault();
-        navigateTo(e.target.href);
-        view = location.pathname
-        setTimeout(() => {
-            document.getElementsByClassName("content")[0].innerHTML = views[view]
-            requistManager()
-        }, 250);
-
-    } else if (e.target.parentElement.classList.contains("data-link")) {
-
-        e.preventDefault();
-        navigateTo(e.target.parentElement.href);
-        view = location.pathname
-        setTimeout(() => {
-            document.getElementsByClassName("content")[0].innerHTML = views[view]
-            requistManager()
-        }, 250);
-
-
-    }
-
-
-})
-
+}
 
 
 

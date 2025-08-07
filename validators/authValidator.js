@@ -35,6 +35,7 @@ exports.signupValidator = [
     validtionMiddleware
 ]
 
+
 exports.loginValidator = [
     check('email')
         .notEmpty()
