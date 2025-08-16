@@ -1028,7 +1028,7 @@
 
     <button onclick="createChallange()" type="button"
       style="border: none;display: block;background-color: #15962A;font-size: 16px;color: #ffffff;border-radius: 4px;width: 84px;height: 30px;margin:0 auto 16px;">Next</button>
-   </section>
+  </section>
 
 
   <!-- Clinical Subject Section -->
@@ -1083,7 +1083,7 @@
 </html>
 
 <script>
-  
+
   document.getElementById('back').addEventListener("click", (e) => {
 
     if (document.getElementById("moduleSection").style.display == "none") {
@@ -1113,42 +1113,7 @@
     //   });
   }
 
-  async function fetchLectures(subject) {
-
-    if (data[subject]) {
-
-      if (data[subject].length > 0) {
-        displayLectures(data[subject]);
-      } else {
-
-        try {
-          const response = await fetch(`api/v1/lectures?subject="${subject}"&module="${data.module}"`);
-          const res = await response.json();
-          data[subject] = res.data
-          displayLectures(data[subject]);
-
-        } catch (error) {
-          console.error('Error fetching lectures:', error);
-        }
-
-      }
-    } else {
-      try {
-        const response = await fetch(`api/v1/lectures?subject="${subject}"&module="${data.module}"`);
-        const res = await response.json();
-        data[subject] = res.data
-        displayLectures(data[subject]);
-
-      } catch (error) {
-        console.error('Error fetching lectures:', error);
-      }
-
-
-    }
-
-
-  }
-
+  
   function displayLectures(lectures) {
     const container = document.getElementById('lectureContainer');
     container.innerHTML = '';
@@ -1345,11 +1310,12 @@
 
     showSection('lectureSection');
     navigationHistory.push('lectureSection');
+    const params = new URLSearchParams({
+      module: selectedModule
 
+    });
 
-
-
-    fetch(`api/v1/lectures?module="${selectedModule}"`)
+    fetch(`api/v1/lectures?${params.toString()}`)
       .then((res) => res.json())
       .then((res) => {
         console.log(res);
@@ -1363,7 +1329,14 @@
         displayLectures(data[subject + module]);
       } else {
         try {
-          const response = await fetch(`api/v1/lectures?subject="${subject}"&module="${module}"`);
+          const params = new URLSearchParams({
+            subject: subject,
+            module: module
+
+          });
+
+
+          const response = await fetch(`api/v1/lectures?${params.toString()}`);
           const res = await response.json();
           data[subject + module] = res.data;
           displayLectures(data[subject + module]);
@@ -1373,7 +1346,16 @@
       }
     } else {
       try {
-        const response = await fetch(`api/v1/lectures?subject="${subject}"&module="${module}"`);
+
+
+        const params = new URLSearchParams({
+          subject: subject,
+          module: module
+
+        });
+
+
+        const response = await fetch(`api/v1/lectures?${params.toString()}`);
         const res = await response.json();
         data[subject + module] = res.data;
         displayLectures(data[subject + module]);
@@ -1384,7 +1366,7 @@
   }
 
 
-  
+
   function displayLectures(lectures) {
     const container = currentPath == 'academy' ? document.getElementById('lectureContainer') : document.getElementById('clinicalLectureContainer');
     container.innerHTML = '';
@@ -1509,7 +1491,14 @@
     modulesList.innerHTML = '';
     console.log(subject);
 
-    let response = await fetch(`/api/v1/modules?type="${currentPath}"&subject="${selectedSubject}"`)
+    const params = new URLSearchParams({
+      type: currentPath,
+      subject: selectedSubject
+    });
+
+
+
+    let response = await fetch(`/api/v1/modules?${params.toString()}`)
 
     modules = await response.json()
     modules = modules.data

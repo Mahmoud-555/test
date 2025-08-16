@@ -829,10 +829,12 @@
     showSection('lectureSection');
     navigationHistory.push('lectureSection');
 
+    const params = new URLSearchParams({
+      module: selectedModule
 
+    });
 
-
-    fetch(`api/v1/lectures?module="${selectedModule}"`)
+    fetch(`api/v1/lectures?${params.toString()}`)
       .then((res) => res.json())
       .then((res) => {
         console.log(res);
@@ -846,7 +848,16 @@
         displayLectures(data[subject + module]);
       } else {
         try {
-          const response = await fetch(`api/v1/lectures?subject="${subject}"&module="${module}"`);
+
+          const params = new URLSearchParams({
+            subject: subject,
+            module: module
+
+          });
+
+
+
+          const response = await fetch(`api/v1/lectures?${params.toString()}`);
           const res = await response.json();
           data[subject + module] = res.data;
           displayLectures(data[subject + module]);
@@ -856,7 +867,17 @@
       }
     } else {
       try {
-        const response = await fetch(`api/v1/lectures?subject="${subject}"&module="${module}"`);
+
+
+
+          const params = new URLSearchParams({
+      subject: subject,
+      module: module
+
+    });
+
+
+        const response = await fetch(`api/v1/lectures?${params.toString()}`);
         const res = await response.json();
         data[subject + module] = res.data;
         displayLectures(data[subject + module]);
@@ -1034,7 +1055,14 @@
     modulesList.innerHTML = '';
     console.log(subject);
 
-    let response = await fetch(`/api/v1/modules?type="${currentPath}"&subject="${selectedSubject}"`)
+      const params = new URLSearchParams({
+      subject: selectedSubject,
+      type: currentPath
+
+    });
+
+
+    let response = await fetch(`/api/v1/modules?${params.toString()}`)
 
     modules = await response.json()
     modules = modules.data
