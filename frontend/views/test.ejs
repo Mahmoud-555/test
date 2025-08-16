@@ -832,7 +832,7 @@
 
 
 
-    fetch(`api/v1/lectures?module=${selectedModule}`)
+    fetch(`api/v1/lectures?module="${selectedModule}"`)
       .then((res) => res.json())
       .then((res) => {
         console.log(res);
@@ -846,7 +846,7 @@
         displayLectures(data[subject + module]);
       } else {
         try {
-          const response = await fetch(`api/v1/lectures?subject=${subject}&module=${module}`);
+          const response = await fetch(`api/v1/lectures?subject="${subject}"&module="${module}"`);
           const res = await response.json();
           data[subject + module] = res.data;
           displayLectures(data[subject + module]);
@@ -856,7 +856,7 @@
       }
     } else {
       try {
-        const response = await fetch(`api/v1/lectures?subject=${subject}&module=${module}`);
+        const response = await fetch(`api/v1/lectures?subject="${subject}"&module="${module}"`);
         const res = await response.json();
         data[subject + module] = res.data;
         displayLectures(data[subject + module]);
@@ -1034,7 +1034,7 @@
     modulesList.innerHTML = '';
     console.log(subject);
 
-    let response = await fetch(`/api/v1/modules?type=${currentPath}&subject=${selectedSubject}`)
+    let response = await fetch(`/api/v1/modules?type="${currentPath}"&subject="${selectedSubject}"`)
 
     modules = await response.json()
     modules = modules.data
