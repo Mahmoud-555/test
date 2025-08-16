@@ -52,3 +52,8 @@ exports.updateModule = factory.updateOne(Module);
 // @route   DELETE /api/v1/Modules/:id
 // @access  Private/Admin
 exports.deleteModule = factory.deleteOne(Module);
+
+
+
+
+exports.aggregateModules = factory.aggregateAll(Module,"module");

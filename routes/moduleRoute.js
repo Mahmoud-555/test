@@ -9,6 +9,7 @@ const {
   deleteModule,
   setModuleIdToBody,
   createFilterObj,
+  aggregateModules
 } = require('../services/moduleService');
 // const {
 //   createModuleValidator,
@@ -35,7 +36,7 @@ router
     createModule
   )
   .get(
-    
+    aggregateModules,
     // createFilterObj ,
      getModules);
 router

@@ -351,6 +351,11 @@ let questionsView =/*html*/`
                     <input type="text" id="module-name" required>
                 </div>
                 
+
+
+
+
+                
                 <button type="submit" class="btn">
                     <i class="fas fa-save"></i> Save Module
                 </button>
@@ -456,15 +461,15 @@ let questionsView =/*html*/`
             <div class="modal-body">
               <form id="modal-mcq-form">
                 <div class="form-group">
-                    <label for="mcq-question">Question</label>
-                    <textarea id="mcq-question" rows="3" required></textarea>
+                    <label for="question-text">Question</label>
+                    <textarea id="question-text" rows="3" required></textarea>
                 </div>
                 <div class="form-group">
                     <label>Options</label>
-                    <div id="options-container" class="mcq-options">
+                    <div id="question-options-container" class="mcq-options">
                         <!-- Options will be added here dynamically -->
                     </div>
-                    <div class="option-controls">
+                    <div class="question-option-controls">
                         <button type="button" id="add-option-btn" class="btn btn-add-option">
                             <i class="fas fa-plus"></i> Add Option
                         </button>
@@ -472,21 +477,21 @@ let questionsView =/*html*/`
                 </div>
                 
                 <div class="form-group">
-                    <label for="mcq-correct">Correct Answer</label>
-                    <select id="mcq-correct" required>
+                    <label for="question-correct">Correct Answer</label>
+                    <select id="question-correct" required>
                         <option value="">Select correct option</option>
                     </select>
                 </div>
                 
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="mcq-time">Time (minutes)</label>
-                        <input type="number" id="mcq-time" min="1" max="60" value="5" required>
+                        <label for="question-time">Time (minutes)</label>
+                        <input type="number" id="question-time" min="1" max="60" value="5" required>
                     </div>
                     
                     <div class="form-group">
-                        <label for="mcq-difficulty">Difficulty</label>
-                        <select id="mcq-difficulty" required>
+                        <label for="question-difficulty">Difficulty</label>
+                        <select id="question-difficulty" required>
                             <option value="easy">Easy</option>
                             <option value="medium" selected>Medium</option>
                             <option value="hard">Hard</option>

@@ -59,7 +59,7 @@ exports.getOne = (Model, populationOpt) =>
     res.status(200).json({ data: document });
   });
 
-exports.getAll = (Model, modelName = '', populateOptions = '' ) =>
+exports.getAll = (Model, modelName = '', populateOptions = '') =>
   asyncHandler(async (req, res) => {
     let filter = {};
     if (req.filterObj) {
@@ -90,10 +90,14 @@ exports.getAll = (Model, modelName = '', populateOptions = '' ) =>
 
 exports.aggregateAll = (Model, modelName = '', populateStages = []) =>
   asyncHandler(async (req, res) => {
-    const { page = 1, limit = 10, sort, fields, keyword, ...filters } = req.query;
-    const skip = (page - 1) * limit;
 
+
+
+    const { page = 1, limit = 10, sort, fields, keyword, module, subject,type, ...filters } = req.query;
+    const skip = (page - 1) * limit;
     const pipeline = [];
+    console.log(req.query);
+
 
     // ✅ Filtering
     if (Object.keys(filters).length > 0) {
@@ -116,6 +120,55 @@ exports.aggregateAll = (Model, modelName = '', populateStages = []) =>
     // ✅ Add population stages (e.g., $lookup)
     if (populateStages.length > 0) {
       pipeline.push(...populateStages);
+    }
+
+
+    if (module) {
+      pipeline.push(...
+        [
+         {
+            '$lookup': {
+              'as': 'modules',
+              'from': 'modules',
+              'foreignField': '_id',
+              'localField': 'module'
+            }
+          }, {
+            '$match': {
+              'modules.module': module
+            }
+          }
+        ]);
+
+    }
+    if (subject) {
+      pipeline.push(...
+        [
+          {
+            '$lookup': {
+              'as': 'subjects',
+              'from': 'subjects',
+              'foreignField': '_id',
+              'localField': 'subject'
+            }
+          }, {
+            '$match': {
+              'subjects.subject': subject
+            }
+          }
+        ]);
+
+    }
+    if (type) {
+      pipeline.push(...
+        [
+          {
+            '$match': {
+              'type': type
+            }
+          }
+        ]);
+
     }
 
     // ✅ Sorting
@@ -146,6 +199,7 @@ exports.aggregateAll = (Model, modelName = '', populateStages = []) =>
 
     // ✅ Execute
     const documents = await Model.aggregate(pipeline);
+    console.log(documents);
 
     res.status(200).json({
       results: documents.length,

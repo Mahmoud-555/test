@@ -1559,117 +1559,7 @@
 
         }
 
-        // Load MCQs with filtering
-        function loadQuestions() {
 
-            const searchTerm = searchInput.value.toLowerCase();
-            const difficultyFilter = filterDifficulty.value;
-            const timeFilter = filterTime.value;
-            const correctFilter = filterCorrect.value;
-
-            // Filter MCQs
-            let filteredMCQs = mcqs;
-
-            if (searchTerm) {
-                filteredMCQs = filteredMCQs.filter(mcq =>
-                    mcq.question.toLowerCase().includes(searchTerm) ||
-                    mcq.options.some(opt => opt.toLowerCase().includes(searchTerm))
-                );
-            }
-
-            if (difficultyFilter) {
-                filteredMCQs = filteredMCQs.filter(mcq => mcq.difficulty === difficultyFilter);
-            }
-
-            if (timeFilter) {
-                filteredMCQs = filteredMCQs.filter(mcq => mcq.time.toString() === timeFilter);
-            }
-
-            if (correctFilter) {
-                filteredMCQs = filteredMCQs.filter(mcq => mcq.correctAnswer === correctFilter);
-            }
-
-            // Display MCQs
-            if (filteredMCQs.length === 0) {
-                mcqList.innerHTML = `
-                <div class="no-results">
-                    <i class="fas fa-search"></i>
-                    <p>No MCQs match your search criteria</p>
-                    </div>
-                    `;
-                return;
-            }
-
-            mcqList.innerHTML = '';
-
-            filteredMCQs.forEach((mcq, index) => {
-                const mcqCard = createQuestionCard(mcq, searchTerm);
-                mcqList.appendChild(mcqCard);
-            });
-        }
-
-        // Create MCQ card with highlighting
-        function createQuestionCard(mcq, searchTerm) {
-            const card = document.createElement('div');
-            card.className = 'mcq-card';
-
-            // Highlight search term in question
-            let question = mcq.question;
-            if (searchTerm) {
-                question = highlightText(question, searchTerm);
-            }
-
-            // Create options with correct answer highlighted
-            let optionsHTML = '';
-            mcq.options.forEach((option, index) => {
-                const letter = String.fromCharCode(65 + index); // A, B, C, D
-                const isCorrect = letter === mcq.correctAnswer;
-                const optionText = searchTerm ? highlightText(option, searchTerm) : option;
-
-                optionsHTML += `
-                    <div class="mcq-option ${isCorrect ? 'option-correct' : ''}">
-                        <div class="option-letter">${letter}</div>
-                        <div class="option-text">${optionText}</div>
-                    </div>
-                `;
-            });
-
-            // Get badge class based on difficulty
-            const badgeClass = `card-badge-difficulty-${mcq.difficulty}`;
-
-            // Create card HTML
-            card.innerHTML = `
-                <div class="card-header">
-                    <h3>${question}</h3>
-                    <span class="card-badge ${badgeClass}">${mcq.difficulty}</span>
-                </div>
-                
-                ${mcq.imageData ? `<img src="${mcq.imageData}" alt="MCQ Image" class="mcq-card-image">` : ''}
-                
-                <div class="mcq-card-content">
-                    <div class="mcq-options">
-                        ${optionsHTML}
-                    </div>
-                    
-                    <div class="card-footer">
-                        <div class="card-info">
-                            <span class="card-icon"><i class="fas fa-clock"></i></span>
-                            ${mcq.time} minutes
-                        </div>
-                        <div class="card-action-buttons">
-                            <button class="btn btn-edit" onclick="editQuestion(${mcq._id})">
-                                <i class="fas fa-edit"></i> Edit
-                            </button>
-                            <button class="btn btn-delete" onclick="deleteMCQ(${mcq._id})">
-                                <i class="fas fa-trash"></i> Delete
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `;
-
-            return card;
-        }
 
         // Highlight text in search results
         function highlightText(text, searchTerm) {
@@ -1809,6 +1699,7 @@
         // }
 
         // Handle image upload
+
         function handleImageUpload(e) {
             const file = e.target.files[0];
             if (!file) return;
@@ -1837,6 +1728,7 @@
         // Display image in preview
         function displayImage(imageData) {
             imagePreview.innerHTML = `<img src="${imageData}" alt="MCQ Image">`;
+            
         }
 
         // Reset image upload
@@ -1963,7 +1855,7 @@
         // Navigation functions
         function showTypeSelectionPage() {
             console.log("lllllllllllll");
-            
+
             hideAllPages();
             typeSelectionPage.style.display = 'block';
         }
@@ -2091,6 +1983,64 @@
 
 
         // Data loading functions
+
+
+
+        // Load MCQs with filtering
+
+
+        async function loadQuestions() {
+
+            const searchTerm = searchInput.value.toLowerCase();
+            const difficultyFilter = filterDifficulty.value;
+            const timeFilter = filterTime.value;
+            const correctFilter = filterCorrect.value;
+
+            let response = await fetch("/api/v1/questions")
+            mcqs = await response.json()
+            mcqs = mcqs.data
+
+            // Filter MCQs
+            let filteredMCQs = mcqs;
+
+            if (searchTerm) {
+                filteredMCQs = filteredMCQs.filter(mcq =>
+                    mcq.question.toLowerCase().includes(searchTerm) ||
+                    mcq.answers.some(opt => opt.toLowerCase().includes(searchTerm))
+                );
+            }
+
+            if (difficultyFilter) {
+                filteredMCQs = filteredMCQs.filter(mcq => mcq.difficulty === difficultyFilter);
+            }
+
+            if (timeFilter) {
+                filteredMCQs = filteredMCQs.filter(mcq => mcq.duration.toString() === timeFilter);
+            }
+
+            if (correctFilter) {
+                filteredMCQs = filteredMCQs.filter(mcq => mcq.correct === correctFilter);
+            }
+
+            // Display MCQs
+            if (filteredMCQs.length === 0) {
+                mcqList.innerHTML = `
+                <div class="no-results">
+                    <i class="fas fa-search"></i>
+                    <p>No MCQs match your search criteria</p>
+                    </div>
+                    `;
+                return;
+            }
+
+            mcqList.innerHTML = '';
+
+            filteredMCQs.forEach((mcq, index) => {
+                const mcqCard = createQuestionCard(mcq, searchTerm);
+                mcqList.appendChild(mcqCard);
+            });
+        }
+
         async function loadSubjects(type) {
             const subjectsList = document.getElementById('subjects-list');
             subjectsList.innerHTML = '';
@@ -2213,6 +2163,72 @@
         }
 
         // Alternative card creation functions
+
+
+        // Create MCQ card with highlighting
+        function createQuestionCard(mcq, searchTerm) {
+            const card = document.createElement('div');
+            card.className = 'mcq-card';
+
+            // Highlight search term in question
+            let question = mcq.question;
+            if (searchTerm) {
+                question = highlightText(question, searchTerm);
+            }
+
+            // Create options with correct answer highlighted
+            let optionsHTML = '';
+            mcq.answers.forEach((option, index) => {
+                const letter = String.fromCharCode(65 + index); // A, B, C, D
+                const isCorrect = option === mcq.correct[0];
+                const optionText = searchTerm ? highlightText(option, searchTerm) : option;
+
+                optionsHTML += `
+                    <div class="mcq-option ${isCorrect ? 'option-correct' : ''}">
+                        <div class="option-letter">${letter}</div>
+                        <div class="option-text">${optionText}</div>
+                    </div>
+                `;
+            });
+
+            // Get badge class based on difficulty
+            const badgeClass = `card-badge-difficulty-${mcq.difficulty}`;
+
+            // Create card HTML
+            card.innerHTML = `
+                <div class="card-header">
+                    <h3>${question}</h3>
+                    <span class="card-badge ${badgeClass}">${mcq.difficulty}</span>
+                </div>
+                
+                ${mcq.images ? `<img src="${mcq.images[0]}" alt="MCQ Image" class="mcq-card-image">` : ''}
+                
+                <div class="mcq-card-content">
+                    <div class="mcq-options">
+                        ${optionsHTML}
+                    </div>
+                    
+                    <div class="card-footer">
+                        <div class="card-info">
+                            <span class="card-icon"><i class="fas fa-clock"></i></span>
+                            ${mcq.duration} minutes
+                        </div>
+                        <div class="card-action-buttons">
+                            <button class="btn btn-edit" onclick=editQuestion('${mcq._id}')>
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <button class="btn btn-delete" onclick=deleteMCQ('${mcq._id}')>
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            return card;
+        }
+
+
         function createSubjectCard(subject, index) {
             const card = document.createElement('div');
             card.className = 'alt-card';
@@ -2763,7 +2779,7 @@
                     headers: {
                         'Content-type': 'application/json; charset=UTF-8',
                     },
-                    body: JSON.stringify({ "module": name, "subject": currentSubject._id })
+                    body: JSON.stringify({ "module": name, "subject": currentSubject._id ,"type": currentType })
                 }).then((response) => {
                     response.json().then((result) => {
                         showNotification('Module added successfully');
@@ -2862,7 +2878,12 @@
                 }).then((response) => {
                     // mcqs.push(result);
                     showNotification('MCQ deleted successfully');
-                    showMCQsPage(currentLecture._id);
+                    if (mcqsPage.style.display != "none") {
+                        showMCQsPage(currentLecture._id);
+
+                    } else {
+                        loadQuestions()
+                    }
 
                 })
 

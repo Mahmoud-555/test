@@ -9,12 +9,10 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <style>
-
-
-::-webkit-scrollbar {
-    width: 0px;
-    height: 0px;
-  }
+    ::-webkit-scrollbar {
+      width: 0px;
+      height: 0px;
+    }
 
 
 
@@ -368,7 +366,404 @@
       margin-left: 10px;
     }
   </style>
+  <style>
+    .path-selection {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin: 50px auto;
+      width: 92%;
+    }
+
+    .path-card {
+      width: 200px;
+      height: 200px;
+      border-radius: 10px;
+      background-color: rgba(255, 255, 255, 0.1);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: transform 0.3s, background-color 0.3s;
+    }
+
+    .path-card:hover {
+      transform: translateY(-5px);
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .path-icon {
+      font-size: 48px;
+      margin-bottom: 15px;
+    }
+
+    .path-title {
+      font-size: 24px;
+      font-weight: bold;
+      color: white;
+    }
+
+    .section-title {
+      color: white;
+      text-align: center;
+      margin: 20px 0;
+      font-size: 24px;
+    }
+
+    .subject {
+      cursor: pointer;
+      padding: 10px 15px;
+      border-radius: 4px;
+      background-color: rgba(0, 123, 255, 0.5);
+      color: white;
+      transition: background-color 0.3s;
+      flex: 1 1 auto;
+      margin: 4px;
+      text-align: center;
+    }
+
+    .subject:hover {
+      background-color: rgba(0, 123, 255, 0.7);
+    }
+
+    input[type="radio"]:checked+.subject {
+      background-color: rgba(0, 123, 255, 1);
+    }
+
+    .button-group {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      width: 92%;
+      margin: 0.5rem auto;
+      padding: 8px;
+      border-radius: 4px;
+      background: rgba(217, 217, 217, 0.05);
+      box-shadow: 0px 4px 4px 0 rgba(0, 0, 0, 0.25);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    .subject {
+      color: #ffffff;
+      flex-grow: 0;
+      flex-shrink: 0;
+      font-size: 14px;
+      font-weight: 500;
+      text-align: left;
+      background-color: rgba(7, 22, 49, 0.417);
+      margin: 0;
+      padding: 2px;
+      border-radius: 4px;
+    }
+
+    .system {
+      border-radius: 8px;
+      /* margin: 20px auto; */
+      /* بتتغير لكل system */
+      /* background-image: url(download-4.png); */
+      height: 76px;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      position: relative;
+      min-width: 170px;
+      mix-blend-mode: screen;
+      border: solid #ffffff0f;
+      box-shadow: 4px 4px 4px rgba(33, 33, 33, 0.573);
+      /* ظل أبيض مع شفافيات */
+      transition: transform 0.3s;
+      cursor: pointer;
+    }
+
+    .system:hover {
+      transform: scale(1.05);
+    }
+
+
+    .system p {
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+    }
+
+
+
+
+    .modal-content {
+      border-radius: 1rem;
+    }
+
+    .modal-header {
+      border-bottom: none;
+    }
+
+    .modal-body {
+      padding: 2rem;
+    }
+
+    .error-message {
+      color: red;
+      font-size: 0.9rem;
+    }
+
+    .form-section {
+      display: none;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .form-section.active {
+      display: block;
+      opacity: 1;
+    }
+
+    .btn-custom {
+      background-color: #007bff;
+      color: white;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .btn-custom:hover {
+      background-color: #0056b3;
+      color: white;
+    }
+
+
+
+
+
+    P {
+      margin: 0;
+    }
+
+
+    /* تحديد حجم الـ div الحاوي */
+    #carouselContainer {
+      width: 92%;
+      /* أو أي قيمة محددة حسب الحاجة */
+      height: 500px;
+      /* يمكنك تغيير هذا حسب الحجم الذي تريده */
+      position: relative;
+      /* لتكون الـ Carousel متوافقة مع حجم الـ div */
+      overflow: hidden;
+      /* لتجنب ظهور أي محتوى خارج الـ div */
+    }
+
+    /* جعل الصور تأخذ الحجم الكامل للـ div */
+    .carousel-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      /* لضمان أن الصور تغطي كامل المساحة دون تشويه */
+    }
+
+    /* التأكد من أن أزرار التنقل تتناسب مع حجم الـ div */
+    .carousel-control-prev,
+    .carousel-control-next {
+      width: 5%;
+      height: 100%;
+    }
+
+
+    .grid {
+      display: grid;
+    }
+
+    .grid-cols-2 {
+      grid-template-columns: repeat(1, minmax(0, 1fr));
+    }
+
+    .gap-4 {
+      gap: 1rem;
+    }
+
+    @media (min-width:768px) {
+      .md\:grid-cols-3 {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+    }
+
+    @media (min-width:1024px) {
+      .lg\:grid-cols-4 {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+      }
+
+      .lg\:gap-6 {
+        gap: 1.5rem;
+      }
+    }
+
+    @media (min-width:1300px) {
+      .xl\:mt-4 {
+        margin-top: 1rem;
+      }
+    }
+
+
+
+    .lecture-container {
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+      /* background: #fff; */
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .lecture {
+      display: flex;
+      justify-content: left;
+      align-items: center;
+      padding: 15px 20px;
+      border-radius: 10px;
+      background: #ffffff;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      margin: 10px 0;
+      transition: all 0.3s ease;
+      position: relative;
+      /* لتحسين التداخل */
+    }
+
+    .lecture:hover {
+      background: #e0f7fa;
+      /* لون خلفية مهدئ عند التحويم */
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+    }
+
+    .lecture.selected {
+      background: #007bff;
+      /* لون اختيار المحاضرة */
+      color: white;
+      /* لون النص عند الاختيار */
+      border-left: 4px solid #0056b3;
+      /* إضافة خط جانبي لتأكيد التحديد */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
+      /* تعزيز تأثير الظل */
+    }
+
+    .lecture-text {
+      font-size: 18px;
+      margin-left: 12px;
+      /* إضافة مساحة للجمل */
+      color: #333;
+      transition: color 0.3s;
+    }
+
+    .lecture.selected .lecture-text {
+      color: #fff;
+      /* تغيير لون النص عند الاختيار */
+    }
+
+    .lecture-icon {
+      background: #007bff;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      font-size: 18px;
+      margin-right: 15px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+
+    .lecture-container {
+      width: 100%;
+      max-width: 800px;
+      /* تحديد عرض أقصى للحاوية */
+      margin: 0 auto;
+      /* تمركز الحاوية */
+      padding: 20px;
+    }
+
+    .lecture {
+      display: flex;
+      justify-content: space-between;
+      /* توزيع النص بشكل جيد */
+      padding: 15px;
+      border-radius: 8px;
+      background: #ffffff;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      margin: 10px auto;
+      align-items: center;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
+      /* تأثيرات انتقال */
+    }
+
+    .lecture:hover {
+      /* background: rgba(0, 123, 255, 0.1); */
+      transform: translateY(-2px);
+      /* تحريك العلوي قليلاً */
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .lecture.selected {
+      background: #007bff;
+      color: white;
+      box-shadow: 0 8px 20px rgba(0, 123, 255, 0.3);
+    }
+
+    .lecture-text {
+      flex-grow: 1;
+      font-size: 18px;
+      /* زيادة حجمه للنص */
+      color: #333;
+      /* لون النص */
+      transition: color 0.3s;
+    }
+
+    .lecture.selected .lecture-text {
+      color: #fff;
+      /* تغيير لون النص للحرارة */
+    }
+
+    .lecture-icon {
+      font-size: 24px;
+      /* إضافة رمز أو أيقونة */
+      color: #007bff;
+      /* لون الرموز */
+      margin-left: 10px;
+    }
+  </style>
 </head>
+
 
 <body style="  background: #03101f;min-height: 100vh;">
 
@@ -393,19 +788,38 @@
     </h1>
 
 
-    
 
   </header>
 
-  <section id="moduleSection">
+
+
+
+  <section id="pathSelection" class="path-selection">
+    <div>
+
+
+    </div>
+    <div class="path-card" onclick="selectPath('academy')">
+      <div class="path-icon">🎓</div>
+      <div class="path-title">Academy</div>
+    </div>
+    <div class="path-card" onclick="selectPath('clinical')">
+      <div class="path-icon">🏥</div>
+      <div class="path-title">Clinical</div>
+    </div>
+  </section>
+
+
+
+  <section id="academyModuleSection">
 
     <div id="main" style="min-height: 100vh;min-width: 100vw;">
 
-      <div class=" grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 lg:gap-6 xl:mt-4"
+      <div id="academy-modules-list" class=" grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 lg:gap-6 xl:mt-4"
         style="width: 92%;margin: 3rem auto;">
 
 
-        <div id="endocrine system" onclick="goToLectures(event)" class="system"
+        <div id="endocrine system" onclick="getLectures(event)" class="system"
           style="background-image: url(/images/download-4.png);display: flex;justify-content: center;align-items: center;">
 
 
@@ -551,46 +965,46 @@
 
   </section>
 
-  <section id="lectureSection" style="display: none;">
+  <section id="lectureSection" style="display: none;flex-direction: column;">
 
     <div
       style="flex-wrap: wrap; display: flex; justify-content: center; align-items: center; width: 92%; gap: 8px; padding: 8px; border-radius: 4px; background: rgba(217,217,217,0.05); box-shadow: 0px 4px 4px 0 rgba(0,0,0,0.25); margin: 0.5rem auto;">
       <input type="radio" id="anatomy" name="subject" value="anatomy" style="display: none;"
-        onclick="fetchLectures('anatomy')">
+        onclick="fetchLectures('anatomy',selectedModule)">
       <label for="anatomy" class="subject"><span style="font-size: 14px; margin-right: 1px;">🦴</span>Anatomy</label>
 
       <input type="radio" id="histology" name="subject" value="histology" style="display: none;"
-        onclick="fetchLectures('histology')">
+        onclick="fetchLectures('histology',selectedModule)">
       <label for="histology" class="subject"> <span
           style="font-size: 14px; margin-right: 1px;">🔬</span>Histology</label>
 
       <input type="radio" id="physiology" name="subject" value="physiology" style="display: none;"
-        onclick="fetchLectures('physiology')">
+        onclick="fetchLectures('physiology',selectedModule)">
       <label for="physiology" class="subject"><span
           style="font-size: 14px; margin-right: 1px;">💪</span>Physiology</label>
 
       <input type="radio" id="biochemistry" name="subject" value="biochemistry" style="display: none;"
-        onclick="fetchLectures('biochemistry')">
+        onclick="fetchLectures('biochemistry',selectedModule)">
       <label for="biochemistry" class="subject"> <span
           style="font-size: 14px; margin-right: 1px;">🧬</span>Biochemistry</label>
 
       <input type="radio" id="pathology" name="subject" value="pathology" style="display: none;"
-        onclick="fetchLectures('pathology')">
+        onclick="fetchLectures('pathology',selectedModule)">
       <label for="pathology" class="subject"><span
           style="font-size: 14px; margin-right: 1px;">🦠</span>Pathology</label>
 
       <input type="radio" id="pharmacology" name="subject" value="pharmacology" style="display: none;"
-        onclick="fetchLectures('pharmacology')">
+        onclick="fetchLectures('pharmacology',selectedModule)">
       <label for="pharmacology" class="subject"><span
           style="font-size: 14px; margin-right: 1px;">💊</span>Pharmacology</label>
 
       <input type="radio" id="microbiology" name="subject" value="microbiology" style="display: none;"
-        onclick="fetchLectures('microbiology')">
+        onclick="fetchLectures('microbiology',selectedModule)">
       <label for="microbiology" class="subject"><span
           style="font-size: 14px; margin-right: 1px;">🔬</span>Microbiology</label>
 
       <input type="radio" id="parasitology" name="subject" value="forensic" style="display: none;"
-        onclick="fetchLectures('forensic')">
+        onclick="fetchLectures('forensic',selectedModule)">
       <label for="parasitology" class="subject">
         <span style="font-size: 14px; margin-right: 1px;">🐛</span>Parasitology
       </label>
@@ -614,10 +1028,49 @@
 
     <button onclick="createChallange()" type="button"
       style="border: none;display: block;background-color: #15962A;font-size: 16px;color: #ffffff;border-radius: 4px;width: 84px;height: 30px;margin:0 auto 16px;">Next</button>
+   </section>
+
+
+  <!-- Clinical Subject Section -->
+  <section id="clinicalSubjectSection" style="display: none;flex-direction: column;">
+    <h2 class="section-title">Select a Subject</h2>
+
+    <div id="clinicalSubjectList" class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 lg:gap-6 xl:mt-4"
+      style="width: 92%; margin: 3rem auto;">
+
+
+    </div>
+    </div>
+
+  </section>
+  <!-- Clinical Module Section -->
+  <section id="clinicalModuleSection" style="display: none;flex-direction: column;">
+    <h2 class="section-title">Select a Module</h2>
+    <div id="clinical-modules-list" class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 lg:gap-6 xl:mt-4"
+      style="width: 92%; margin: 3rem auto;">
+
+
+    </div>
   </section>
 
-
-
+  <section id="clinicalLectureSection" style="display: none;flex-direction: column;">
+    <h2 class="section-title">Select Lectures</h2>
+    <div
+      style="width: 92%; height: 25px; display: flex; justify-content: space-between; align-items: center; margin: 1.5rem auto;">
+      <span style="font-size: 16px; text-align: left; color: #fff;">
+        select all
+      </span>
+      <svg id="selectAll" width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg"
+        style="width: 25px; height: 25px;" preserveAspectRatio=xMidYMid meet>
+        <path
+          d="M5.20833 21.875C4.63542 21.875 4.14497 21.671 3.73698 21.263C3.32899 20.855 3.125 20.3646 3.125 19.7917V5.20833C3.125 4.63542 3.32899 4.14497 3.73698 3.73698C4.14497 3.32899 4.63542 3.125 5.20833 3.125H19.7917C20.3646 3.125 20.855 3.32899 21.263 3.73698C21.671 4.14497 21.875 4.63542 21.875 5.20833V19.7917C21.875 20.3646 21.671 20.855 21.263 21.263C20.855 21.671 20.3646 21.875 19.7917 21.875H5.20833ZM5.20833 19.7917H19.7917V5.20833H5.20833V19.7917Z"
+          fill="white"></path>
+      </svg>
+    </div>
+    <div class="lecture-container" id="clinicalLectureContainer"></div>
+    <button onclick="createChallange()" type="button"
+      style="border: none;display: block;background-color: #15962A;font-size: 16px;color: #ffffff;border-radius: 4px;width: 84px;height: 30px;margin:0 auto 16px;">Next</button>
+  </section>
 
 
 
@@ -626,98 +1079,11 @@
     crossorigin="anonymous"></script>
 
 </body>
-<!-- 
-<script>
-  let module
-
-  // function getModules(params) {
-
-  //   fetch(`api/v1/lectures?module=${module}`)
-
-  // }
-
-  function getLectures(event) {
-
-    const target = event.target;
-
-        document.getElementById("lectureSection").style.display = "block"
-
-    document.getElementById("moduleSection").style.display = "none"
-
-
-    // إذا كان العنصر المستهدف هو العنصر الرئيسي، احصل على id العنصر
-    module = target.id || target.parentElement.id;
-
-    fetch(`api/v1/lectures?module=${module}`)
-      .then((res) => {
-        res.json().then((res) => {
-
-          console.log(res)
-
-
-        }
-        )
-
-
-
-      })
-
-  }
-
-  async function fetchLectures(subject) {
-    try {
-      const response = await fetch(`api/v1/lectures?subject=${subject}&module=${module}`);
-      const data = await response.json();
-      displayLectures(data.data);
-    } catch (error) {
-      console.error('Error fetching lectures:', error);
-    }
-  }
-
-  function displayLectures(lectures) {
-    const container = document.getElementById('lectureContainer');
-    container.innerHTML = ''; // Clear existing lectures
-
-
-    for (const lecture of lectures) {
-      container.innerHTML +=
-        `          
-  <div id=${lecture._id}  style = "
-    display: flex;
-    padding: 8px;
-    width: 92%;
-    height: 43px;
-    border-radius: 4px;
-    background: rgba(217, 217, 217, 0.02);
-    box-shadow: 0px 4px 4px 0 rgba(0, 0, 0, 0.25);
-    margin: 8px auto;
-    align-items: center;">
-   
-   <span
-      style="width: 144.69px; height: 23px; left: 36.6px; top: 239px; opacity: 0.45; font-size: 20px; text-align: left; color: #fff;">
-     ${lecture.lecture}
-    </span>
-  </div> 
-          
-          
-          `
-
-    }
-
-
-  }
-
-
-
-</script> -->
-
 
 </html>
 
 <script>
-  let data = {};
-  let selectedLectures = [];
-
+  
   document.getElementById('back').addEventListener("click", (e) => {
 
     if (document.getElementById("moduleSection").style.display == "none") {
@@ -851,7 +1217,7 @@
       body: JSON.stringify({ selectedLectures: selectedLectures })
     }).then((response) => {
       response.json().then((res) => {
-        localStorage.setItem('testId',res.testId );
+        localStorage.setItem('testId', res.testId);
         document.location.pathname = "/challenge/invite"
 
       }
@@ -860,6 +1226,350 @@
 
 
 
+  }
+
+
+
+
+
+
+
+
+
+
+
+  document.getElementById('selectAll').onclick = selectAllLectures;
+</script>
+
+<script>
+  let data = {};
+  let selectedLectures = [];
+  let currentPath = '';
+  let selectedModule = '';
+  let selectedSubject = '';
+  let navigationHistory = [];
+
+
+  // Initialize the app
+  document.addEventListener('DOMContentLoaded', function () {
+    showSection('pathSelection');
+    navigationHistory = ['pathSelection'];
+  });
+
+
+  // Show a specific section and hide others
+  function showSection(sectionId) {
+    const sections = [
+      'pathSelection',
+      'academyModuleSection',
+      // 'academySubjectSection',
+      'clinicalSubjectSection',
+      'clinicalModuleSection',
+      'lectureSection',
+      'clinicalLectureSection'
+    ];
+
+    sections.forEach(section => {
+      document.getElementById(section).style.display = section === sectionId ? 'flex' : 'none';
+    });
+  }
+
+
+  // Select path (Academy or Clinical)
+  function selectPath(path) {
+    currentPath = path;
+    document.getElementById('header-h1').innerHTML = path.charAt(0).toUpperCase() + path.slice(1);
+
+    if (path === 'academy') {
+      showSection('academyModuleSection');
+      navigationHistory = ['pathSelection', 'academyModuleSection'];
+    } else {
+      showSection('clinicalSubjectSection');
+      loadSubjects(currentPath)
+      navigationHistory = ['pathSelection', 'clinicalSubjectSection'];
+
+    }
+  }
+
+
+
+
+
+  // Clinical path: Subject selected, show modules
+  function getClinicalModules(subject) {
+    console.log("selectedSubject", subject);
+    selectedSubject = subject;
+
+    document.getElementById('header-h1').innerHTML = subject;
+    showSection('clinicalModuleSection');
+    loadModules(selectedSubject)
+    navigationHistory.push('clinicalModuleSection');
+  }
+
+
+
+  // Clinical path: Module selected, show lectures
+  function getClinicalLectures(event) {
+    const target = event.target;
+    selectedModule = target.id || target.parentElement.id;
+    document.getElementById('header-h1').innerHTML = `${selectedSubject} - ${selectedModule}`;
+    fetchLectures(selectedSubject, selectedModule);
+    showSection('clinicalLectureSection');
+    navigationHistory.push('lectureSection');
+  }
+
+
+
+
+  document.getElementById('back').addEventListener("click", (e) => {
+
+    if (document.getElementById("academyModuleSection").style.display == "none") {
+      e.preventDefault()
+      document.getElementById("lectureSection").style.display = "none";
+      document.getElementById("academyModuleSection").style.display = "block";
+    }
+
+
+  })
+
+  // academy
+  function getLectures(event) {
+
+    const target = event.target;
+    // document.getElementById("lectureSection").style.display = "block";
+    // document.getElementById("academyModuleSection").style.display = "none";
+
+    selectedModule = target.id || target.parentElement.id;
+
+    document.getElementById("header-h1").innerHTML = selectedModule
+
+    showSection('lectureSection');
+    navigationHistory.push('lectureSection');
+
+
+
+
+    fetch(`api/v1/lectures?module=${selectedModule}`)
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+      });
+  }
+
+  // Fetch lectures based on subject and module
+  async function fetchLectures(subject, module) {
+    if (data[subject + module]) {
+      if (data[subject + module].length > 0) {
+        displayLectures(data[subject + module]);
+      } else {
+        try {
+          const response = await fetch(`api/v1/lectures?subject=${subject}&module=${module}`);
+          const res = await response.json();
+          data[subject + module] = res.data;
+          displayLectures(data[subject + module]);
+        } catch (error) {
+          console.error('Error fetching lectures:', error);
+        }
+      }
+    } else {
+      try {
+        const response = await fetch(`api/v1/lectures?subject=${subject}&module=${module}`);
+        const res = await response.json();
+        data[subject + module] = res.data;
+        displayLectures(data[subject + module]);
+      } catch (error) {
+        console.error('Error fetching lectures:', error);
+      }
+    }
+  }
+
+
+  
+  function displayLectures(lectures) {
+    const container = currentPath == 'academy' ? document.getElementById('lectureContainer') : document.getElementById('clinicalLectureContainer');
+    container.innerHTML = '';
+
+    for (const lecture of lectures) {
+      const isSelected = selectedLectures.includes(lecture._id);
+      const lectureDiv = document.createElement('div');
+      lectureDiv.className = 'lecture';
+      lectureDiv.id = lecture._id;
+      lectureDiv.onclick = () => toggleLectureSelection(lecture._id, lectureDiv);
+
+      lectureDiv.innerHTML = `
+        <div class="lecture-icon">&#x1F4DA;</div>
+        <span class="lecture-text">${lecture.lecture}</span>
+      `;
+
+      if (isSelected) {
+        lectureDiv.classList.add('selected');
+      }
+
+      container.appendChild(lectureDiv);
+    }
+  }
+
+
+  // // نبحث عن فهرس الكائن الذي له id يساوي 2
+  // const index = objectsArray.findIndex(obj => obj.id === 2);
+
+  function toggleLectureSelection(lecture, lectureDiv) {
+    const index = selectedLectures.indexOf(lecture);
+    if (index > -1) {
+      selectedLectures.splice(index, 1);
+      lectureDiv.classList.remove('selected');
+    } else {
+      selectedLectures.push(lecture);
+      lectureDiv.classList.add('selected');
+    }
+    console.log('المحاضرات المختارة:', selectedLectures);
+  }
+
+  function selectAllLectures() {
+    const lectureElements = currentPath == 'academy' ? document.querySelectorAll('#lectureContainer > div') : document.querySelectorAll('#clinicalLectureContainer > div');
+    if (selectedLectures.length < lectureElements.length) {
+      lectureElements.forEach((element) => {
+        const lectureId = element.id;
+        if (!selectedLectures.includes(lectureId)) {
+          selectedLectures.push(lectureId);
+          element.classList.add('selected');
+        }
+      });
+    } else {
+      selectedLectures = [];
+      lectureElements.forEach((element) => {
+        element.classList.remove('selected');
+      });
+    }
+    console.log('المحاضرات المختارة:', selectedLectures);
+  }
+
+  async function createTest() {
+
+    fetch("api/v1/tests", {
+      method: "post",
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+      },
+      body: JSON.stringify({ selectedLectures: selectedLectures })
+    }).then((response) => {
+      response.json().then((res) => {
+        localStorage.setItem('testId', res.testId);
+        document.location.pathname = "/test/start"
+
+      }
+      )
+    }).catch((err) => { console.log(err) })
+
+
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+  async function loadSubjects(type) {
+    const subjectsList = document.getElementById('clinicalSubjectList');
+    subjectsList.innerHTML = '';
+
+    let response = await fetch("/api/v1/subjects?type=" + type);
+
+    subjects = await response.json()
+    subjects = subjects.data
+
+    console.log(subjects);
+    console.log(currentPath);
+    console.log(type);
+
+    const typeSubjects = subjects.filter(s => s.type === currentPath);
+
+    if (typeSubjects.length === 0) {
+      subjectsList.innerHTML = '<p class="card-description">No subjects found.</p>';
+      return;
+    }
+
+    typeSubjects.forEach((subject, index) => {
+      const subjectCard = createSubjectCard(subject, index);
+
+
+      subjectsList.appendChild(subjectCard);
+    });
+  }
+
+
+  async function loadModules(subject) {
+    const modulesList = currentPath == 'academy' ? document.getElementById('academy-modules-list') : document.getElementById('clinical-modules-list');
+    modulesList.innerHTML = '';
+    console.log(subject);
+
+    let response = await fetch(`/api/v1/modules?type=${currentPath}&subject=${selectedSubject}`)
+
+    modules = await response.json()
+    modules = modules.data
+    console.log("modules", modules);
+
+    if (modules.length === 0) {
+      modulesList.innerHTML = '<p class="card-description">No modules found </p>';
+      return;
+    }
+
+    modules.forEach((module, index) => {
+      const moduleCard = createModuleCard(module, index);
+
+
+
+      modulesList.appendChild(moduleCard);
+    });
+  }
+
+
+
+  function createSubjectCard(subject, index) {
+    const card = document.createElement('div');
+    card.className = 'alt-card';
+    card.style.animationDelay = `${index * 0.1}s`;
+    if (!subject.images || subject.images.length == 0) {
+      subject.images = []
+    }
+
+    card.innerHTML = `
+                      <div id="${subject.subject}" onclick="getClinicalModules('${subject.subject}')" class="system"
+        style= ${subject.images[0] ? `background-image:url( ${subject.images[0]}) ` : ""}; display: flex; justify-content: center; align-items: center;">
+        <p
+          style="font-size: 20px; font-weight: 700; color: #fff; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); text-align: center;">
+          ${subject.subject} </p>
+      </div>
+
+            `;
+
+    return card;
+  }
+
+  function createModuleCard(module, index) {
+    const card = document.createElement('div');
+    card.className = 'alt-card';
+    card.style.animationDelay = `${index * 0.1}s`;
+    if (!module.images || module.images.length == 0) {
+      module.images = []
+    }
+    card.innerHTML = `
+             <div id="${module.module}" onclick="getClinicalLectures(event)" class="system"
+        style=" ${module.images[0] ? `background-image:url( ${module.images[0]}) ` : ""} ; display: flex; justify-content: center; align-items: center;">
+        <p
+          style="font-size: 20px; font-weight: 700; color: #fff; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); text-align: center;">
+          ${module.module}
+        </p>
+      </div>
+            `;
+
+    return card;
   }
 
 

@@ -1,6 +1,7 @@
 const express = require('express');
 // var router = express.Router();
 
+
 const {
   createLecture,
   getLecture,
@@ -9,6 +10,7 @@ const {
   deleteLecture,
   // setLectureIdToBody,
   createFilterObj,
+  aggregateLectures
 } = require('../services/lectureService');
 const {
   createLectureValidator,
@@ -34,7 +36,8 @@ router
     createLectureValidator,
     createLecture
   )
-  .get(createFilterObj, getLectures);
+  .get(createFilterObj,aggregateLectures, getLectures);
+
 router
   .route('/:id')
   .get(getLectureValidator, getLecture)

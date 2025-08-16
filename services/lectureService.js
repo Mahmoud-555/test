@@ -3,6 +3,7 @@ const Lecture = require('../models/lectureModel');
 
 exports.setCategoryIdToBody = (req, res, next) => {
   // Nested route (Create)
+  
   if (!req.body.category) req.body.category = req.params.categoryId;
   next();
 };
@@ -21,6 +22,44 @@ exports.createFilterObj = (req, res, next) => {
 // @route   GET /api/v1/subcategories
 // @access  Public
 exports.getLectures = factory.getAll(Lecture,"Lecture",{ path: 'subject', select: 'subject' });
+
+
+
+exports.aggregateLectures = factory.aggregateAll(Lecture,"lecture", 
+   [
+    // Lookup subcategories
+    {
+      $lookup: {
+        from: 'lectures',
+        localField: '_id',
+        foreignField: 'subject',
+        as: 'lectures'
+      }
+    },
+    // Lookup subsubcategories for each subcategory
+    {
+      $lookup: {
+        from: 'questions',
+        localField: 'lectures._id',
+        foreignField: 'lecture',
+        as: 'questions'
+      }
+    },
+    // Add counts
+    {
+      $addFields: {
+        lectureCount: { $size: '$lectures' },
+        questionCount: { $size: '$questions' }
+      }
+    },
+    // Optionally remove arrays if you only want counts
+    {
+      $project: {
+        lectures: 0,
+        questions: 0
+      }
+    }
+  ]);
 
 // @desc    Get specific subcategory by id
 // @route   GET /api/v1/subcategories/:id
