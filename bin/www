@@ -578,7 +578,7 @@ io.on('connection', async (socket) => {
 // server.listen(port, "192.168.1.7");
 // server.listen(port, "192.168.1.8");
 // server.listen(port, "197.59.25.224");
-server.listen(port);
+// server.listen(port);
 server.listen(process.env.PORT || 10000, '0.0.0.0')
 console.log("port",port);
 
