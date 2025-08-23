@@ -10,10 +10,11 @@ exports.createLectureValidator = [
   check('lecture')
     .notEmpty()
     .withMessage('Lecture required')
-    .isLength({ min: 3 })
-    .withMessage('Too short category name')
-    .isLength({ max: 32 })
-    .withMessage('Too long category name'),
+    // .isLength({ min: 3 })
+    // .withMessage('Too short category name')
+    // .isLength({ max: 32 })
+    // .withMessage('Too long category name')
+    ,
   validatorMiddleware,
 ];
 
